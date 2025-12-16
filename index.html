@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sennen Agency | Timeless Influence</title>
+    <title>Sennen Agency | AI Content Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -17,8 +17,6 @@
             --color-text: #ffffff;
             --color-panel: rgba(255, 255, 255, 0.03);
             --color-border: rgba(255, 255, 255, 0.1);
-            --color-accent-glitch-1: #00ffff;
-            --color-accent-glitch-2: #ff00ff;
             --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }
@@ -28,23 +26,192 @@
             background-color: var(--color-bg);
             color: var(--color-text);
             overflow-x: hidden;
-            cursor: none; /* Custom cursor */
-            transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: none;
+            transition: background-color 1.5s cubic-bezier(0.16, 1, 0.3, 1), color 1.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Light Mode Variables */
+        /* --- THEME STATES --- */
+        body.gray-mode {
+            --color-bg: #111111;
+            --color-text: #f4f4f5;
+            --color-panel: rgba(255,255,255,0.05);
+            --color-border: rgba(255,255,255,0.15);
+        }
+
         body.light-mode {
             --color-bg: #ffffff;
             --color-text: #000000;
-            --color-panel: #f3f3f3;
+            --color-panel: #f8f8f8;
             --color-border: #e5e5e5;
         }
 
-        /* Custom Cursor - FIXED VISIBILITY */
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loader-text {
+            font-family: var(--font-mono);
+            font-size: 6rem;
+            font-weight: bold;
+            color: white;
+            line-height: 1;
+        }
+
+        /* --- REFINED GLITCH EFFECT (LESS AGGRESSIVE) --- */
+        .glitch-hover {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .glitch-hover:hover {
+            animation: glitch-anim 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+            color: rgba(var(--color-text), 0.8);
+        }
+        
+        .glitch-hover:hover::before,
+        .glitch-hover:hover::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-hover:hover::before {
+            color: #0ff;
+            z-index: -1;
+            transform: translate(-1px, 0); /* Reduced from 2px */
+            clip-path: inset(0 0 0 0);
+        }
+
+        .glitch-hover:hover::after {
+            color: #f0f;
+            z-index: -2;
+            transform: translate(1px, 0); /* Reduced from 2px */
+            clip-path: inset(0 0 0 0);
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(-1px, -1px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+            100% { transform: translate(0); }
+        }
+
+        /* --- 3D CAROUSEL (PORTRAIT MODE) --- */
+        .carousel-scene {
+            perspective: 2500px;
+            width: 100%;
+            height: 500px; /* Taller for portrait */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+        }
+        .carousel {
+            width: 220px; /* Slimmer */
+            height: 380px; /* Taller */
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 25s infinite linear;
+        }
+        .carousel:hover {
+            animation-play-state: paused;
+        }
+        .carousel-item {
+            position: absolute;
+            width: 220px;
+            height: 380px;
+            left: 0;
+            top: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            font-family: var(--font-mono);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.7rem;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .carousel-item:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        /* Layout logic: 6 items in a circle */
+        .carousel-item:nth-child(1) { transform: rotateY(0deg) translateZ(450px); }
+        .carousel-item:nth-child(2) { transform: rotateY(60deg) translateZ(450px); }
+        .carousel-item:nth-child(3) { transform: rotateY(120deg) translateZ(450px); }
+        .carousel-item:nth-child(4) { transform: rotateY(180deg) translateZ(450px); }
+        .carousel-item:nth-child(5) { transform: rotateY(240deg) translateZ(450px); }
+        .carousel-item:nth-child(6) { transform: rotateY(300deg) translateZ(450px); }
+
+        @keyframes rotate {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .video-content {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        /* --- MARQUEE --- */
+        .marquee-wrapper {
+            width: 100%;
+            overflow: hidden;
+            background: transparent;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            white-space: nowrap;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: scroll-left 40s linear infinite;
+        }
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- CURSOR --- */
         .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #ffffff; /* Always white for difference mode to work */
+            width: 6px;
+            height: 6px;
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 10000;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+        .cursor-ring {
+            width: 30px;
+            height: 30px;
+            border: 1px solid white;
             position: fixed;
             top: 0;
             left: 0;
@@ -52,308 +219,335 @@
             border-radius: 50%;
             z-index: 9999;
             pointer-events: none;
-            mix-blend-mode: difference; /* Key for visibility on both backgrounds */
-            transition: width 0.3s, height 0.3s;
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s, transform 0.1s;
         }
-        
-        .cursor-ring {
-            width: 40px;
-            height: 40px;
-            border: 1px solid #ffffff; /* Always white for difference mode to work */
+
+        /* --- CENTERED POPUP --- */
+        #waitlist-popup {
             position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9998;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 320px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            z-index: 9999;
+            opacity: 0;
             pointer-events: none;
-            mix-blend-mode: difference; /* Key for visibility on both backgrounds */
-            transition: all 0.1s ease-out;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
-
-        /* Glitch Effect Classes */
-        .glitch-target {
-            position: relative;
-            display: inline-block;
-            transition: all 0.1s;
+        #waitlist-popup.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(-50%, -50%) scale(1);
         }
         
-        .glitch-active {
-            text-shadow: 2px 0 var(--color-accent-glitch-1), -2px 0 var(--color-accent-glitch-2);
-            animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        /* Subtle glitch border for popup */
+        #waitlist-popup:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            animation: border-glitch 2s infinite;
+        }
+        @keyframes border-glitch {
+            0% { border-color: rgba(255, 255, 255, 0.2); }
+            50% { border-color: rgba(255, 255, 255, 0.3); }
+            52% { border-color: #0ff; }
+            54% { border-color: rgba(255, 255, 255, 0.2); }
+            100% { border-color: rgba(255, 255, 255, 0.2); }
         }
 
-        @keyframes glitch-skew {
-            0% { transform: skew(0deg); }
-            20% { transform: skew(-2deg); }
-            40% { transform: skew(2deg); }
-            60% { transform: skew(-1deg); }
-            80% { transform: skew(1deg); }
-            100% { transform: skew(0deg); }
-        }
-
-        /* Navigation */
-        .nav-blur {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.5s;
-        }
-        .nav-blur.scrolled {
-            border-bottom-color: var(--color-border);
-            background: rgba(var(--color-bg), 0.8);
-        }
-
-        /* Pro Logo */
-        .brand-logo {
-            font-family: var(--font-sans);
-            font-weight: 700;
-            letter-spacing: -0.05em;
-            position: relative;
-            overflow: hidden;
-            transition: color 0.3s ease;
-        }
-        .brand-logo:hover {
-            color: #888; /* Grey hover state */
-        }
-        .light-mode .brand-logo:hover {
-            color: #666;
-        }
-
-        /* Typography */
-        h1, h2, h3 { letter-spacing: -0.04em; }
-        .hero-title { line-height: 0.95; }
-
-        /* Buttons */
-        .btn-pro {
-            background: var(--color-text);
-            color: var(--color-bg);
-            border: 1px solid var(--color-text);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .btn-pro:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .btn-ghost {
-            background: transparent;
-            color: var(--color-text);
-            border: 1px solid var(--color-border);
-            transition: all 0.4s;
-        }
-        .btn-ghost:hover {
-            border-color: var(--color-text);
-        }
-
-        /* Cards */
-        .card-glass {
+        /* --- CARD STYLES --- */
+        .offer-card {
             background: var(--color-panel);
             border: 1px solid var(--color-border);
-            transition: all 0.5s ease;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
         }
-        .card-glass:hover {
+        .offer-card:hover {
+            transform: translateY(-5px);
             border-color: var(--color-text);
         }
+        .light-mode .offer-card {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
 
-        /* Noise Texture */
-        .noise-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-        
-        .clip-text-hidden {
-            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
-            transform: translateY(100%);
-        }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased opacity-0 overflow-hidden" id="main-body">
 
-    <!-- Cursor Elements -->
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="loader-text glitch-hover" data-text="0%">0%</div>
+        <div class="mt-4 font-mono text-xs text-gray-500">INITIALIZING AI CONTENT ENGINE...</div>
+    </div>
+
+    <!-- CURSOR -->
     <div class="cursor-dot"></div>
     <div class="cursor-ring"></div>
-    
-    <!-- Global Noise -->
-    <div class="noise-overlay"></div>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 nav-blur transition-all duration-500 py-6" id="navbar">
-        <div class="max-w-[90%] mx-auto flex justify-between items-center">
-            <!-- Logo -->
-            <a href="#" class="brand-logo text-xl md:text-2xl z-50 glitch-target" data-glitch-intensity="high">
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 py-6 mix-blend-difference text-white">
+        <div class="max-w-[92%] mx-auto flex justify-between items-center">
+            <a href="#" class="text-lg font-bold tracking-tighter hover:text-gray-300 transition-colors glitch-hover" data-text="sennen.agency">
                 sennen.agency
             </a>
-            
-            <div class="hidden md:flex items-center gap-12 text-xs font-medium uppercase tracking-widest opacity-70">
-                <a href="#philosophy" class="hover:opacity-100 transition-opacity">Philosophy</a>
-                <a href="#showcase" class="hover:opacity-100 transition-opacity">Showcase</a>
-                <a href="#system" class="hover:opacity-100 transition-opacity">System</a>
+            <div class="hidden md:flex gap-10 text-[10px] font-mono uppercase tracking-widest">
+                <a href="#engine" class="hover:underline">Engine</a>
+                <a href="#offers" class="hover:underline">Solutions</a>
+                <a href="#roadmap" class="hover:underline">Roadmap</a>
             </div>
-
-            <a href="#contact" class="hidden md:block text-xs font-bold uppercase tracking-wider hover:opacity-50 transition-opacity">
-                Contact
-            </a>
         </div>
     </nav>
 
-    <!-- Hero Section (Dark) -->
-    <header class="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden" id="hero">
+    <!-- HERO SECTION (BLACK) -->
+    <header class="relative min-h-screen flex flex-col justify-center items-center pt-10 overflow-hidden perspective-1000">
         
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+
         <div class="container mx-auto px-6 z-10 flex flex-col items-center">
             
-            <div class="mb-10 overflow-hidden">
-                <div class="js-hero-fade opacity-0 translate-y-10">
-                    <span class="font-mono text-[10px] opacity-60 border border-current px-3 py-1 rounded-full uppercase tracking-[0.25em]">
-                        Est. 2024 / Digital Origin
-                    </span>
+            <h1 class="text-5xl md:text-8xl font-bold text-center tracking-tighter leading-[0.9] mb-16">
+                <span class="block glitch-hover" data-text="AI CONTENT">AI CONTENT</span>
+                <span class="block glitch-hover text-gray-600" data-text="ENGINE">ENGINE</span>
+            </h1>
+
+            <!-- 3D CAROUSEL PORTRAIT -->
+            <div class="carousel-scene mb-8">
+                <div class="carousel">
+                    <!-- Item 1 -->
+                    <div class="carousel-item">
+                        <div class="video-content"></div>
+                        <div class="font-bold text-sm mb-1">TESLA_BOT</div>
+                        <div class="text-[10px] opacity-60">ENGAGEMENT: 98%</div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="carousel-item">
+                        <div class="video-content" style="background: linear-gradient(180deg, #222 0%, #111 100%)"></div>
+                        <div class="font-bold text-sm mb-1">BALENCIAGA</div>
+                        <div class="text-[10px] opacity-60">VIRALITY: HIGH</div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="carousel-item">
+                        <div class="video-content"></div>
+                        <div class="font-bold text-sm mb-1">SPACEX</div>
+                        <div class="text-[10px] opacity-60">RETENTION: 45s</div>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="carousel-item">
+                        <div class="video-content"></div>
+                        <div class="font-bold text-sm mb-1">APPLE</div>
+                        <div class="text-[10px] opacity-60">CLICKS: 12.5k</div>
+                    </div>
+                    <!-- Item 5 -->
+                    <div class="carousel-item">
+                         <div class="video-content"></div>
+                        <div class="font-bold text-sm mb-1">NEURALINK</div>
+                        <div class="text-[10px] opacity-60">SHARES: 8.2k</div>
+                    </div>
+                    <!-- Item 6 -->
+                    <div class="carousel-item">
+                        <div class="video-content"></div>
+                        <div class="font-bold text-sm mb-1">SORA</div>
+                        <div class="text-[10px] opacity-60">VIEWS: 1.2M</div>
+                    </div>
                 </div>
             </div>
 
-            <h1 class="hero-title text-6xl md:text-8xl lg:text-9xl font-bold text-center mb-12 tracking-tighter leading-none mix-blend-mode-difference">
-                <div class="overflow-hidden"><span class="block clip-text-hidden js-hero-text glitch-target">Human</span></div>
-                <div class="overflow-hidden"><span class="block clip-text-hidden js-hero-text glitch-target italic opacity-80">Essence.</span></div>
-                <div class="overflow-hidden"><span class="block clip-text-hidden js-hero-text glitch-target">Timeless.</span></div>
-            </h1>
-
-            <p class="max-w-xl mx-auto text-lg opacity-60 mb-16 text-center font-light leading-relaxed js-hero-fade opacity-0 translate-y-10">
-                Sennen captura el factor humano y lo eleva. 
-                Vencemos al tiempo mediante identidad sintética de alta fidelidad.
-                <br><span class="text-xs font-mono mt-4 block opacity-50">// PRESERVING IDENTITY PROTOCOL</span>
+            <p class="font-mono text-[10px] text-gray-600 uppercase tracking-[0.3em] animate-pulse mt-8">
+                Modelo de negocio para la agencia del futuro
             </p>
-
-            <div class="flex gap-6 js-hero-fade opacity-0 translate-y-10">
-                <button class="btn-pro px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wide">
-                    Discover Sennen
-                </button>
-            </div>
-        </div>
-        
-        <div class="absolute bottom-10 animate-pulse opacity-30">
-            <span class="text-[10px] font-mono tracking-widest uppercase">Scroll to Evolve</span>
         </div>
     </header>
 
-    <!-- Scroll Trigger Area -->
-    <div id="trigger-color-change" class="h-2 w-full pointer-events-none"></div>
+    <!-- TRIGGER GRAY MODE -->
+    <div id="trigger-gray" class="h-10 w-full"></div>
 
-    <!-- Philosophy Section (Turns White) -->
-    <section id="philosophy" class="py-40 relative z-20 transition-colors duration-1000">
-        <div class="max-w-[90%] mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                
-                <div class="lg:col-span-5 lg:sticky lg:top-40 h-fit">
-                    <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-none glitch-target">
-                        The Human <br>Advantage.
-                    </h2>
-                    <p class="text-xl opacity-70 leading-relaxed font-light mb-8">
-                        No eliminamos al humano; lo perfeccionamos. Capturamos el carisma, la imperfección y la emoción, y eliminamos las limitaciones biológicas.
+    <!-- NEWS / GLOBAL INSIGHT (GRAY) -->
+    <section id="engine" class="py-32 relative z-20 border-t border-white/5">
+        <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div>
+                <span class="inline-block px-3 py-1 border border-blue-500/30 text-blue-400 text-[10px] font-mono uppercase mb-6 rounded-full">Noticia Global</span>
+                <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-8">
+                    The 90% Reality. <br>
+                    <span class="opacity-40">Paradigm Shift.</span>
+                </h2>
+                <div class="text-sm font-mono text-gray-500 mb-8 border-l-2 border-blue-500 pl-4">
+                    "El engagement de la IA supera al contenido real."
+                </div>
+            </div>
+            <div class="space-y-8 pt-4">
+                <p class="text-xl text-gray-400 font-light leading-relaxed">
+                    Más allá del volumen, la verdadera revolución es el <span class="text-white font-medium">Engagement</span>. Los videos generados con IA están logrando tasas de retención superiores al contenido tradicional.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-white font-bold mb-2">Dominio de la Atención</h4>
+                        <p class="text-sm text-gray-500">Al eliminar errores y optimizar guiones al milímetro, el contenido sintético retiene al usuario por más tiempo.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold mb-2">La Nueva Realidad</h4>
+                        <p class="text-sm text-gray-500">El ojo humano ya no distingue, y el algoritmo prefiere la consistencia perfecta de la IA.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE (GRAY) -->
+    <div class="marquee-wrapper text-4xl md:text-6xl font-bold uppercase tracking-tighter opacity-10 hover:opacity-100 transition-opacity duration-700">
+        <div class="marquee-content">
+            Zero Friction • Zero Latency • Infinite Scale • Hyper-Personalization • Sennen Engine • Zero Friction • Zero Latency • Infinite Scale •
+        </div>
+    </div>
+
+    <!-- TRIGGER LIGHT MODE -->
+    <div id="trigger-white" class="h-10 w-full"></div>
+
+    <!-- OFFERS SECTION (WHITE) -->
+    <section id="offers" class="py-32 relative z-20">
+        <div class="max-w-[85%] mx-auto">
+            <div class="mb-20">
+                <h3 class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Zero Friction</h3>
+                <h2 class="text-5xl font-bold tracking-tight text-black">Problema & Solución.</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Option A -->
+                <div class="offer-card group">
+                    <div class="text-xs font-mono text-gray-400 mb-6 group-hover:text-blue-600 transition-colors">OPCIÓN A</div>
+                    <h3 class="text-2xl font-bold mb-3">Influencers UGC</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-8">
+                        Contenido masivo sin tu cara. Escala campañas publicitarias con rostros sintéticos diversos.
                     </p>
-                    <div class="h-[1px] w-24 bg-current opacity-20"></div>
+                    <div class="w-full h-px bg-gray-200 group-hover:bg-blue-600 transition-colors"></div>
+                    <div class="mt-4 text-xs font-bold uppercase">Core Offer</div>
                 </div>
 
-                <div class="lg:col-span-7 space-y-32 pt-10 lg:pl-20">
-                    <div class="group">
-                        <h3 class="text-3xl font-semibold mb-4 glitch-target">01. Inmortalidad Digital</h3>
-                        <p class="text-lg opacity-60 font-light max-w-md">
-                            Tu identidad de marca ya no depende de contratos que caducan o personas que envejecen. Creamos embajadores que perduran.
-                        </p>
-                    </div>
-
-                    <div class="group">
-                        <h3 class="text-3xl font-semibold mb-4 glitch-target">02. Consistencia Perfecta</h3>
-                        <p class="text-lg opacity-60 font-light max-w-md">
-                            El factor humano suele traer caos. Sennen trae la calidez humana con la precisión de un reloj suizo. Siempre el tono correcto.
-                        </p>
-                    </div>
-
-                    <div class="group">
-                        <h3 class="text-3xl font-semibold mb-4 glitch-target">03. Presencia Global</h3>
-                        <p class="text-lg opacity-60 font-light max-w-md">
-                            Rompe las barreras del espacio-tiempo. Estar en todos lados, en todos los idiomas, en el mismo instante.
-                        </p>
-                    </div>
+                <!-- Option B -->
+                <div class="offer-card group">
+                    <div class="text-xs font-mono text-gray-400 mb-6 group-hover:text-purple-600 transition-colors">OPCIÓN B</div>
+                    <h3 class="text-2xl font-bold mb-3">Clon Digital</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-8">
+                        Marca Personal Automatizada. Tu voz, tu rostro, escalado infinitamente sin grabar ni un segundo extra.
+                    </p>
+                    <div class="w-full h-px bg-gray-200 group-hover:bg-purple-600 transition-colors"></div>
+                    <div class="mt-4 text-xs font-bold uppercase">High Ticket</div>
                 </div>
 
-            </div>
-        </div>
-    </section>
-
-    <!-- Showcase Section -->
-    <section id="showcase" class="py-32 overflow-hidden">
-        <div class="max-w-[90%] mx-auto mb-16">
-            <h2 class="text-4xl font-bold tracking-tight glitch-target">Selected Assets</h2>
-        </div>
-
-        <div class="flex gap-8 px-[5%] overflow-x-auto pb-12 scrollbar-hide">
-            <!-- Card 1 -->
-            <div class="card-glass min-w-[300px] md:min-w-[400px] h-[550px] relative group overflow-hidden cursor-none">
-                <div class="absolute inset-0 bg-gray-200 group-hover:scale-105 transition-transform duration-1000 grayscale group-hover:grayscale-0">
-                    <div class="w-full h-full flex items-center justify-center bg-zinc-200 text-zinc-400 font-mono text-xs">
-                        [SUBJECT: AURA]
-                    </div>
-                </div>
-                <div class="absolute bottom-0 left-0 w-full p-8 z-10">
-                    <h3 class="text-3xl font-bold text-black mb-1 mix-blend-hard-light">Aura</h3>
-                    <p class="text-sm text-black font-mono mix-blend-hard-light">Fashion / Editorial</p>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="card-glass min-w-[300px] md:min-w-[400px] h-[550px] relative group overflow-hidden cursor-none">
-                <div class="absolute inset-0 bg-gray-300 group-hover:scale-105 transition-transform duration-1000 grayscale group-hover:grayscale-0">
-                    <div class="w-full h-full flex items-center justify-center bg-zinc-300 text-zinc-500 font-mono text-xs">
-                        [SUBJECT: ECHO]
-                    </div>
-                </div>
-                <div class="absolute bottom-0 left-0 w-full p-8 z-10">
-                    <h3 class="text-3xl font-bold text-black mb-1 mix-blend-hard-light">Echo</h3>
-                    <p class="text-sm text-black font-mono mix-blend-hard-light">Tech / Opinion</p>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="card-glass min-w-[300px] md:min-w-[400px] h-[550px] relative group overflow-hidden cursor-none">
-                <div class="absolute inset-0 bg-gray-400 group-hover:scale-105 transition-transform duration-1000 grayscale group-hover:grayscale-0">
-                    <div class="w-full h-full flex items-center justify-center bg-zinc-400 text-zinc-600 font-mono text-xs">
-                        [SUBJECT: ION]
-                    </div>
-                </div>
-                <div class="absolute bottom-0 left-0 w-full p-8 z-10">
-                    <h3 class="text-3xl font-bold text-black mb-1 mix-blend-hard-light">Ion</h3>
-                    <p class="text-sm text-black font-mono mix-blend-hard-light">Sports / Performance</p>
+                <!-- Option C -->
+                <div class="offer-card group">
+                    <div class="text-xs font-mono text-gray-400 mb-6 group-hover:text-green-600 transition-colors">OPCIÓN C</div>
+                    <h3 class="text-2xl font-bold mb-3">Cursos Digitales</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-8">
+                        Activos de conocimiento. Empaqueta el expertise en IA y véndelo como producto digital.
+                    </p>
+                    <div class="w-full h-px bg-gray-200 group-hover:bg-green-600 transition-colors"></div>
+                    <div class="mt-4 text-xs font-bold uppercase">Passive Income</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer id="contact" class="py-20 border-t border-current/10">
-        <div class="max-w-[90%] mx-auto text-center">
-            <h2 class="text-5xl md:text-8xl font-bold tracking-tighter mb-12 glitch-target hover:text-gray-500 transition-colors cursor-pointer">
-                Let's Glitch <br> Reality.
-            </h2>
+    <!-- ROADMAP & DASHBOARD (WHITE) -->
+    <section id="roadmap" class="py-32 border-t border-gray-100">
+        <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             
-            <a href="mailto:hello@sennen.agency" class="btn-pro px-10 py-5 rounded-full text-lg font-bold inline-block">
-                Start Project
-            </a>
+            <div class="relative">
+                <!-- Abstract Dashboard Visual -->
+                <div class="w-full aspect-square bg-gray-50 border border-gray-200 p-8 relative overflow-hidden">
+                    <div class="absolute top-8 left-8 right-8 h-32 bg-white border border-gray-100 shadow-sm p-4">
+                        <div class="flex justify-between mb-4">
+                            <div class="w-20 h-2 bg-gray-200"></div>
+                            <div class="w-8 h-2 bg-green-200"></div>
+                        </div>
+                        <div class="w-full h-16 bg-blue-50 relative overflow-hidden">
+                            <div class="absolute bottom-0 left-0 w-full h-full bg-blue-500 opacity-10 transform skew-x-12"></div>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-8 left-8 right-8 top-44 bg-white border border-gray-100 shadow-sm p-4 grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 h-full"></div>
+                        <div class="bg-gray-50 h-full"></div>
+                    </div>
+                    
+                    <!-- Floating Badge -->
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black text-white px-6 py-3 text-xs font-mono uppercase tracking-widest shadow-2xl">
+                        Real-Time Data
+                    </div>
+                </div>
+            </div>
 
-            <div class="mt-20 flex justify-between items-end text-xs font-mono opacity-50 uppercase">
+            <div class="space-y-12">
                 <div>
-                    sennen.agency © 2025<br>
-                    All Systems Operational
+                    <h3 class="text-sm font-mono uppercase text-blue-600 mb-2">Tu Roadmap</h3>
+                    <h2 class="text-4xl font-bold mb-4">Plan de 90 Días.</h2>
+                    <p class="text-gray-500">
+                        Implementación estratégica desde la creación de activos hasta la automatización total.
+                    </p>
                 </div>
-                <div class="text-right">
-                    London <br>
-                    Tokyo
+
+                <div class="space-y-6">
+                    <div class="flex gap-4 items-start group cursor-pointer">
+                        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs font-mono group-hover:bg-black group-hover:text-white transition-colors">01</div>
+                        <div>
+                            <h4 class="font-bold">Pruebas / Demos</h4>
+                            <p class="text-sm text-gray-500">Ver ejemplos reales antes de escalar.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start group cursor-pointer">
+                        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs font-mono group-hover:bg-black group-hover:text-white transition-colors">02</div>
+                        <div>
+                            <h4 class="font-bold">Dashboard</h4>
+                            <p class="text-sm text-gray-500">Rendimiento en tiempo real de tus clones.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start group cursor-pointer">
+                        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs font-mono group-hover:bg-black group-hover:text-white transition-colors">03</div>
+                        <div>
+                            <h4 class="font-bold">Comunidad > Contenido</h4>
+                            <p class="text-sm text-gray-500">El activo final donde reside el valor real.</p>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CENTERED POPUP -->
+    <div id="waitlist-popup" class="text-center">
+        <div class="flex justify-between items-center mb-6">
+            <h4 class="text-sm font-bold uppercase tracking-widest text-white glitch-hover" data-text="Access Beta">Access Beta</h4>
+            <button onclick="document.getElementById('waitlist-popup').classList.remove('active')" class="text-gray-500 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+        <div class="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+        <p class="text-xs text-gray-400 mb-6 font-mono">Secure your brand's synthetic future.</p>
+        <form onsubmit="event.preventDefault(); this.innerHTML='<p class=\'text-xs text-green-400 font-mono py-2\'> > ACCESS GRANTED</p>'">
+            <input type="email" placeholder="ENTER_EMAIL" class="bg-black border border-gray-800 text-white px-4 py-3 text-xs w-full focus:outline-none focus:border-white font-mono mb-3 placeholder-gray-700">
+            <button type="submit" class="bg-white text-black px-4 py-3 text-xs font-bold uppercase w-full hover:bg-gray-200 transition-colors">Join Waitlist</button>
+        </form>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-20 border-t border-current/10 bg-white dark:bg-black transition-colors duration-1000">
+        <div class="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-end">
+            <div>
+                <a href="#" class="text-3xl font-bold tracking-tighter block mb-10 glitch-hover text-black dark:text-white" data-text="sennen.agency">sennen.agency</a>
+                <div class="flex gap-6 items-center">
+                    <a href="https://instagram.com/sennen.agency" target="_blank" class="text-black dark:text-white hover:opacity-50 transition-opacity">
+                        <i data-lucide="instagram" class="w-6 h-6"></i>
+                    </a>
+                    <div class="h-4 w-px bg-gray-300"></div>
+                    <span class="font-mono text-[10px] text-gray-500 uppercase">Automated. Scalable. High-Ticket.</span>
+                </div>
+            </div>
+            <div class="mt-12 md:mt-0 text-right">
+                <div class="font-mono text-[10px] text-gray-400 mb-2">SYSTEM STATUS: OPTIMAL</div>
+                <div class="font-mono text-[10px] text-gray-400">LONDON • TOKYO • CLOUD</div>
             </div>
         </div>
     </footer>
@@ -361,104 +555,95 @@
     <script>
         lucide.createIcons();
 
-        // 1. Custom Cursor Logic
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorRing = document.querySelector('.cursor-ring');
-        let mouseX = 0;
-        let mouseY = 0;
-        let cursorX = 0;
-        let cursorY = 0;
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        /* --- PRELOADER & INTRO --- */
+        const preloader = document.getElementById('preloader');
+        const loaderText = preloader.querySelector('.loader-text');
+        const mainBody = document.getElementById('main-body');
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.floor(Math.random() * 8) + 2; // Faster load
+            if (progress > 100) progress = 100;
+            loaderText.innerText = progress + "%";
+            loaderText.setAttribute('data-text', progress + "%");
             
-            // Move Dot Instantly
-            cursorDot.style.left = `${mouseX}px`;
-            cursorDot.style.top = `${mouseY}px`;
-
-            // Glitch Effect Calculation based on speed
-            const speed = Math.abs(e.movementX) + Math.abs(e.movementY);
-            if (speed > 30) {
-                document.body.classList.add('fast-move');
-                // Find element under cursor
-                const hovered = document.elementFromPoint(mouseX, mouseY);
-                if (hovered && hovered.classList.contains('glitch-target')) {
-                    hovered.classList.add('glitch-active');
-                    setTimeout(() => hovered.classList.remove('glitch-active'), 200);
-                }
+            if (progress === 100) {
+                clearInterval(interval);
+                gsap.to(preloader, {
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        preloader.style.display = 'none';
+                        mainBody.classList.remove('opacity-0');
+                        mainBody.classList.remove('overflow-hidden');
+                    }
+                });
             }
-        });
+        }, 30);
 
-        // Smooth follow for ring
-        function animateCursor() {
-            let distX = mouseX - cursorX;
-            let distY = mouseY - cursorY;
-            cursorX += distX * 0.15;
-            cursorY += distY * 0.15;
-            cursorRing.style.left = `${cursorX}px`;
-            cursorRing.style.top = `${cursorY}px`;
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Cursor Hover States
-        document.querySelectorAll('a, button, .card-glass').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorRing.style.width = '60px';
-                cursorRing.style.height = '60px';
-                cursorRing.style.backgroundColor = '#ffffff'; // Keep white for mix-blend-mode difference
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorRing.style.width = '40px';
-                cursorRing.style.height = '40px';
-                cursorRing.style.backgroundColor = 'transparent';
-            });
-        });
-
-        // 2. GSAP Animations
+        /* --- SCROLL TRIGGERS --- */
         document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
 
-            // Hero Entrance
-            const heroTl = gsap.timeline();
-            heroTl.to('.js-hero-text', {
-                y: 0,
-                duration: 1.5,
-                stagger: 0.1,
-                ease: "power4.out"
-            })
-            .to('.js-hero-fade', {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                stagger: 0.1,
-                ease: "power2.out"
-            }, "-=1");
-
-            // 3. Theme Switch (Black -> White)
+            // Theme: Gray
             ScrollTrigger.create({
-                trigger: "#trigger-color-change",
+                trigger: "#trigger-gray",
+                start: "top center",
+                end: "bottom center",
+                onEnter: () => document.body.classList.add('gray-mode'),
+                onLeaveBack: () => document.body.classList.remove('gray-mode')
+            });
+
+            // Theme: White
+            ScrollTrigger.create({
+                trigger: "#trigger-white",
                 start: "top center",
                 end: "bottom center",
                 onEnter: () => {
+                    document.body.classList.remove('gray-mode');
                     document.body.classList.add('light-mode');
                 },
                 onLeaveBack: () => {
                     document.body.classList.remove('light-mode');
+                    document.body.classList.add('gray-mode');
                 }
             });
 
-            // Navbar Scroll Effect
-            window.addEventListener('scroll', () => {
-                const nav = document.getElementById('navbar');
-                if (window.scrollY > 50) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
+            // Waitlist Popup (30s delay)
+            setTimeout(() => {
+                document.getElementById('waitlist-popup').classList.add('active');
+            }, 30000);
+        });
+
+        /* --- CURSOR LOGIC --- */
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorRing = document.querySelector('.cursor-ring');
+        
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = `${e.clientX}px`;
+            cursorDot.style.top = `${e.clientY}px`;
+            
+            setTimeout(() => {
+                cursorRing.style.left = `${e.clientX}px`;
+                cursorRing.style.top = `${e.clientY}px`;
+            }, 50);
+        });
+
+        // Hover Effect
+        const interactables = document.querySelectorAll('a, button, .offer-card, .carousel-item');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorRing.style.transform = "translate(-50%, -50%) scale(1.5)";
+                cursorRing.style.mixBlendMode = "difference";
+                cursorRing.style.backgroundColor = "white";
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorRing.style.transform = "translate(-50%, -50%) scale(1)";
+                cursorRing.style.backgroundColor = "transparent";
             });
         });
+
     </script>
 </body>
 </html>
