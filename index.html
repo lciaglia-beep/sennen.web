@@ -148,19 +148,31 @@
             height: 380px;
             left: 0;
             top: 0;
-            background: rgba(10, 10, 10, 0.95);
+            background: #000;
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
             overflow: hidden;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, transform 0.3s;
+            cursor: pointer;
         }
         .carousel-item:hover {
-            border-color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.8);
+            z-index: 10;
         }
+        .carousel-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .carousel-item:hover video {
+            opacity: 1;
+        }
+
         /* Layout logic: 6 items in a circle */
         .carousel-item:nth-child(1) { transform: rotateY(0deg) translateZ(450px); }
         .carousel-item:nth-child(2) { transform: rotateY(60deg) translateZ(450px); }
@@ -174,21 +186,56 @@
             to { transform: rotateY(360deg); }
         }
 
-        .video-content {
+        /* --- VIDEO MODAL --- */
+        #video-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 11000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(20px);
+        }
+        #video-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-content {
+            width: 90%;
+            max-width: 500px; /* Portrait optimized */
+            aspect-ratio: 9/16;
+            position: relative;
+            box-shadow: 0 0 100px rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal-content video {
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
-            /* Simulate video content with animated gradients */
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            object-fit: cover;
         }
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .close-modal-btn {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: white;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .close-modal-btn:hover {
+            background: white;
+            color: black;
         }
         
         /* --- MARQUEE --- */
@@ -372,6 +419,18 @@
     <div class="cursor-dot"></div>
     <div class="cursor-ring"></div>
 
+    <!-- VIDEO MODAL LIGHTBOX -->
+    <div id="video-modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal()">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <video id="modal-video-player" controls playsinline>
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
     <!-- NAVIGATION -->
     <nav class="fixed w-full z-50 py-6 mix-blend-difference text-white">
         <div class="max-w-[92%] mx-auto flex justify-between items-center">
@@ -393,21 +452,38 @@
 
         <div class="container mx-auto px-6 z-10 flex flex-col items-center">
             
-            <!-- Pushed down further as requested -->
             <h1 class="text-5xl md:text-8xl font-bold text-center tracking-tighter leading-[0.9] mb-16 mt-20">
                 <span class="block glitch-hover" data-text="AI CONTENT">AI CONTENT</span>
                 <span class="block glitch-hover text-gray-600" data-text="ENGINE">ENGINE</span>
             </h1>
 
-            <!-- 3D CAROUSEL PORTRAIT (NO TEXT, JUST VISUALS) -->
+            <!-- 3D CAROUSEL PORTRAIT WITH REAL VIDEOS -->
             <div class="carousel-scene mb-8">
-                <div class="carousel">
-                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(45deg, #111, #333);"></div></div>
-                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(135deg, #000, #222);"></div></div>
-                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(225deg, #222, #444);"></div></div>
-                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(315deg, #111, #000);"></div></div>
-                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(90deg, #333, #111);"></div></div>
-                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(180deg, #000, #333);"></div></div>
+                <div class="carousel" id="carousel-track">
+                    <!-- Video 1 -->
+                    <div class="carousel-item" onclick="openModal('video1.mp4')">
+                        <video src="video1.mp4" muted loop autoplay playsinline></video>
+                    </div>
+                    <!-- Video 2 -->
+                    <div class="carousel-item" onclick="openModal('video2.mp4')">
+                        <video src="video2.mp4" muted loop autoplay playsinline></video>
+                    </div>
+                    <!-- Video 3 -->
+                    <div class="carousel-item" onclick="openModal('video3.mp4')">
+                        <video src="video3.mp4" muted loop autoplay playsinline></video>
+                    </div>
+                    <!-- Video 4 -->
+                    <div class="carousel-item" onclick="openModal('video4.mp4')">
+                        <video src="video4.mp4" muted loop autoplay playsinline></video>
+                    </div>
+                    <!-- Video 5 -->
+                    <div class="carousel-item" onclick="openModal('video5.mp4')">
+                        <video src="video5.mp4" muted loop autoplay playsinline></video>
+                    </div>
+                    <!-- Video 6 -->
+                    <div class="carousel-item" onclick="openModal('video6.mp4')">
+                        <video src="video6.mp4" muted loop autoplay playsinline></video>
+                    </div>
                 </div>
             </div>
 
@@ -777,6 +853,36 @@
                 cursorRing.style.transform = "translate(-50%, -50%) scale(1)";
                 cursorRing.style.backgroundColor = "transparent";
             });
+        });
+
+        /* --- VIDEO MODAL LOGIC --- */
+        const modal = document.getElementById('video-modal');
+        const modalPlayer = document.getElementById('modal-video-player');
+        
+        function openModal(videoSrc) {
+            modal.classList.add('active');
+            modalPlayer.src = videoSrc;
+            modalPlayer.play();
+            // Pause carousel rotation animation
+            document.getElementById('carousel-track').style.animationPlayState = 'paused';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modalPlayer.pause();
+            modalPlayer.src = "";
+             // Resume carousel rotation animation
+             document.getElementById('carousel-track').style.animationPlayState = 'running';
+        }
+
+        // Close on ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
         });
 
     </script>
