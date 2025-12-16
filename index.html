@@ -26,19 +26,29 @@
             background-color: var(--color-bg);
             color: var(--color-text);
             overflow-x: hidden;
-            cursor: none; /* Custom cursor for desktop */
+            cursor: none; /* Custom cursor for desktop only */
             transition: background-color 1.5s cubic-bezier(0.16, 1, 0.3, 1), color 1.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Mobile Fixes */
+        /* --- MOBILE ADAPTATIONS (CRITICAL) --- */
         @media (max-width: 768px) {
-            body { cursor: auto; }
-            .cursor-dot, .cursor-ring, #glitch-canvas { display: none !important; }
-            .carousel-scene { height: 400px; perspective: 1000px; }
+            body { cursor: auto !important; } /* Restore native cursor */
+            .cursor-dot, .cursor-ring, #glitch-canvas { display: none !important; } /* Hide custom cursor */
+            
+            .carousel-scene { height: 350px; perspective: 800px; }
             .carousel { width: 140px; height: 240px; }
             .carousel-item { width: 140px; height: 240px; }
+            
+            /* Adjust font sizes for mobile */
+            h1 { font-size: 2.5rem !important; } 
+            h2 { font-size: 2rem !important; }
             .offer-card { padding: 1.5rem; }
-            #video-modal .modal-content { width: 85%; max-height: 70vh; }
+            
+            /* Modal adjustments */
+            #video-modal .modal-content { width: 90%; height: auto; max-height: 70vh; }
+            
+            /* Popup adjustments for mobile */
+            #waitlist-popup { width: 85% !important; padding: 1.5rem !important; }
         }
 
         /* --- THEME STATES --- */
@@ -58,65 +68,29 @@
 
         /* --- PRELOADER --- */
         #preloader {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
         .loader-text {
-            font-family: var(--font-mono);
-            font-size: 4rem;
-            font-weight: bold;
-            color: white;
-            line-height: 1;
+            font-family: var(--font-mono); font-size: 4rem; font-weight: bold; color: white; line-height: 1;
         }
         @media (min-width: 768px) { .loader-text { font-size: 6rem; } }
 
         /* --- CANVAS --- */
         #glitch-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9998;
-            opacity: 0.6;
-            mix-blend-mode: overlay;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998;
+            opacity: 0.6; mix-blend-mode: overlay;
         }
         
-        #globe-container {
-            position: relative;
-            width: 100%;
-            height: 600px;
-        }
-        #globe-canvas {
-            width: 100%;
-            height: 100%;
-            cursor: grab;
-        }
+        #globe-container { position: relative; width: 100%; height: 600px; }
+        #globe-canvas { width: 100%; height: 100%; cursor: grab; }
         #globe-canvas:active { cursor: grabbing; }
         
         /* Globe Tooltip */
         #globe-tooltip {
-            position: absolute;
-            background: rgba(10, 10, 10, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 15px;
-            border-radius: 8px;
-            pointer-events: none;
-            opacity: 0;
-            transform: translate(-50%, -120%);
-            transition: opacity 0.3s;
-            color: white;
-            z-index: 50;
-            font-family: var(--font-mono);
-            backdrop-filter: blur(5px);
-            min-width: 200px;
+            position: absolute; background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px; border-radius: 8px; pointer-events: none; opacity: 0; transform: translate(-50%, -120%);
+            transition: opacity 0.3s; color: white; z-index: 50; font-family: var(--font-mono); backdrop-filter: blur(5px); min-width: 200px;
         }
         #globe-tooltip.active { opacity: 1; pointer-events: auto; }
         #globe-tooltip h4 { font-weight: bold; margin-bottom: 5px; color: #fff; }
@@ -141,52 +115,23 @@
 
         /* --- 3D CAROUSEL --- */
         .carousel-scene {
-            perspective: 2500px;
-            width: 100%;
-            height: 600px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: visible;
+            perspective: 2500px; width: 100%; height: 600px; display: flex; justify-content: center; align-items: center; overflow: visible;
         }
         .carousel {
-            width: 220px;
-            height: 380px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: rotate 60s infinite linear;
+            width: 220px; height: 380px; position: relative; transform-style: preserve-3d; animation: rotate 60s infinite linear;
         }
         .carousel:hover { animation-play-state: paused; }
         .carousel-item {
-            position: absolute;
-            width: 220px;
-            height: 380px;
-            left: 0;
-            top: 0;
-            background: #000;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            overflow: hidden;
-            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
+            position: absolute; width: 220px; height: 380px; left: 0; top: 0; background: #000; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; cursor: pointer;
         }
         .carousel-item:hover {
-            border-color: rgba(255, 255, 255, 1);
-            box-shadow: 0 0 50px rgba(255,255,255,0.2);
-            z-index: 10;
+            border-color: rgba(255, 255, 255, 1); box-shadow: 0 0 50px rgba(255,255,255,0.2); z-index: 10;
         }
         .carousel-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.4;
-            transition: opacity 0.5s ease;
-            filter: grayscale(100%);
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: opacity 0.5s ease; filter: grayscale(100%);
         }
-        .carousel-item:hover video {
-            opacity: 1;
-            filter: grayscale(0%);
-        }
+        .carousel-item:hover video { opacity: 1; filter: grayscale(0%); }
 
         .carousel-item:nth-child(1) { transform: rotateY(0deg) translateZ(550px); }
         .carousel-item:nth-child(2) { transform: rotateY(40deg) translateZ(550px); }
@@ -209,138 +154,106 @@
             .carousel-item:nth-child(8) { transform: rotateY(280deg) translateZ(300px); }
             .carousel-item:nth-child(9) { transform: rotateY(320deg) translateZ(300px); }
         }
-
         @keyframes rotate { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 
         /* --- VIDEO MODAL --- */
         #video-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 11000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-            backdrop-filter: blur(20px);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000;
+            display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(20px);
         }
         #video-modal.active { opacity: 1; pointer-events: all; }
         .modal-content {
-            width: auto;
-            height: 80vh;
-            aspect-ratio: 9/16;
-            position: relative;
-            box-shadow: 0 0 100px rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.1);
-            background: black;
+            width: auto; height: 80vh; aspect-ratio: 9/16; position: relative; box-shadow: 0 0 100px rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); background: black;
         }
         .modal-content video { width: 100%; height: 100%; object-fit: cover; }
         .close-modal-btn {
-            position: absolute; top: -50px; right: 0; color: white; background: transparent;
-            border: 1px solid rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s;
+            position: absolute; top: -50px; right: 0; color: white; background: transparent; border: 1px solid rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s;
         }
         .close-modal-btn:hover { background: white; color: black; }
 
-        /* --- INFO MODAL (ROADMAP - PRO VERSION) --- */
+        /* --- INFO MODAL (ROADMAP) --- */
         #info-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 11000;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            backdrop-filter: blur(15px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(15px);
         }
         #info-modal.active { opacity: 1; pointer-events: all; }
         .info-box {
-            background: rgba(10, 10, 10, 0.8); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 3rem; 
-            max-width: 500px; 
-            width: 90%;
-            position: relative; 
-            transform: translateY(20px) scale(0.95); 
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-            border-radius: 4px;
+            background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 3rem; max-width: 500px; width: 90%; position: relative; transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 40px 80px rgba(0,0,0,0.5); border-radius: 4px;
         }
         #info-modal.active .info-box { transform: translateY(0) scale(1); }
         .light-mode .info-box { background: rgba(255, 255, 255, 0.9); border-color: rgba(0,0,0,0.1); color: black; }
-        
         .info-box::before {
-            content: ''; position: absolute; top: -1px; left: -1px; right: -1px; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            content: ''; position: absolute; top: -1px; left: -1px; right: -1px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
         }
 
-        /* --- CURSOR --- */
+        /* --- CURSOR (DESKTOP ONLY) --- */
         .cursor-dot {
-            width: 6px; height: 6px; background-color: white; position: fixed; top: 0; left: 0;
-            transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference;
+            width: 6px; height: 6px; background-color: white; position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference;
         }
         .cursor-ring {
-            width: 30px; height: 30px; border: 1px solid white; position: fixed; top: 0; left: 0;
-            transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; mix-blend-mode: difference;
-            transition: width 0.3s, height 0.3s, transform 0.1s;
+            width: 30px; height: 30px; border: 1px solid white; position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; mix-blend-mode: difference; transition: width 0.3s, height 0.3s, transform 0.1s;
         }
 
         /* --- CARDS & UI --- */
         .offer-card {
-            background: var(--color-panel);
-            border: 1px solid var(--color-border);
-            padding: 3rem 2.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--color-panel); border: 1px solid var(--color-border); padding: 3rem 2.5rem; position: relative; overflow: hidden; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .offer-card * { transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         .offer-card:hover {
-            background: #0a0a0a; border-color: #333; transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            background: #0a0a0a; border-color: #333; transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
         .offer-card:hover h3, .offer-card:hover .meta { color: #fff; }
         .offer-card:hover p { color: #888; }
         .offer-card:hover .divider { background-color: #333; }
 
-        /* --- DASHBOARD REPAIR --- */
         .dashboard-container {
-            font-family: var(--font-mono); background: #050505; color: #fff; border: 1px solid #222;
-            padding: 20px; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            font-family: var(--font-mono); background: #050505; color: #fff; border: 1px solid #222; padding: 20px; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
         }
         .dash-header { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 15px; margin-bottom: 20px; }
         .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
         .stat-box { background: #111; padding: 15px; border: 1px solid #222; }
         .stat-value { font-size: 1.5rem; font-weight: bold; color: #fff; }
         .stat-label { font-size: 0.7rem; color: #666; text-transform: uppercase; }
-        
-        /* Flex Alignment Fixed */
         .graph-area {
-            height: 150px;
-            display: flex;
-            align-items: flex-end; /* Ensures bars sit at bottom */
-            gap: 4px;
-            padding-top: 20px;
-            border-top: 1px solid #1a1a1a;
-            width: 100%;
+            height: 150px; display: flex; align-items: flex-end; gap: 4px; padding-top: 20px; border-top: 1px solid #1a1a1a; width: 100%;
         }
-        .bar {
-            flex: 1;
-            background: #222;
-            transition: height 0.5s ease;
-            min-height: 2px;
-        }
+        .bar { flex: 1; background: #222; transition: height 0.5s ease; min-height: 2px; }
         .bar:hover { background: #fff; }
         .live-dot {
-            width: 8px; height: 8px; background: #00ff00; border-radius: 50%;
-            display: inline-block; box-shadow: 0 0 10px #00ff00; animation: blink 1s infinite;
+            width: 8px; height: 8px; background: #00ff00; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #00ff00; animation: blink 1s infinite;
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         /* --- MARQUEE --- */
-        .marquee-wrapper {
-            width: 100%; overflow: hidden; padding: 1.5rem 0; border-y: 1px solid var(--color-border); white-space: nowrap;
-        }
+        .marquee-wrapper { width: 100%; overflow: hidden; padding: 1.5rem 0; border-y: 1px solid var(--color-border); white-space: nowrap; }
         .marquee-content { display: inline-block; animation: scroll-left 50s linear infinite; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- COMPACT POPUP STYLE --- */
+        #waitlist-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 280px; /* Smaller, Compact Width */
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.5rem; /* Smaller Padding */
+            z-index: 12000; /* Max Z-Index */
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        #waitlist-popup.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        #waitlist-popup:hover { border-color: rgba(255, 255, 255, 0.6); animation: border-glitch 2s infinite; }
+        @keyframes border-glitch {
+            0% { border-color: rgba(255, 255, 255, 0.2); }
+            50% { border-color: rgba(255, 255, 255, 0.3); }
+            52% { border-color: #0ff; }
+            54% { border-color: rgba(255, 255, 255, 0.2); }
+            100% { border-color: rgba(255, 255, 255, 0.2); }
+        }
 
     </style>
 </head>
@@ -606,19 +519,19 @@
         </div>
     </section>
 
-    <!-- WAITLIST POPUP -->
+    <!-- WAITLIST POPUP (Compact & Center) -->
     <div id="waitlist-popup" class="text-center">
-        <div class="flex justify-between items-center mb-6">
-            <h4 class="text-sm font-bold uppercase tracking-widest text-white glitch-hover" data-text="Acceso Beta">Acceso Beta</h4>
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-white glitch-hover" data-text="Acceso Beta">Acceso Beta</h4>
             <button onclick="document.getElementById('waitlist-popup').classList.remove('active')" class="text-gray-500 hover:text-white transition-colors">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
-        <div class="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
-        <p class="text-xs text-gray-400 mb-6 font-mono">Asegura el futuro sintético de tu marca.</p>
+        <div class="mb-4 h-px w-full bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+        <p class="text-[10px] text-gray-400 mb-4 font-mono">Asegura el futuro sintético de tu marca.</p>
         <form onsubmit="handleWaitlist(event)">
-            <input type="email" placeholder="TU_EMAIL" class="bg-black border border-gray-800 text-white px-4 py-3 text-xs w-full focus:outline-none focus:border-white font-mono mb-3 placeholder-gray-700" required>
-            <button type="submit" class="bg-white text-black px-4 py-3 text-xs font-bold uppercase w-full hover:bg-gray-200 transition-colors">Unirse a la lista</button>
+            <input type="email" placeholder="TU_EMAIL" class="bg-black border border-gray-800 text-white px-3 py-2 text-[10px] w-full focus:outline-none focus:border-white font-mono mb-2 placeholder-gray-700" required>
+            <button type="submit" class="bg-white text-black px-3 py-2 text-[10px] font-bold uppercase w-full hover:bg-gray-200 transition-colors">Unirse</button>
         </form>
     </div>
 
@@ -730,7 +643,11 @@
                 onEnter: () => { document.body.classList.remove('gray-mode'); document.body.classList.add('light-mode'); },
                 onLeaveBack: () => { document.body.classList.remove('light-mode'); document.body.classList.add('gray-mode'); }
             });
-            setTimeout(() => { document.getElementById('waitlist-popup').classList.add('active'); }, 30000);
+            
+            // Waitlist Popup (30 Seconds Delay)
+            setTimeout(() => { 
+                document.getElementById('waitlist-popup').classList.add('active'); 
+            }, 30000);
         });
 
         /* --- 5. CURSOR LOGIC (DESKTOP) --- */
@@ -986,7 +903,7 @@
             
             setTimeout(() => {
                 form.innerHTML = `
-                    <div class="text-green-400 font-mono text-xs border border-green-500/30 p-4 bg-green-500/10 rounded">
+                    <div class="text-green-400 font-mono text-[10px] border border-green-500/30 p-2 bg-green-500/10 rounded">
                         <div class="font-bold mb-1">> ACCESO CONCEDIDO</div>
                         <div class="opacity-70">Bienvenido al protocolo Sennen.</div>
                     </div>
