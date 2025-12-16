@@ -40,7 +40,7 @@
 
         body.light-mode {
             --color-bg: #ffffff;
-            --color-text: #000000;
+            --color-text: #050505;
             --color-panel: #f8f8f8;
             --color-border: #e5e5e5;
         }
@@ -64,7 +64,20 @@
             line-height: 1;
         }
 
-        /* --- REFINED GLITCH EFFECT (LESS AGGRESSIVE) --- */
+        /* --- GLITCH/RIPPLE CANVAS --- */
+        #glitch-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998; /* Just below cursor */
+            opacity: 0.6;
+            mix-blend-mode: overlay;
+        }
+
+        /* --- REFINED GLITCH EFFECT FOR TEXT --- */
         .glitch-hover {
             position: relative;
             display: inline-block;
@@ -89,14 +102,14 @@
         .glitch-hover:hover::before {
             color: #0ff;
             z-index: -1;
-            transform: translate(-1px, 0); /* Reduced from 2px */
+            transform: translate(-1px, 0);
             clip-path: inset(0 0 0 0);
         }
 
         .glitch-hover:hover::after {
             color: #f0f;
             z-index: -2;
-            transform: translate(1px, 0); /* Reduced from 2px */
+            transform: translate(1px, 0);
             clip-path: inset(0 0 0 0);
         }
 
@@ -113,18 +126,18 @@
         .carousel-scene {
             perspective: 2500px;
             width: 100%;
-            height: 500px; /* Taller for portrait */
+            height: 500px;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: visible;
         }
         .carousel {
-            width: 220px; /* Slimmer */
-            height: 380px; /* Taller */
+            width: 220px;
+            height: 380px;
             position: relative;
             transform-style: preserve-3d;
-            animation: rotate 25s infinite linear;
+            animation: rotate 60s infinite linear; /* SLOWER ANIMATION */
         }
         .carousel:hover {
             animation-play-state: paused;
@@ -139,11 +152,8 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            padding: 20px;
-            font-family: var(--font-mono);
-            color: rgba(255,255,255,0.7);
-            font-size: 0.7rem;
+            justify-content: center;
+            align-items: center;
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
             overflow: hidden;
             transition: border-color 0.3s;
@@ -171,8 +181,14 @@
             top: 0;
             left: 0;
             background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
-            z-index: -1;
-            opacity: 0.5;
+            /* Simulate video content with animated gradients */
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         /* --- MARQUEE --- */
@@ -187,7 +203,7 @@
         }
         .marquee-content {
             display: inline-block;
-            animation: scroll-left 40s linear infinite;
+            animation: scroll-left 50s linear infinite;
         }
         @keyframes scroll-left {
             0% { transform: translateX(0); }
@@ -245,34 +261,99 @@
             pointer-events: all;
             transform: translate(-50%, -50%) scale(1);
         }
-        
-        /* Subtle glitch border for popup */
         #waitlist-popup:hover {
             border-color: rgba(255, 255, 255, 0.6);
             animation: border-glitch 2s infinite;
         }
-        @keyframes border-glitch {
-            0% { border-color: rgba(255, 255, 255, 0.2); }
-            50% { border-color: rgba(255, 255, 255, 0.3); }
-            52% { border-color: #0ff; }
-            54% { border-color: rgba(255, 255, 255, 0.2); }
-            100% { border-color: rgba(255, 255, 255, 0.2); }
-        }
 
-        /* --- CARD STYLES --- */
+        /* --- OFFER CARDS (High Standing) --- */
         .offer-card {
             background: var(--color-panel);
             border: 1px solid var(--color-border);
-            padding: 2.5rem;
-            transition: all 0.4s ease;
+            padding: 3rem 2.5rem;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
         }
+        .offer-card h3, .offer-card p, .offer-card .meta {
+            transition: color 0.3s ease;
+        }
+        /* Hover Effect: Invert to Dark/Premium */
         .offer-card:hover {
+            background: #0a0a0a;
+            border-color: #333;
             transform: translateY(-5px);
-            border-color: var(--color-text);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        .light-mode .offer-card {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        .offer-card:hover h3 { color: #fff; }
+        .offer-card:hover p { color: #888; }
+        .offer-card:hover .meta { color: #fff; }
+        .offer-card:hover .divider { background-color: #333; }
+
+        /* --- DASHBOARD UI --- */
+        .dashboard-container {
+            font-family: var(--font-mono);
+            background: #050505;
+            color: #fff;
+            border: 1px solid #222;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
         }
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #222;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #222;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .graph-area {
+            height: 150px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+        }
+        .bar {
+            flex: 1;
+            background: #222;
+            transition: height 0.5s ease;
+        }
+        .bar:hover { background: #fff; }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px #00ff00;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     </style>
 </head>
@@ -281,8 +362,11 @@
     <!-- PRELOADER -->
     <div id="preloader">
         <div class="loader-text glitch-hover" data-text="0%">0%</div>
-        <div class="mt-4 font-mono text-xs text-gray-500">INITIALIZING AI CONTENT ENGINE...</div>
+        <div class="mt-4 font-mono text-xs text-gray-500">INITIALIZING SYSTEM...</div>
     </div>
+
+    <!-- CANVAS FOR CURSOR EFFECTS -->
+    <canvas id="glitch-canvas"></canvas>
 
     <!-- CURSOR -->
     <div class="cursor-dot"></div>
@@ -296,68 +380,39 @@
             </a>
             <div class="hidden md:flex gap-10 text-[10px] font-mono uppercase tracking-widest">
                 <a href="#engine" class="hover:underline">Engine</a>
-                <a href="#offers" class="hover:underline">Solutions</a>
-                <a href="#roadmap" class="hover:underline">Roadmap</a>
+                <a href="#solutions" class="hover:underline">Solutions</a>
+                <a href="#architecture" class="hover:underline">Architecture</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO SECTION (BLACK) -->
-    <header class="relative min-h-screen flex flex-col justify-center items-center pt-10 overflow-hidden perspective-1000">
+    <header class="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden perspective-1000">
         
         <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
 
         <div class="container mx-auto px-6 z-10 flex flex-col items-center">
             
-            <h1 class="text-5xl md:text-8xl font-bold text-center tracking-tighter leading-[0.9] mb-16">
+            <!-- Pushed down further as requested -->
+            <h1 class="text-5xl md:text-8xl font-bold text-center tracking-tighter leading-[0.9] mb-16 mt-20">
                 <span class="block glitch-hover" data-text="AI CONTENT">AI CONTENT</span>
                 <span class="block glitch-hover text-gray-600" data-text="ENGINE">ENGINE</span>
             </h1>
 
-            <!-- 3D CAROUSEL PORTRAIT -->
+            <!-- 3D CAROUSEL PORTRAIT (NO TEXT, JUST VISUALS) -->
             <div class="carousel-scene mb-8">
                 <div class="carousel">
-                    <!-- Item 1 -->
-                    <div class="carousel-item">
-                        <div class="video-content"></div>
-                        <div class="font-bold text-sm mb-1">TESLA_BOT</div>
-                        <div class="text-[10px] opacity-60">ENGAGEMENT: 98%</div>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="carousel-item">
-                        <div class="video-content" style="background: linear-gradient(180deg, #222 0%, #111 100%)"></div>
-                        <div class="font-bold text-sm mb-1">BALENCIAGA</div>
-                        <div class="text-[10px] opacity-60">VIRALITY: HIGH</div>
-                    </div>
-                    <!-- Item 3 -->
-                    <div class="carousel-item">
-                        <div class="video-content"></div>
-                        <div class="font-bold text-sm mb-1">SPACEX</div>
-                        <div class="text-[10px] opacity-60">RETENTION: 45s</div>
-                    </div>
-                    <!-- Item 4 -->
-                    <div class="carousel-item">
-                        <div class="video-content"></div>
-                        <div class="font-bold text-sm mb-1">APPLE</div>
-                        <div class="text-[10px] opacity-60">CLICKS: 12.5k</div>
-                    </div>
-                    <!-- Item 5 -->
-                    <div class="carousel-item">
-                         <div class="video-content"></div>
-                        <div class="font-bold text-sm mb-1">NEURALINK</div>
-                        <div class="text-[10px] opacity-60">SHARES: 8.2k</div>
-                    </div>
-                    <!-- Item 6 -->
-                    <div class="carousel-item">
-                        <div class="video-content"></div>
-                        <div class="font-bold text-sm mb-1">SORA</div>
-                        <div class="text-[10px] opacity-60">VIEWS: 1.2M</div>
-                    </div>
+                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(45deg, #111, #333);"></div></div>
+                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(135deg, #000, #222);"></div></div>
+                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(225deg, #222, #444);"></div></div>
+                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(315deg, #111, #000);"></div></div>
+                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(90deg, #333, #111);"></div></div>
+                    <div class="carousel-item"><div class="video-content" style="background: linear-gradient(180deg, #000, #333);"></div></div>
                 </div>
             </div>
 
             <p class="font-mono text-[10px] text-gray-600 uppercase tracking-[0.3em] animate-pulse mt-8">
-                Modelo de negocio para la agencia del futuro
+                Operating System for Digital Sovereignty
             </p>
         </div>
     </header>
@@ -365,31 +420,31 @@
     <!-- TRIGGER GRAY MODE -->
     <div id="trigger-gray" class="h-10 w-full"></div>
 
-    <!-- NEWS / GLOBAL INSIGHT (GRAY) -->
+    <!-- GLOBAL INSIGHT (GRAY) -->
     <section id="engine" class="py-32 relative z-20 border-t border-white/5">
         <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
             <div>
-                <span class="inline-block px-3 py-1 border border-blue-500/30 text-blue-400 text-[10px] font-mono uppercase mb-6 rounded-full">Noticia Global</span>
+                <!-- Removed circle badge -->
                 <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-8">
                     The 90% Reality. <br>
                     <span class="opacity-40">Paradigm Shift.</span>
                 </h2>
-                <div class="text-sm font-mono text-gray-500 mb-8 border-l-2 border-blue-500 pl-4">
-                    "El engagement de la IA supera al contenido real."
+                <div class="text-sm font-mono text-gray-500 mb-8 border-l-2 border-white pl-4">
+                    "Synthetic engagement metrics are outperforming organic reach by 400%."
                 </div>
             </div>
             <div class="space-y-8 pt-4">
                 <p class="text-xl text-gray-400 font-light leading-relaxed">
-                    Más allá del volumen, la verdadera revolución es el <span class="text-white font-medium">Engagement</span>. Los videos generados con IA están logrando tasas de retención superiores al contenido tradicional.
+                    It is not about volume; it is about <span class="text-white font-medium">Algorithmic Resonance</span>. AI-generated assets achieve retention rates that biology simply cannot sustain.
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h4 class="text-white font-bold mb-2">Dominio de la Atención</h4>
-                        <p class="text-sm text-gray-500">Al eliminar errores y optimizar guiones al milímetro, el contenido sintético retiene al usuario por más tiempo.</p>
+                        <h4 class="text-white font-bold mb-2">Attention Dominance</h4>
+                        <p class="text-sm text-gray-500">Eliminating micro-errors and optimizing scripts for dopamine retention.</p>
                     </div>
                     <div>
-                        <h4 class="text-white font-bold mb-2">La Nueva Realidad</h4>
-                        <p class="text-sm text-gray-500">El ojo humano ya no distingue, y el algoritmo prefiere la consistencia perfecta de la IA.</p>
+                        <h4 class="text-white font-bold mb-2">The New Standard</h4>
+                        <p class="text-sm text-gray-500">The human eye no longer distinguishes; the algorithm prefers synthetic consistency.</p>
                     </div>
                 </div>
             </div>
@@ -407,107 +462,113 @@
     <div id="trigger-white" class="h-10 w-full"></div>
 
     <!-- OFFERS SECTION (WHITE) -->
-    <section id="offers" class="py-32 relative z-20">
+    <section id="solutions" class="py-32 relative z-20">
         <div class="max-w-[85%] mx-auto">
             <div class="mb-20">
                 <h3 class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Zero Friction</h3>
-                <h2 class="text-5xl font-bold tracking-tight text-black">Problema & Solución.</h2>
+                <h2 class="text-5xl font-bold tracking-tight text-black">Fricción & Arquitectura</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Option A -->
-                <div class="offer-card group">
-                    <div class="text-xs font-mono text-gray-400 mb-6 group-hover:text-blue-600 transition-colors">OPCIÓN A</div>
-                    <h3 class="text-2xl font-bold mb-3">Influencers UGC</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed mb-8">
-                        Contenido masivo sin tu cara. Escala campañas publicitarias con rostros sintéticos diversos.
+                <div class="offer-card group cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-4">Influencers UGC</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-10">
+                        Despliegue masivo de activos visuales. Escale campañas publicitarias con rostros sintéticos diversificados, eliminando la dependencia del talento humano.
                     </p>
-                    <div class="w-full h-px bg-gray-200 group-hover:bg-blue-600 transition-colors"></div>
-                    <div class="mt-4 text-xs font-bold uppercase">Core Offer</div>
+                    <div class="w-full h-px bg-gray-200 divider mb-6"></div>
+                    <div class="text-xs font-bold uppercase meta tracking-widest">Foundational Asset</div>
                 </div>
 
                 <!-- Option B -->
-                <div class="offer-card group">
-                    <div class="text-xs font-mono text-gray-400 mb-6 group-hover:text-purple-600 transition-colors">OPCIÓN B</div>
-                    <h3 class="text-2xl font-bold mb-3">Clon Digital</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed mb-8">
-                        Marca Personal Automatizada. Tu voz, tu rostro, escalado infinitamente sin grabar ni un segundo extra.
+                <div class="offer-card group cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-4">Clon Digital</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-10">
+                        Sintetización de Identidad. Su voz y rostro, escalados infinitamente. Presencia omnicanal sin requerir tiempo físico de grabación.
                     </p>
-                    <div class="w-full h-px bg-gray-200 group-hover:bg-purple-600 transition-colors"></div>
-                    <div class="mt-4 text-xs font-bold uppercase">High Ticket</div>
+                    <div class="w-full h-px bg-gray-200 divider mb-6"></div>
+                    <div class="text-xs font-bold uppercase meta tracking-widest">Identity Synthesis</div>
                 </div>
 
                 <!-- Option C -->
-                <div class="offer-card group">
-                    <div class="text-xs font-mono text-gray-400 mb-6 group-hover:text-green-600 transition-colors">OPCIÓN C</div>
-                    <h3 class="text-2xl font-bold mb-3">Cursos Digitales</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed mb-8">
-                        Activos de conocimiento. Empaqueta el expertise en IA y véndelo como producto digital.
+                <div class="offer-card group cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-4">Cursos Digitales</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-10">
+                        Capital Intelectual. Empaquetado estratégico de expertise en IA distribuido como producto digital de alto margen.
                     </p>
-                    <div class="w-full h-px bg-gray-200 group-hover:bg-green-600 transition-colors"></div>
-                    <div class="mt-4 text-xs font-bold uppercase">Passive Income</div>
+                    <div class="w-full h-px bg-gray-200 divider mb-6"></div>
+                    <div class="text-xs font-bold uppercase meta tracking-widest">Intellectual Capital</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ROADMAP & DASHBOARD (WHITE) -->
-    <section id="roadmap" class="py-32 border-t border-gray-100">
+    <section id="architecture" class="py-32 border-t border-gray-100">
         <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             
-            <div class="relative">
-                <!-- Abstract Dashboard Visual -->
-                <div class="w-full aspect-square bg-gray-50 border border-gray-200 p-8 relative overflow-hidden">
-                    <div class="absolute top-8 left-8 right-8 h-32 bg-white border border-gray-100 shadow-sm p-4">
-                        <div class="flex justify-between mb-4">
-                            <div class="w-20 h-2 bg-gray-200"></div>
-                            <div class="w-8 h-2 bg-green-200"></div>
+            <!-- REAL INTERACTIVE DASHBOARD -->
+            <div class="relative group cursor-crosshair">
+                <div class="dashboard-container transform transition-transform duration-500 group-hover:scale-[1.02]">
+                    <div class="dash-header">
+                        <div class="flex items-center gap-2">
+                            <span class="live-dot"></span>
+                            <span class="text-xs font-bold tracking-widest">SENNEN_OS v2.4</span>
                         </div>
-                        <div class="w-full h-16 bg-blue-50 relative overflow-hidden">
-                            <div class="absolute bottom-0 left-0 w-full h-full bg-blue-500 opacity-10 transform skew-x-12"></div>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-8 left-8 right-8 top-44 bg-white border border-gray-100 shadow-sm p-4 grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 h-full"></div>
-                        <div class="bg-gray-50 h-full"></div>
+                        <div class="text-[10px] opacity-50">CONNECTION: SECURE</div>
                     </div>
                     
-                    <!-- Floating Badge -->
-                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black text-white px-6 py-3 text-xs font-mono uppercase tracking-widest shadow-2xl">
-                        Real-Time Data
+                    <div class="stat-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Engagement</div>
+                            <div class="stat-value glitch-hover" data-text="98.4%">98.4%</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Retention</div>
+                            <div class="stat-value text-green-400">4m 12s</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">ROI</div>
+                            <div class="stat-value">+320%</div>
+                        </div>
+                    </div>
+
+                    <div class="text-[10px] uppercase mb-2 opacity-50 tracking-widest">Real-time Performance</div>
+                    <div class="graph-area" id="live-graph">
+                        <!-- Bars generated by JS -->
                     </div>
                 </div>
             </div>
 
             <div class="space-y-12">
                 <div>
-                    <h3 class="text-sm font-mono uppercase text-blue-600 mb-2">Tu Roadmap</h3>
-                    <h2 class="text-4xl font-bold mb-4">Plan de 90 Días.</h2>
+                    <h3 class="text-sm font-mono uppercase text-gray-500 mb-2">Protocolo de Implementación</h3>
+                    <h2 class="text-4xl font-bold mb-4">Plan de 90 Días</h2>
                     <p class="text-gray-500">
-                        Implementación estratégica desde la creación de activos hasta la automatización total.
+                        Ejecución estratégica desde la síntesis de activos hasta la automatización total del ecosistema.
                     </p>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="flex gap-4 items-start group cursor-pointer">
-                        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs font-mono group-hover:bg-black group-hover:text-white transition-colors">01</div>
+                <div class="space-y-8">
+                    <div class="flex gap-6 items-start group cursor-pointer">
+                        <div class="w-8 h-8 flex items-center justify-center text-xs font-mono border border-gray-300 rounded-full group-hover:bg-black group-hover:text-white transition-colors">01</div>
                         <div>
-                            <h4 class="font-bold">Pruebas / Demos</h4>
-                            <p class="text-sm text-gray-500">Ver ejemplos reales antes de escalar.</p>
+                            <h4 class="font-bold">Proof of Concept</h4>
+                            <p class="text-sm text-gray-500 mt-1">Validación de clones en entorno controlado.</p>
                         </div>
                     </div>
-                    <div class="flex gap-4 items-start group cursor-pointer">
-                        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs font-mono group-hover:bg-black group-hover:text-white transition-colors">02</div>
+                    <div class="flex gap-6 items-start group cursor-pointer">
+                        <div class="w-8 h-8 flex items-center justify-center text-xs font-mono border border-gray-300 rounded-full group-hover:bg-black group-hover:text-white transition-colors">02</div>
                         <div>
-                            <h4 class="font-bold">Dashboard</h4>
-                            <p class="text-sm text-gray-500">Rendimiento en tiempo real de tus clones.</p>
+                            <h4 class="font-bold">Dashboard Integration</h4>
+                            <p class="text-sm text-gray-500 mt-1">Visualización de métricas y optimización algorítmica.</p>
                         </div>
                     </div>
-                    <div class="flex gap-4 items-start group cursor-pointer">
-                        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs font-mono group-hover:bg-black group-hover:text-white transition-colors">03</div>
+                    <div class="flex gap-6 items-start group cursor-pointer">
+                        <div class="w-8 h-8 flex items-center justify-center text-xs font-mono border border-gray-300 rounded-full group-hover:bg-black group-hover:text-white transition-colors">03</div>
                         <div>
-                            <h4 class="font-bold">Comunidad > Contenido</h4>
-                            <p class="text-sm text-gray-500">El activo final donde reside el valor real.</p>
+                            <h4 class="font-bold">Ecosystem Scale</h4>
+                            <p class="text-sm text-gray-500 mt-1">El activo final: Comunidad propietaria y monetización.</p>
                         </div>
                     </div>
                 </div>
@@ -562,7 +623,7 @@
         
         let progress = 0;
         const interval = setInterval(() => {
-            progress += Math.floor(Math.random() * 8) + 2; // Faster load
+            progress += Math.floor(Math.random() * 8) + 2;
             if (progress > 100) progress = 100;
             loaderText.innerText = progress + "%";
             loaderText.setAttribute('data-text', progress + "%");
@@ -582,11 +643,88 @@
             }
         }, 30);
 
+        /* --- GLITCH / RIPPLE CANVAS EFFECT --- */
+        const canvas = document.getElementById('glitch-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class GlitchParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 20 + 5;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2;
+                this.color = Math.random() > 0.5 ? '#00ffff' : '#ff00ff';
+                this.life = 1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= 0.05;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life * 0.5;
+                ctx.fillRect(this.x, this.y, this.size, 2); // Digital glitch look (horizontal lines)
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function animateGlitch() {
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateGlitch);
+        }
+        animateGlitch();
+
+        window.addEventListener('mousemove', (e) => {
+            // Add particles on move
+            if (Math.random() > 0.5) {
+                particles.push(new GlitchParticle(e.clientX, e.clientY));
+            }
+        });
+
+
+        /* --- DASHBOARD LIVE GRAPH --- */
+        const graphArea = document.getElementById('live-graph');
+        for(let i=0; i<30; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = Math.random() * 100 + '%';
+            graphArea.appendChild(bar);
+        }
+        
+        // Animate Bars
+        setInterval(() => {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                if(Math.random() > 0.7) {
+                    bar.style.height = Math.random() * 100 + '%';
+                }
+            });
+        }, 200);
+
+
         /* --- SCROLL TRIGGERS --- */
         document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
 
-            // Theme: Gray
             ScrollTrigger.create({
                 trigger: "#trigger-gray",
                 start: "top center",
@@ -595,7 +733,6 @@
                 onLeaveBack: () => document.body.classList.remove('gray-mode')
             });
 
-            // Theme: White
             ScrollTrigger.create({
                 trigger: "#trigger-white",
                 start: "top center",
@@ -610,7 +747,6 @@
                 }
             });
 
-            // Waitlist Popup (30s delay)
             setTimeout(() => {
                 document.getElementById('waitlist-popup').classList.add('active');
             }, 30000);
@@ -630,8 +766,7 @@
             }, 50);
         });
 
-        // Hover Effect
-        const interactables = document.querySelectorAll('a, button, .offer-card, .carousel-item');
+        const interactables = document.querySelectorAll('a, button, .offer-card, .carousel-item, .dashboard-container');
         interactables.forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursorRing.style.transform = "translate(-50%, -50%) scale(1.5)";
