@@ -15,8 +15,8 @@
         :root {
             --color-bg: #050505;
             --color-text: #ffffff;
-            --color-panel: rgba(255, 255, 255, 0.03);
-            --color-border: rgba(255, 255, 255, 0.1);
+            --color-panel: #0a0a0a;
+            --color-border: rgba(255, 255, 255, 0.08);
             --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }
@@ -26,60 +26,44 @@
             background-color: var(--color-bg);
             color: var(--color-text);
             overflow-x: hidden;
-            cursor: none; /* Custom cursor for desktop only */
-            transition: background-color 1.5s cubic-bezier(0.16, 1, 0.3, 1), color 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: none;
+            transition: background-color 1s ease, color 1s ease;
         }
 
-        /* --- MOBILE ADAPTATIONS (CRITICAL) --- */
+        /* --- MOBILE FIXES --- */
         @media (max-width: 768px) {
-            body { cursor: auto !important; } /* Restore native cursor */
-            .cursor-dot, .cursor-ring, #glitch-canvas { display: none !important; } /* Hide custom cursor */
-            
+            body { cursor: auto !important; }
+            .cursor-dot, .cursor-ring, #liquid-canvas { display: none !important; }
             .carousel-scene { height: 350px; perspective: 800px; }
             .carousel { width: 140px; height: 240px; }
             .carousel-item { width: 140px; height: 240px; }
-            
-            /* Adjust font sizes for mobile */
             h1 { font-size: 2.5rem !important; } 
             h2 { font-size: 2rem !important; }
             .offer-card { padding: 1.5rem; }
-            
-            /* Modal adjustments */
             #video-modal .modal-content { width: 90%; height: auto; max-height: 70vh; }
-            
-            /* Popup adjustments for mobile */
             #waitlist-popup { width: 85% !important; padding: 1.5rem !important; }
+            .timeline-line { left: 1rem !important; }
+            .timeline-node { left: 0.75rem !important; }
+            .timeline-content { margin-left: 3rem !important; }
         }
 
-        /* --- THEME STATES --- */
-        body.gray-mode {
-            --color-bg: #111111;
-            --color-text: #f4f4f5;
-            --color-panel: rgba(255,255,255,0.05);
-            --color-border: rgba(255,255,255,0.15);
-        }
-
-        body.light-mode {
-            --color-bg: #ffffff;
-            --color-text: #050505;
-            --color-panel: #f8f8f8;
-            --color-border: #e5e5e5;
-        }
-
+        /* --- UTILS --- */
+        .force-text-white { color: #ffffff !important; }
+        
         /* --- PRELOADER --- */
         #preloader {
             position: fixed; inset: 0; background: #000; z-index: 9999;
             display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
         .loader-text {
-            font-family: var(--font-mono); font-size: 4rem; font-weight: bold; color: white; line-height: 1;
+            font-family: var(--font-sans); font-size: 4rem; font-weight: 800; color: white; line-height: 1; letter-spacing: -0.05em;
         }
         @media (min-width: 768px) { .loader-text { font-size: 6rem; } }
 
         /* --- CANVAS --- */
-        #glitch-canvas {
+        #liquid-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998;
-            opacity: 0.6; mix-blend-mode: overlay;
+            opacity: 0.3; mix-blend-mode: screen;
         }
         
         #globe-container { position: relative; width: 100%; height: 600px; }
@@ -88,29 +72,41 @@
         
         /* Globe Tooltip */
         #globe-tooltip {
-            position: absolute; background: rgba(10, 10, 10, 0.9); border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 15px; border-radius: 8px; pointer-events: none; opacity: 0; transform: translate(-50%, -120%);
-            transition: opacity 0.3s; color: white; z-index: 50; font-family: var(--font-mono); backdrop-filter: blur(5px); min-width: 200px;
+            position: absolute; background: rgba(10, 10, 10, 0.95); border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px; border-radius: 12px; pointer-events: none; opacity: 0; transform: translate(-50%, -120%);
+            transition: opacity 0.3s; color: white; z-index: 50; font-family: var(--font-mono); backdrop-filter: blur(10px); min-width: 220px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
         #globe-tooltip.active { opacity: 1; pointer-events: auto; }
-        #globe-tooltip h4 { font-weight: bold; margin-bottom: 5px; color: #fff; }
-        #globe-tooltip .stat { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px; color: #aaa; }
-        #globe-tooltip .close-tip { position: absolute; top: 5px; right: 5px; cursor: pointer; color: #666; font-size: 10px; }
+        #globe-tooltip h4 { font-weight: 700; margin-bottom: 8px; color: white; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+        #globe-tooltip .stat { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #aaa; }
+        #globe-tooltip .stat span:last-child { color: #fff; font-weight: 600; }
 
-        /* --- TEXT GLITCH --- */
-        .glitch-hover { position: relative; display: inline-block; }
-        .glitch-hover:hover {
-            animation: glitch-anim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
-            color: rgba(var(--color-text), 0.8);
+        /* --- GLITCH CINÉTICO --- */
+        .glitch-hover { position: relative; display: inline-block; color: inherit; transition: color 0.2s; font-weight: 800; cursor: default; }
+        .glitch-hover:hover { 
+            animation: glitch-skew 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite; 
+            color: transparent; 
+        } 
+        .glitch-hover::before, .glitch-hover::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; transition: opacity 0.2s; pointer-events: none; font-weight: 800;
         }
-        .glitch-hover:hover::before, .glitch-hover:hover::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+        .glitch-hover:hover::before {
+            opacity: 1; color: #fff; transform: translate(-2px, 0); z-index: 1;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
         }
-        .glitch-hover:hover::before { color: #0ff; z-index: -1; transform: translate(-2px, 0); clip-path: inset(0 0 0 0); }
-        .glitch-hover:hover::after { color: #f0f; z-index: -2; transform: translate(2px, 0); clip-path: inset(0 0 0 0); }
-        @keyframes glitch-anim {
-            0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); }
+        .glitch-hover:hover::after {
+            opacity: 1; color: #888; transform: translate(2px, 0); z-index: 2;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+        }
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-5deg); }
+            40% { transform: skew(5deg); }
+            60% { transform: skew(-2deg); }
+            80% { transform: skew(2deg); }
+            100% { transform: skew(0deg); }
         }
 
         /* --- 3D CAROUSEL --- */
@@ -118,18 +114,19 @@
             perspective: 2500px; width: 100%; height: 600px; display: flex; justify-content: center; align-items: center; overflow: visible;
         }
         .carousel {
-            width: 220px; height: 380px; position: relative; transform-style: preserve-3d; animation: rotate 60s infinite linear;
+            width: 220px; height: 380px; position: relative; transform-style: preserve-3d; animation: rotate 80s infinite linear;
         }
         .carousel:hover { animation-play-state: paused; }
         .carousel-item {
-            position: absolute; width: 220px; height: 380px; left: 0; top: 0; background: #000; border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0,0,0,0.8); overflow: hidden; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; cursor: pointer;
+            position: absolute; width: 220px; height: 380px; left: 0; top: 0; background: #0a0a0a; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden; transition: all 0.4s; cursor: pointer;
+            border-radius: 24px;
         }
         .carousel-item:hover {
-            border-color: rgba(255, 255, 255, 1); box-shadow: 0 0 50px rgba(255,255,255,0.2); z-index: 10;
+            border-color: rgba(255, 255, 255, 0.8); z-index: 100; transform: scale(1.1); box-shadow: 0 0 60px rgba(255,255,255,0.15);
         }
         .carousel-item video {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: opacity 0.5s ease; filter: grayscale(100%);
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: opacity 0.5s ease; filter: grayscale(100%); pointer-events: none;
         }
         .carousel-item:hover video { opacity: 1; filter: grayscale(0%); }
 
@@ -156,104 +153,128 @@
         }
         @keyframes rotate { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 
-        /* --- VIDEO MODAL --- */
-        #video-modal {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000;
-            display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(20px);
+        /* --- MODALS --- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(20px);
         }
-        #video-modal.active { opacity: 1; pointer-events: all; }
-        .modal-content {
-            width: auto; height: 80vh; aspect-ratio: 9/16; position: relative; box-shadow: 0 0 100px rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); background: black;
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        
+        .modal-content-video { 
+            width: auto; height: 80vh; aspect-ratio: 9/16; position: relative; border: 1px solid rgba(255,255,255,0.15); background: #000; box-shadow: 0 0 100px rgba(0,0,0,0.8);
+            border-radius: 24px; overflow: hidden;
         }
-        .modal-content video { width: 100%; height: 100%; object-fit: cover; }
-        .close-modal-btn {
-            position: absolute; top: -50px; right: 0; color: white; background: transparent; border: 1px solid rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s;
-        }
-        .close-modal-btn:hover { background: white; color: black; }
+        .modal-content-video video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- INFO MODAL (ROADMAP) --- */
-        #info-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(15px);
+        .modal-content-info {
+            background: #0f0f0f; border: 1px solid rgba(255,255,255,0.1); padding: 3rem; max-width: 600px; width: 90%; position: relative; transform: translateY(30px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            border-radius: 32px;
         }
-        #info-modal.active { opacity: 1; pointer-events: all; }
-        .info-box {
-            background: rgba(10, 10, 10, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 3rem; max-width: 500px; width: 90%; position: relative; transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 40px 80px rgba(0,0,0,0.5); border-radius: 4px;
+        .modal-overlay.active .modal-content-info { transform: translateY(0); }
+        
+        /* Updated Close Button */
+        .close-btn { 
+            position: absolute; top: 1.5rem; right: 1.5rem; color: #fff; background: rgba(255,255,255,0.1); 
+            border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; z-index: 20; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
         }
-        #info-modal.active .info-box { transform: translateY(0) scale(1); }
-        .light-mode .info-box { background: rgba(255, 255, 255, 0.9); border-color: rgba(0,0,0,0.1); color: black; }
-        .info-box::before {
-            content: ''; position: absolute; top: -1px; left: -1px; right: -1px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-        }
+        .close-btn:hover { background: white; color: black; }
 
-        /* --- CURSOR (DESKTOP ONLY) --- */
+        /* --- CURSOR (DESKTOP) --- */
         .cursor-dot {
-            width: 6px; height: 6px; background-color: white; position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference;
+            width: 6px; height: 6px; background-color: white; position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: exclusion;
         }
         .cursor-ring {
-            width: 30px; height: 30px; border: 1px solid white; position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; mix-blend-mode: difference; transition: width 0.3s, height 0.3s, transform 0.1s;
+            width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.4); position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; transition: width 0.3s, height 0.3s, border-color 0.3s; mix-blend-mode: exclusion;
         }
 
-        /* --- CARDS & UI --- */
+        /* --- OFFER CARDS PRO --- */
         .offer-card {
-            background: var(--color-panel); border: 1px solid var(--color-border); padding: 3rem 2.5rem; position: relative; overflow: hidden; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--color-panel); 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem 2.5rem; 
+            position: relative; 
+            overflow: hidden; 
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+            cursor: pointer;
+            border-radius: 32px;
         }
-        .offer-card * { transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        .offer-card:hover {
-            background: #0a0a0a; border-color: #333; transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        
+        /* Inner Fill Animation */
+        .offer-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.08) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
         }
-        .offer-card:hover h3, .offer-card:hover .meta { color: #fff; }
-        .offer-card:hover p { color: #888; }
-        .offer-card:hover .divider { background-color: #333; }
 
+        .offer-card:hover {
+            background: #080808; 
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-5px); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+        .offer-card:hover::before { opacity: 1; }
+
+        .offer-card h3 { color: var(--color-text); transition: color 0.4s; font-weight: 700; }
+        .offer-card p { color: #888; transition: color 0.4s; }
+        .offer-card:hover h3 { color: #fff; }
+        .offer-card:hover p { color: #ddd; }
+        
+        .offer-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
+        .offer-card-icon {
+            font-size: 1.2rem; opacity: 0.6; transition: all 0.5s ease; color: #fff;
+        }
+        .offer-card-arrow {
+            opacity: 0; transition: all 0.5s ease; transform: translateX(-10px); color: #fff;
+        }
+        .offer-card:hover .offer-card-icon { opacity: 1; transform: scale(1.1); text-shadow: 0 0 20px rgba(255,255,255,0.6); }
+        .offer-card:hover .offer-card-arrow { opacity: 1; transform: translateX(0); }
+        
+        .divider { height: 1px; width: 100%; background: var(--color-border); margin-bottom: 1.5rem; transition: background 0.3s; }
+        .offer-card:hover .divider { background: rgba(255,255,255,0.3); }
+
+        /* --- DASHBOARD --- */
         .dashboard-container {
-            font-family: var(--font-mono); background: #050505; color: #fff; border: 1px solid #222; padding: 20px; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            font-family: var(--font-mono); background: #0f0f0f; color: #fff; border: 1px solid #222; padding: 30px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            /* Cursor Visible */
         }
-        .dash-header { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 15px; margin-bottom: 20px; }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: #111; padding: 15px; border: 1px solid #222; }
-        .stat-value { font-size: 1.5rem; font-weight: bold; color: #fff; }
-        .stat-label { font-size: 0.7rem; color: #666; text-transform: uppercase; }
-        .graph-area {
-            height: 150px; display: flex; align-items: flex-end; gap: 4px; padding-top: 20px; border-top: 1px solid #1a1a1a; width: 100%;
+        .dash-header { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 20px; margin-bottom: 25px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+        .stat-box { background: #151515; padding: 20px; border: 1px solid #222; border-radius: 16px; transition: border-color 0.3s; }
+        .stat-box:hover { border-color: #444; }
+        .stat-value { font-size: 1.4rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
+        .stat-label { font-size: 0.65rem; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
+        
+        .graph-area { height: 150px; display: flex; align-items: flex-end; gap: 4px; padding-top: 20px; border-top: 1px solid #222; width: 100%; }
+        .bar { flex: 1; background: #333; transition: all 0.3s ease; min-height: 2px; border-radius: 2px 2px 0 0; }
+        .bar:hover { background: #fff; transform: scaleY(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .live-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px rgba(255,255,255,0.5); animation: blink 2s infinite; }
+
+        /* --- ROADMAP (TIMELINE) --- */
+        .timeline-container { position: relative; padding-left: 2rem; }
+        .timeline-line {
+            position: absolute; left: 2.4rem; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, #444, transparent);
         }
-        .bar { flex: 1; background: #222; transition: height 0.5s ease; min-height: 2px; }
-        .bar:hover { background: #fff; }
-        .live-dot {
-            width: 8px; height: 8px; background: #00ff00; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #00ff00; animation: blink 1s infinite;
+        .timeline-item { position: relative; margin-bottom: 4rem; cursor: pointer; group; }
+        .timeline-node {
+            position: absolute; left: 2rem; top: 0.5rem; width: 0.8rem; height: 0.8rem; background: #111; border: 1px solid #444; border-radius: 50%; transform: translateX(-50%); transition: all 0.3s;
         }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .timeline-item:hover .timeline-node { border-color: #fff; background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.6); }
+        .timeline-content { margin-left: 5rem; transition: transform 0.3s; }
+        .timeline-item:hover .timeline-content { transform: translateX(5px); }
 
         /* --- MARQUEE --- */
-        .marquee-wrapper { width: 100%; overflow: hidden; padding: 1.5rem 0; border-y: 1px solid var(--color-border); white-space: nowrap; }
-        .marquee-content { display: inline-block; animation: scroll-left 50s linear infinite; }
+        .marquee-wrapper { width: 100%; overflow: hidden; padding: 2rem 0; border-y: 1px solid var(--color-border); white-space: nowrap; background: var(--color-bg); }
+        .marquee-content { display: inline-block; animation: scroll-left 60s linear infinite; }
+        .marquee-content span { display: inline-block; padding: 0 2rem; opacity: 0.3; transition: all 0.3s ease; cursor: default; }
+        .marquee-content:hover { animation-play-state: paused; }
+        .marquee-content span:hover { opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1.05); color: #fff; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* --- COMPACT POPUP STYLE --- */
+        /* --- POPUP --- */
         #waitlist-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 280px; /* Smaller, Compact Width */
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1.5rem; /* Smaller Padding */
-            z-index: 12000; /* Max Z-Index */
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 280px; background: rgba(20, 20, 20, 0.95); border: 1px solid #333; padding: 1.5rem; z-index: 12000; opacity: 0; pointer-events: none; transition: all 0.5s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(20px); border-radius: 24px;
         }
         #waitlist-popup.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
-        #waitlist-popup:hover { border-color: rgba(255, 255, 255, 0.6); animation: border-glitch 2s infinite; }
-        @keyframes border-glitch {
-            0% { border-color: rgba(255, 255, 255, 0.2); }
-            50% { border-color: rgba(255, 255, 255, 0.3); }
-            52% { border-color: #0ff; }
-            54% { border-color: rgba(255, 255, 255, 0.2); }
-            100% { border-color: rgba(255, 255, 255, 0.2); }
-        }
 
     </style>
 </head>
@@ -262,40 +283,36 @@
     <!-- PRELOADER -->
     <div id="preloader">
         <div class="loader-text glitch-hover" data-text="0%">0%</div>
-        <div class="mt-4 font-mono text-xs text-gray-500 uppercase">Iniciando Motor...</div>
+        <div class="mt-4 font-mono text-[10px] text-gray-500 uppercase tracking-[0.3em]">Cargando Entorno</div>
     </div>
 
     <!-- CANVAS BG -->
-    <canvas id="glitch-canvas"></canvas>
+    <canvas id="liquid-canvas"></canvas>
 
     <!-- CURSOR -->
     <div class="cursor-dot"></div>
     <div class="cursor-ring"></div>
 
-    <!-- VIDEO MODAL -->
-    <div id="video-modal">
-        <div class="modal-content">
-            <button class="close-modal-btn" onclick="closeModal()">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <video id="modal-video-player" controls playsinline>
-                <source src="" type="video/mp4">
-            </video>
+    <!-- MODALS -->
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal-overlay" onclick="closeModal('video-modal')">
+        <div class="modal-content-video" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal('video-modal')" style="right: 20px; top: 20px;"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <video id="modal-video-player" controls playsinline><source src="" type="video/mp4"></video>
         </div>
     </div>
 
-    <!-- INFO MODAL (ROADMAP - PRO) -->
-    <div id="info-modal" onclick="closeInfoModal(event)">
-        <div class="info-box" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-                <span class="text-xs font-mono uppercase text-blue-500 tracking-widest" id="info-step">FASE 01</span>
-                <button onclick="closeInfoModal()" class="text-gray-500 hover:text-white transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <h3 class="text-3xl font-bold mb-6 tracking-tight glitch-hover" id="info-title" data-text="Título">Título</h3>
-            <p class="text-base text-gray-400 leading-relaxed font-light" id="info-desc">Descripción detallada.</p>
-            <div class="mt-8 pt-4 border-t border-gray-800 flex justify-between items-center">
-                <span class="text-[10px] font-mono uppercase text-gray-600">Estado: Listo para desplegar</span>
-                <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+    <!-- Info Modal -->
+    <div id="info-modal" class="modal-overlay" onclick="closeModal('info-modal')">
+        <div class="modal-content-info" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal('info-modal')"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="font-mono text-xs text-white/50 mb-6 tracking-widest" id="modal-tag">TAG</div>
+            <h3 class="text-3xl font-bold mb-6 text-white tracking-tight" id="modal-title">Title</h3>
+            <div class="h-px w-full bg-white/10 mb-6"></div>
+            <p class="text-gray-400 leading-relaxed font-light mb-10 text-sm" id="modal-desc">Description</p>
+            <div class="font-mono text-[10px] text-gray-600 uppercase flex justify-between">
+                <span>Estado del sistema</span>
+                <span class="text-white">EN LÍNEA</span>
             </div>
         </div>
     </div>
@@ -303,40 +320,34 @@
     <!-- NAVIGATION -->
     <nav class="fixed w-full z-50 py-6 mix-blend-difference text-white">
         <div class="max-w-[92%] mx-auto flex justify-between items-center">
-            <a href="#" class="text-lg font-bold tracking-tighter hover:text-gray-300 transition-colors glitch-hover" data-text="sennen.agency">
-                sennen.agency
-            </a>
-            <div class="hidden md:flex gap-10 text-[10px] font-mono uppercase tracking-widest">
-                <a href="#engine" class="hover:underline">Motor</a>
-                <a href="#solutions" class="hover:underline">Soluciones</a>
-                <a href="#architecture" class="hover:underline">Arquitectura</a>
+            <a href="#" class="text-lg font-bold tracking-tighter hover:text-gray-300 transition-colors glitch-hover" data-text="sennen.agency">sennen.agency</a>
+            <div class="hidden md:flex gap-12 text-[10px] font-mono uppercase tracking-widest text-gray-400">
+                <a href="#engine" class="hover:text-white transition-colors">Motor</a>
+                <a href="#solutions" class="hover:text-white transition-colors">Ofertas</a>
+                <a href="#vector" class="hover:text-white transition-colors">Vector</a>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION (BLACK) -->
-    <header class="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden perspective-1000">
-        
+    <!-- HERO SECTION -->
+    <header class="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden perspective-1000 bg-[#050505] text-white">
         <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
-
         <div class="container mx-auto px-6 z-10 flex flex-col items-center">
-            
-            <!-- 3D CAROUSEL (9 ITEMS) -->
+            <!-- 3D CAROUSEL -->
             <div class="carousel-scene mb-8 mt-20">
                 <div class="carousel" id="carousel-track">
-                    <div class="carousel-item" onclick="openModal('video1.mp4')"><video src="video1.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video2.mp4')"><video src="video2.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video3.mp4')"><video src="video3.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video4.mp4')"><video src="video4.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video5.mp4')"><video src="video5.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video6.mp4')"><video src="video6.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video7.mp4')"><video src="video7.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video8.mp4')"><video src="video8.mp4" muted loop autoplay playsinline></video></div>
-                    <div class="carousel-item" onclick="openModal('video9.mp4')"><video src="video9.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video1.mp4')"><video src="video1.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video2.mp4')"><video src="video2.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video3.mp4')"><video src="video3.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video4.mp4')"><video src="video4.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video5.mp4')"><video src="video5.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video6.mp4')"><video src="video6.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video7.mp4')"><video src="video7.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video8.mp4')"><video src="video8.mp4" muted loop autoplay playsinline></video></div>
+                    <div class="carousel-item" onclick="openVideo('video9.mp4')"><video src="video9.mp4" muted loop autoplay playsinline></video></div>
                 </div>
             </div>
-
-            <p class="font-mono text-[10px] text-gray-600 uppercase tracking-[0.3em] animate-pulse mt-12 text-center px-4">
+            <p class="font-mono text-[10px] text-gray-500 uppercase tracking-[0.4em] animate-pulse mt-12 text-center px-4">
                 Sistema Operativo para Soberanía Digital
             </p>
         </div>
@@ -345,15 +356,15 @@
     <!-- TRIGGER GRAY MODE -->
     <div id="trigger-gray" class="h-10 w-full"></div>
 
-    <!-- GLOBAL INSIGHT (GRAY) -->
-    <section id="engine" class="py-20 md:py-32 relative z-20 border-t border-white/5">
+    <!-- GLOBAL INSIGHT -->
+    <section id="engine" class="py-20 md:py-32 relative z-20 border-t border-white/5 force-text-white bg-[#050505]">
         <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
             <div>
-                <h2 class="text-3xl md:text-6xl font-bold leading-tight mb-8 glitch-hover" data-text="La Realidad del 90%.">
+                <h2 class="text-3xl md:text-6xl font-bold leading-tight mb-8 glitch-hover" data-text="La Realidad del 90%">
                     La Realidad del 90%. <br>
-                    <span class="opacity-40">Cambio de Paradigma.</span>
+                    <span class="opacity-30">Cambio de Paradigma.</span>
                 </h2>
-                <div class="text-sm font-mono text-gray-500 mb-8 border-l-2 border-white pl-4">
+                <div class="text-sm font-mono text-gray-500 mb-8 border-l border-white/20 pl-4">
                     "Las métricas de engagement sintético están superando el alcance orgánico en un 400%."
                 </div>
             </div>
@@ -363,101 +374,119 @@
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h4 class="text-white font-bold mb-2">Dominio de la Atención</h4>
-                        <p class="text-sm text-gray-500">Eliminando micro-errores y optimizando guiones para retención de dopamina.</p>
+                        <h4 class="text-white font-medium mb-2 text-sm uppercase tracking-wider">Dominio de la Atención</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">Erradicación de fricción cognitiva y modulación semántica para una adherencia neuro-química absoluta.</p>
                     </div>
                     <div>
-                        <h4 class="text-white font-bold mb-2">El Nuevo Estándar</h4>
-                        <p class="text-sm text-gray-500">El ojo humano ya no distingue; el algoritmo prefiere la consistencia sintética.</p>
+                        <h4 class="text-white font-medium mb-2 text-sm uppercase tracking-wider">El Nuevo Estándar</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">El ojo humano ya no distingue; el algoritmo prefiere la consistencia sintética.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- MARQUEE (GRAY) -->
-    <div class="marquee-wrapper text-3xl md:text-6xl font-bold uppercase tracking-tighter opacity-10 hover:opacity-100 transition-opacity duration-700">
+    <!-- MARQUEE (INTERACTIVE) -->
+    <div class="marquee-wrapper text-3xl md:text-6xl font-bold uppercase tracking-tighter">
         <div class="marquee-content">
-            Fricción Cero • Latencia Cero • Escala Infinita • Hiper-Personalización • Motor Sennen • Fricción Cero • Latencia Cero • Escala Infinita •
+            <span>Fricción Cero</span> <span>•</span> 
+            <span>Latencia Cero</span> <span>•</span> 
+            <span>Escala Infinita</span> <span>•</span> 
+            <span>Hiper-Personalización</span> <span>•</span> 
+            <span>Motor Sennen</span> <span>•</span> 
+            <span>Fricción Cero</span> <span>•</span> 
+            <span>Latencia Cero</span> <span>•</span> 
+            <span>Escala Infinita</span> <span>•</span>
         </div>
     </div>
 
     <!-- TRIGGER LIGHT MODE -->
     <div id="trigger-white" class="h-10 w-full"></div>
 
-    <!-- OFFERS SECTION (WHITE) -->
+    <!-- SOLUTIONS (INTERACTIVE & ROUNDED) -->
     <section id="solutions" class="py-20 md:py-32 relative z-20">
         <div class="max-w-[85%] mx-auto">
             <div class="mb-20">
-                <h3 class="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Fricción Cero</h3>
-                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-black glitch-hover" data-text="Fricción & Arquitectura">Fricción & Arquitectura</h2>
+                <h3 class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-4">Arquitectura</h3>
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-black glitch-hover" data-text="Estructura de Ofertas">Estructura de Ofertas</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Solución 1 -->
-                <div class="offer-card group cursor-pointer">
+                <!-- Option A -->
+                <div class="offer-card group" onclick="openContent('ugc')">
+                    <div class="offer-card-top">
+                        <div class="offer-card-icon"><i data-lucide="zap" class="w-6 h-6"></i></div>
+                        <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-6 h-6"></i></div>
+                    </div>
                     <h3 class="text-2xl font-bold mb-4">Influencers UGC</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed mb-10">
-                        Despliegue masivo de activos visuales. Escale campañas publicitarias con rostros sintéticos diversificados, eliminando la dependencia del talento humano.
+                    <p class="text-sm mb-10 leading-relaxed">
+                        Despliegue masivo de activos visuales sin dependencia humana.
                     </p>
-                    <div class="w-full h-px bg-gray-200 divider mb-6"></div>
-                    <div class="text-xs font-bold uppercase meta tracking-widest">Activo Fundacional</div>
+                    <div class="divider"></div>
+                    <div class="text-[10px] font-bold uppercase meta tracking-widest text-gray-400 group-hover:text-white">Ver Detalles +</div>
                 </div>
 
-                <!-- Solución 2 -->
-                <div class="offer-card group cursor-pointer">
+                <!-- Option B -->
+                <div class="offer-card group" onclick="openContent('clon')">
+                    <div class="offer-card-top">
+                        <div class="offer-card-icon"><i data-lucide="fingerprint" class="w-6 h-6"></i></div>
+                        <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-6 h-6"></i></div>
+                    </div>
                     <h3 class="text-2xl font-bold mb-4">Clon Digital</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed mb-10">
-                        Sintetización de Identidad. Su voz y rostro, escalados infinitamente. Presencia omnicanal sin requerir tiempo físico de grabación.
+                    <p class="text-sm mb-10 leading-relaxed">
+                        Sintetización de Identidad. Presencia omnicanal automatizada.
                     </p>
-                    <div class="w-full h-px bg-gray-200 divider mb-6"></div>
-                    <div class="text-xs font-bold uppercase meta tracking-widest">Síntesis de Identidad</div>
+                    <div class="divider"></div>
+                    <div class="text-[10px] font-bold uppercase meta tracking-widest text-gray-400 group-hover:text-white">Ver Detalles +</div>
                 </div>
 
-                <!-- Solución 3 -->
-                <div class="offer-card group cursor-pointer">
+                <!-- Option C -->
+                <div class="offer-card group" onclick="openContent('cursos')">
+                    <div class="offer-card-top">
+                        <div class="offer-card-icon"><i data-lucide="library" class="w-6 h-6"></i></div>
+                        <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-6 h-6"></i></div>
+                    </div>
                     <h3 class="text-2xl font-bold mb-4">Cursos Digitales</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed mb-10">
-                        Capital Intelectual. Empaquetado estratégico de expertise en IA distribuido como producto digital de alto margen.
+                    <p class="text-sm mb-10 leading-relaxed">
+                        Capital Intelectual. Empaquetado estratégico de expertise.
                     </p>
-                    <div class="w-full h-px bg-gray-200 divider mb-6"></div>
-                    <div class="text-xs font-bold uppercase meta tracking-widest">Capital Intelectual</div>
+                    <div class="divider"></div>
+                    <div class="text-[10px] font-bold uppercase meta tracking-widest text-gray-400 group-hover:text-white">Ver Detalles +</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- NEW GLOBE SECTION 2.0 -->
-    <section id="global-map" class="py-20 overflow-hidden relative">
-        <div class="max-w-[85%] mx-auto mb-10 text-center">
-            <h2 class="text-3xl font-bold mb-2 glitch-hover" data-text="Activación Neuronal Global">Activación Neuronal Global</h2>
-            <p class="text-xs font-mono text-gray-500 uppercase">Impacto en Tiempo Real - Arrastre para girar</p>
+    <!-- GLOBE SECTION (FORCED DARK MODE) -->
+    <section id="global-map" class="py-20 overflow-hidden relative bg-[#050505] force-text-white">
+        <div class="max-w-[85%] mx-auto mb-10 text-center relative z-10">
+            <h2 class="text-3xl font-bold mb-2 glitch-hover" data-text="ACTIVIDAD NEURAL">ACTIVIDAD NEURAL</h2>
+            <p class="text-xs font-mono text-gray-500 uppercase">Red Neural Global: Activa</p>
         </div>
         <div id="globe-container">
             <canvas id="globe-canvas"></canvas>
             <div id="globe-tooltip">
-                <button class="close-tip" onclick="document.getElementById('globe-tooltip').classList.remove('active')">✕</button>
                 <h4 id="tip-region">Region</h4>
                 <div class="stat"><span>Población Sintética:</span> <span id="tip-pop" class="text-white">0</span></div>
                 <div class="stat"><span>Nodos Activos:</span> <span id="tip-nodes" class="text-green-400">0</span></div>
-                <div class="stat"><span>Latencia:</span> <span class="text-blue-400">12ms</span></div>
             </div>
         </div>
     </section>
 
-    <!-- ARCHITECTURE & DASHBOARD -->
-    <section id="architecture" class="py-20 md:py-32 border-t border-gray-100">
-        <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+    <!-- VECTOR & DASHBOARD (FORCED DARK MODE) -->
+    <section id="vector" class="py-20 md:py-32 bg-[#050505] force-text-white border-t border-gray-900">
+        <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
             
-            <!-- REAL INTERACTIVE DASHBOARD -->
-            <div class="relative group cursor-crosshair">
-                <div class="dashboard-container transform transition-transform duration-500 group-hover:scale-[1.02]">
+            <!-- DASHBOARD (Monochrome) -->
+            <div class="relative group">
+                <div class="mb-4 text-xs font-mono text-gray-500 uppercase tracking-widest text-center">DASHBOARD DE RENDIMIENTO</div>
+                <div class="dashboard-container transform transition-transform duration-500 group-hover:scale-[1.01]">
                     <div class="dash-header">
                         <div class="flex items-center gap-2">
                             <span class="live-dot"></span>
-                            <span class="text-xs font-bold tracking-widest">SENNEN_OS v2.4</span>
+                            <span class="text-xs font-bold tracking-widest text-white">SENNEN_OS</span>
                         </div>
-                        <div class="text-[10px] opacity-50">CONEXIÓN: SEGURA</div>
+                        <div class="text-[10px] text-gray-500">METRICAS EN VIVO</div>
                     </div>
                     
                     <div class="stat-grid">
@@ -467,51 +496,64 @@
                         </div>
                         <div class="stat-box">
                             <div class="stat-label">Retención</div>
-                            <div class="stat-value text-green-400">4m 12s</div>
+                            <div class="stat-value">4m 12s</div>
                         </div>
                         <div class="stat-box">
-                            <div class="stat-label">ROI</div>
-                            <div class="stat-value">+320%</div>
+                            <div class="stat-label">Iteraciones</div>
+                            <div class="stat-value">12.4k</div>
                         </div>
                     </div>
 
-                    <div class="text-[10px] uppercase mb-2 opacity-50 tracking-widest">Rendimiento en Vivo</div>
+                    <div class="text-[10px] uppercase mb-4 text-white tracking-widest flex justify-between border-b border-gray-800 pb-2">
+                        <span>Bucle de Retroalimentación</span>
+                        <span>LIVE</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono mb-6 leading-relaxed">
+                        > Analizando patrones de caída de audiencia.<br>
+                        > Re-optimizando scripts en tiempo real.<br>
+                        > Iteración automática de ganchos virales.
+                    </div>
                     <div class="graph-area" id="live-graph"></div>
                 </div>
             </div>
 
-            <div class="space-y-12">
-                <div>
-                    <h3 class="text-sm font-mono uppercase text-gray-500 mb-2">Protocolo de Implementación</h3>
-                    <h2 class="text-4xl font-bold mb-4 glitch-hover" data-text="Plan de 90 Días">Plan de 90 Días</h2>
-                    <p class="text-gray-500">
-                        Ejecución estratégica desde la síntesis de activos hasta la automatización total del ecosistema.
-                    </p>
+            <!-- ROADMAP (TIMELINE) -->
+            <div class="timeline-container">
+                <div class="mb-12">
+                    <h3 class="text-sm font-mono uppercase text-gray-500 mb-2">Protocolo</h3>
+                    <h2 class="text-4xl font-bold mb-4 glitch-hover" data-text="Vector de Ejecución">Vector de Ejecución</h2>
                 </div>
 
-                <div class="space-y-8">
-                    <!-- Step 01 -->
-                    <div class="flex gap-6 items-start group cursor-pointer" onclick="openInfo('01')">
-                        <div class="w-8 h-8 flex items-center justify-center text-xs font-mono border border-gray-300 rounded-full group-hover:bg-black group-hover:text-white transition-colors">01</div>
-                        <div>
-                            <h4 class="font-bold">Prueba de Concepto</h4>
-                            <p class="text-sm text-gray-500 mt-1">Validación de clones en entorno controlado.</p>
+                <div class="relative">
+                    <div class="timeline-line"></div>
+                    
+                    <!-- Step 1 -->
+                    <div class="timeline-item" onclick="openContent('fase1')">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-content">
+                            <span class="text-xs font-mono text-gray-500 mb-1 block">FASE 01</span>
+                            <h4 class="text-xl font-medium mb-2 text-white">Inyección de Activos</h4>
+                            <p class="text-sm text-gray-500 font-light">Prueba de concepto y calibración de identidad.</p>
                         </div>
                     </div>
-                    <!-- Step 02 -->
-                    <div class="flex gap-6 items-start group cursor-pointer" onclick="openInfo('02')">
-                        <div class="w-8 h-8 flex items-center justify-center text-xs font-mono border border-gray-300 rounded-full group-hover:bg-black group-hover:text-white transition-colors">02</div>
-                        <div>
-                            <h4 class="font-bold">Integración de Dashboard</h4>
-                            <p class="text-sm text-gray-500 mt-1">Visualización de métricas y optimización algorítmica.</p>
+
+                    <!-- Step 2 -->
+                    <div class="timeline-item" onclick="openContent('fase2')">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-content">
+                            <span class="text-xs font-mono text-gray-500 mb-1 block">FASE 02</span>
+                            <h4 class="text-xl font-medium mb-2 text-white">Sincronización de Datos</h4>
+                            <p class="text-sm text-gray-500 font-light">Integración de Dashboard y optimización algorítmica.</p>
                         </div>
                     </div>
-                    <!-- Step 03 -->
-                    <div class="flex gap-6 items-start group cursor-pointer" onclick="openInfo('03')">
-                        <div class="w-8 h-8 flex items-center justify-center text-xs font-mono border border-gray-300 rounded-full group-hover:bg-black group-hover:text-white transition-colors">03</div>
-                        <div>
-                            <h4 class="font-bold">Escala del Ecosistema</h4>
-                            <p class="text-sm text-gray-500 mt-1">El activo final: Comunidad propietaria y monetización.</p>
+
+                    <!-- Step 3 -->
+                    <div class="timeline-item" onclick="openContent('fase3')">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-content">
+                            <span class="text-xs font-mono text-gray-500 mb-1 block">FASE 03</span>
+                            <h4 class="text-xl font-medium mb-2 text-white">Dominancia de Ecosistema</h4>
+                            <p class="text-sm text-gray-500 font-light">Escalado masivo y monetización de comunidad propietaria.</p>
                         </div>
                     </div>
                 </div>
@@ -519,38 +561,34 @@
         </div>
     </section>
 
-    <!-- WAITLIST POPUP (Compact & Center) -->
+    <!-- WAITLIST POPUP -->
     <div id="waitlist-popup" class="text-center">
         <div class="flex justify-between items-center mb-4">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-white glitch-hover" data-text="Acceso Beta">Acceso Beta</h4>
-            <button onclick="document.getElementById('waitlist-popup').classList.remove('active')" class="text-gray-500 hover:text-white transition-colors">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
+            <h4 class="text-xs font-bold uppercase tracking-widest text-white">Acceso Beta</h4>
+            <button onclick="document.getElementById('waitlist-popup').classList.remove('active')" class="text-gray-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
-        <div class="mb-4 h-px w-full bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+        <div class="mb-4 h-px w-full bg-gray-800"></div>
         <p class="text-[10px] text-gray-400 mb-4 font-mono">Asegura el futuro sintético de tu marca.</p>
         <form onsubmit="handleWaitlist(event)">
-            <input type="email" placeholder="TU_EMAIL" class="bg-black border border-gray-800 text-white px-3 py-2 text-[10px] w-full focus:outline-none focus:border-white font-mono mb-2 placeholder-gray-700" required>
+            <input type="email" placeholder="CORREO" class="bg-black border border-gray-800 text-white px-3 py-2 text-[10px] w-full focus:outline-none focus:border-white font-mono mb-2 placeholder-gray-600" required>
             <button type="submit" class="bg-white text-black px-3 py-2 text-[10px] font-bold uppercase w-full hover:bg-gray-200 transition-colors">Unirse</button>
         </form>
     </div>
 
     <!-- FOOTER -->
-    <footer class="py-20 border-t border-current/10 bg-white dark:bg-black transition-colors duration-1000">
+    <footer class="py-20 border-t border-gray-900 bg-[#050505] text-white">
         <div class="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-end">
             <div>
-                <a href="#" class="text-3xl font-bold tracking-tighter block mb-10 glitch-hover text-black dark:text-white" data-text="sennen.agency">sennen.agency</a>
+                <a href="#" class="text-3xl font-bold tracking-tighter block mb-10 hover:text-gray-400 transition-colors">sennen.agency</a>
                 <div class="flex gap-6 items-center">
-                    <a href="https://instagram.com/sennen.agency" target="_blank" class="text-black dark:text-white hover:opacity-50 transition-opacity">
-                        <i data-lucide="instagram" class="w-6 h-6"></i>
-                    </a>
-                    <div class="h-4 w-px bg-gray-300"></div>
-                    <span class="font-mono text-[10px] text-gray-500 uppercase">Automatizado. Escalable. High-Ticket.</span>
+                    <a href="https://instagram.com/sennen.agency" target="_blank" class="hover:text-white transition-colors text-gray-500"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <div class="h-4 w-px bg-gray-800"></div>
+                    <span class="font-mono text-[10px] text-gray-500 uppercase tracking-widest">High-Ticket AI Infrastructure</span>
                 </div>
             </div>
             <div class="mt-12 md:mt-0 text-right">
-                <div class="font-mono text-[10px] text-gray-400 mb-2">ESTADO DEL SISTEMA: ÓPTIMO</div>
-                <div class="font-mono text-[10px] text-gray-400">LONDRES • TOKIO • MADRID • BUENOS AIRES</div>
+                <div class="font-mono text-[10px] text-gray-500 mb-2">ESTADO: ÓPTIMO</div>
+                <div class="font-mono text-[10px] text-gray-500">LONDRES • MADRID • BUENOS AIRES</div>
             </div>
         </div>
     </footer>
@@ -558,67 +596,122 @@
     <script>
         lucide.createIcons();
 
-        /* --- 1. PRELOADER & INTRO --- */
+        /* --- DATA FOR MODALS --- */
+        const contentData = {
+            'ugc': {
+                tag: 'CORE OFFER',
+                title: 'Influencers UGC',
+                desc: 'Creamos una red de avatares sintéticos hiper-realistas diseñados para testear creatividades publicitarias a escala masiva. Eliminamos los costes de contratación, estudios y re-grabaciones. Iteramos guiones basados en retención segundo a segundo.'
+            },
+            'clon': {
+                tag: 'HIGH TICKET',
+                title: 'Clon Digital',
+                desc: 'Digitalizamos tu esencia. Capturamos tu voz, micro-expresiones y estilo de comunicación para crear un activo digital que puede generar contenido ilimitado en múltiples idiomas. Tu marca personal sigue trabajando mientras tú duermes.'
+            },
+            'cursos': {
+                tag: 'PASSIVE INCOME',
+                title: 'Cursos Digitales',
+                desc: 'Transformamos tu conocimiento en productos digitales de alto valor. Utilizamos presentadores de IA para mantener el contenido siempre actualizado sin necesidad de volver a grabar lecciones completas.'
+            },
+            'fase1': {
+                tag: 'SPRINT 01',
+                title: 'Inyección de Activos',
+                desc: 'Despliegue inicial de 3 prototipos de IA en canales controlados. Pruebas A/B de tono, estética y velocidad de habla. Análisis de sentimiento preliminar.'
+            },
+            'fase2': {
+                tag: 'SPRINT 02',
+                title: 'Sincronización',
+                desc: 'Conexión con el Dashboard Sennen. Visualización de métricas en tiempo real. La IA comienza a auto-corregir sus guiones basándose en los puntos de caída de retención.'
+            },
+            'fase3': {
+                tag: 'SPRINT 03',
+                title: 'Dominancia',
+                desc: 'Escalado horizontal a todas las plataformas. Activación de funnels de venta automáticos operados por agentes de IA que conversan con tus leads.'
+            }
+        };
+
+        /* --- PRELOADER --- */
         const preloader = document.getElementById('preloader');
         const loaderText = preloader.querySelector('.loader-text');
         const mainBody = document.getElementById('main-body');
-        
         let progress = 0;
         const interval = setInterval(() => {
             progress += Math.floor(Math.random() * 8) + 2;
             if (progress > 100) progress = 100;
             loaderText.innerText = progress + "%";
-            loaderText.setAttribute('data-text', progress + "%");
-            
             if (progress === 100) {
                 clearInterval(interval);
-                gsap.to(preloader, {
-                    opacity: 0, duration: 0.8, ease: "power2.inOut",
-                    onComplete: () => {
-                        preloader.style.display = 'none';
-                        mainBody.classList.remove('opacity-0');
-                        mainBody.classList.remove('overflow-hidden');
-                    }
-                });
+                gsap.to(preloader, { opacity: 0, duration: 0.8, ease: "power2.inOut", onComplete: () => { preloader.style.display = 'none'; mainBody.classList.remove('opacity-0'); mainBody.classList.remove('overflow-hidden'); }});
             }
         }, 30);
 
-        /* --- 2. GLITCH CANVAS --- */
-        const canvas = document.getElementById('glitch-canvas');
-        if(window.innerWidth > 768) {
+        /* --- MODAL LOGIC --- */
+        function openVideo(src) {
+            const m = document.getElementById('video-modal');
+            const v = document.getElementById('modal-video-player');
+            m.classList.add('active'); v.src = src; v.play();
+            document.getElementById('carousel-track').style.animationPlayState = 'paused';
+        }
+        function openContent(key) {
+            const data = contentData[key];
+            document.getElementById('modal-tag').innerText = data.tag;
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-desc').innerText = data.desc;
+            document.getElementById('info-modal').classList.add('active');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            if(id === 'video-modal') {
+                const v = document.getElementById('modal-video-player');
+                v.pause(); v.src = "";
+                document.getElementById('carousel-track').style.animationPlayState = 'running';
+            }
+        }
+        
+        // GLOBAL CLOSE (ESC & OVERLAY)
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') {
+                closeModal('video-modal');
+                closeModal('info-modal');
+                document.getElementById('waitlist-popup').classList.remove('active');
+            }
+        });
+
+        /* --- LIQUID CURSOR TRAIL (PARTICLES) --- */
+        const canvas = document.getElementById('liquid-canvas');
+        if (window.innerWidth > 768) {
             const ctx = canvas.getContext('2d');
             let width, height;
             let particles = [];
             function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
-            window.addEventListener('resize', resize);
-            resize();
-            class GlitchParticle {
+            window.addEventListener('resize', resize); resize();
+            
+            class Particle {
                 constructor(x, y) {
-                    this.x = x; this.y = y; this.size = Math.random() * 20 + 5;
-                    this.speedX = (Math.random() - 0.5) * 2; this.speedY = (Math.random() - 0.5) * 2;
-                    this.color = Math.random() > 0.5 ? '#00ffff' : '#ff00ff'; this.life = 1;
+                    this.x = x; this.y = y; this.size = Math.random() * 20 + 10;
+                    this.life = 1; this.decay = 0.02;
                 }
-                update() { this.x += this.speedX; this.y += this.speedY; this.life -= 0.05; }
+                update() { this.size *= 0.95; this.life -= this.decay; }
                 draw() {
-                    ctx.fillStyle = this.color; ctx.globalAlpha = this.life * 0.5;
-                    ctx.fillRect(this.x, this.y, this.size, 2); ctx.globalAlpha = 1;
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.life * 0.05})`; ctx.fill();
                 }
             }
-            function animateGlitch() {
+            function animate() {
                 ctx.clearRect(0, 0, width, height);
-                for (let i = 0; i < particles.length; i++) {
+                for(let i=0; i<particles.length; i++) {
                     particles[i].update(); particles[i].draw();
-                    if (particles[i].life <= 0) { particles.splice(i, 1); i--; }
+                    if(particles[i].life <= 0 || particles[i].size < 0.5) { particles.splice(i, 1); i--; }
                 }
-                requestAnimationFrame(animateGlitch);
+                requestAnimationFrame(animate);
             }
-            animateGlitch();
-            window.addEventListener('mousemove', (e) => {
-                if (Math.random() > 0.5) particles.push(new GlitchParticle(e.clientX, e.clientY));
+            animate();
+            window.addEventListener('mousemove', e => {
+                particles.push(new Particle(e.clientX, e.clientY));
             });
         }
 
-        /* --- 3. DASHBOARD BARS --- */
+        /* --- DASHBOARD GRAPH --- */
         const graphArea = document.getElementById('live-graph');
         for(let i=0; i<30; i++) {
             const bar = document.createElement('div');
@@ -630,7 +723,190 @@
             bars.forEach(bar => { if(Math.random() > 0.7) bar.style.height = Math.random() * 100 + '%'; });
         }, 200);
 
-        /* --- 4. SCROLL TRIGGERS (THEME) --- */
+        /* --- GLOBE (SILVER DUST NODES WITH PULSE) --- */
+        const globeCanvas = document.getElementById('globe-canvas');
+        const tooltip = document.getElementById('globe-tooltip');
+        const tipRegion = document.getElementById('tip-region');
+        const tipPop = document.getElementById('tip-pop');
+        const tipNodes = document.getElementById('tip-nodes');
+
+        if (globeCanvas) {
+            const gCtx = globeCanvas.getContext('2d');
+            let gW = globeCanvas.width = globeCanvas.offsetWidth;
+            let gH = globeCanvas.height = globeCanvas.offsetHeight;
+            
+            // Physics
+            let rotY = 0; let rotX = 0;
+            let velY = 0.002; let velX = 0;
+            let dragging = false; let lx=0; let ly=0;
+            let mx = -1000, my = -1000;
+
+            const dots = [];
+            const dust = [];
+            
+            // Generate Data
+            const regions = [
+                { name: "NA_Server_01", pop: "4.2M", nodes: 142 },
+                { name: "EU_Core_West", pop: "3.8M", nodes: 98 },
+                { name: "Asia_Pacific_Node", pop: "8.1M", nodes: 215 },
+                { name: "SA_Hub_Latam", pop: "2.5M", nodes: 64 }
+            ];
+
+            for (let i = 0; i < 700; i++) {
+                const phi = Math.acos(-1 + (2 * i) / 700);
+                const theta = Math.sqrt(700 * Math.PI) * phi;
+                dots.push({
+                    x: Math.cos(theta) * Math.sin(phi),
+                    y: Math.sin(theta) * Math.sin(phi),
+                    z: Math.cos(phi),
+                    isNode: Math.random() > 0.95, // 5% chance active
+                    pulseOffset: Math.random() * 100,
+                    active: false
+                });
+            }
+            
+            // Dust
+            for(let i=0; i<100; i++) {
+                dust.push({
+                    x: Math.random() * gW,
+                    y: Math.random() * gH,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2
+                });
+            }
+
+            let frame = 0;
+
+            function drawGlobe() {
+                gCtx.clearRect(0, 0, gW, gH);
+                const r = Math.min(gW, gH) * 0.35;
+                frame++;
+                
+                // Inertia
+                if(!dragging) {
+                    if (Math.abs(velY) > 0.002) velY *= 0.98;
+                    if (Math.abs(velX) > 0) velX *= 0.95;
+                    rotY += velY;
+                    rotX += velX;
+                }
+
+                // Random Activation
+                if(frame % 20 === 0) {
+                    const randomDot = dots[Math.floor(Math.random() * dots.length)];
+                    if(randomDot.isNode) randomDot.active = true;
+                }
+
+                dots.forEach(d => {
+                    let x = d.x * Math.cos(rotY) - d.z * Math.sin(rotY);
+                    let z = d.z * Math.cos(rotY) + d.x * Math.sin(rotY);
+                    let y = d.y * Math.cos(rotX) - z * Math.sin(rotX);
+                    z = z * Math.cos(rotX) + d.y * Math.sin(rotX);
+
+                    // Map 3D to 2D
+                    let scale = 300 / (300 - z * r);
+                    let px = gW/2 + x * r;
+                    let py = gH/2 + y * r;
+                    
+                    // Store for click
+                    d.sx = px; d.sy = py; d.visible = z < 0.5;
+
+                    if (z < 0.5) {
+                        const alpha = 0.5 - z;
+                        gCtx.beginPath();
+                        
+                        if (d.isNode) {
+                            // Breathe effect
+                            let pulse = (Math.sin((frame + d.pulseOffset) * 0.05) + 1) / 2; // 0 to 1
+                            if(d.active) {
+                                d.active = Math.random() > 0.01; // Chance to turn off
+                            }
+                            
+                            let size = d.active ? 3 : 2;
+                            let opacity = d.active ? alpha : alpha * 0.5;
+                            
+                            gCtx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                            gCtx.arc(px, py, size, 0, Math.PI * 2);
+                            
+                            // Glow for active
+                            if(d.active) {
+                                gCtx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3 * pulse})`;
+                                gCtx.arc(px, py, size * 2, 0, Math.PI * 2);
+                            }
+                        } else {
+                            gCtx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3})`;
+                            gCtx.arc(px, py, 1, 0, Math.PI * 2);
+                        }
+                        gCtx.fill();
+                    }
+                });
+                
+                // Draw Dust
+                gCtx.fillStyle = "rgba(255, 255, 255, 0.1)";
+                dust.forEach(p => {
+                    let dx = p.x - mx;
+                    let dy = p.y - my;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if(dist < 100) { p.vx += dx * 0.001; p.vy += dy * 0.001; }
+                    p.x += p.vx; p.y += p.vy;
+                    p.vx *= 0.98; p.vy *= 0.98;
+                    if(p.x < 0) p.x = gW; if(p.x > gW) p.x = 0;
+                    if(p.y < 0) p.y = gH; if(p.y > gH) p.y = 0;
+                    gCtx.beginPath(); gCtx.arc(p.x, p.y, p.size, 0, Math.PI*2); gCtx.fill();
+                });
+
+                requestAnimationFrame(drawGlobe);
+            }
+            drawGlobe();
+            
+            // Interactions
+            globeCanvas.addEventListener('mousedown', e => { 
+                dragging=true; lx=e.clientX; ly=e.clientY; globeCanvas.style.cursor='grabbing'; 
+            });
+            window.addEventListener('mouseup', () => { 
+                dragging=false; globeCanvas.style.cursor='grab'; 
+            });
+            window.addEventListener('mousemove', e => {
+                const rect = globeCanvas.getBoundingClientRect();
+                mx = e.clientX - rect.left; my = e.clientY - rect.top;
+                
+                if(dragging) {
+                    const deltaX = e.clientX - lx;
+                    const deltaY = e.clientY - ly;
+                    velY = deltaX * 0.005;
+                    velX = deltaY * 0.005;
+                    rotY += velY; rotX += velX;
+                    lx=e.clientX; ly=e.clientY;
+                }
+            });
+            
+            // Click Handler
+            globeCanvas.addEventListener('click', e => {
+                const rect = globeCanvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+                
+                let hit = false;
+                dots.forEach(d => {
+                    if(d.visible && d.isNode) {
+                        const dist = Math.sqrt((clickX - d.sx)**2 + (clickY - d.sy)**2);
+                        if(dist < 10) {
+                            const region = regions[Math.floor(Math.random() * regions.length)];
+                            tipRegion.innerText = region.name;
+                            tipPop.innerText = region.pop;
+                            tipNodes.innerText = region.nodes;
+                            tooltip.style.left = d.sx + 'px';
+                            tooltip.style.top = d.sy + 'px';
+                            tooltip.classList.add('active');
+                            hit = true;
+                        }
+                    }
+                });
+                if(!hit && !dragging) tooltip.classList.remove('active');
+            });
+        }
+
+        /* --- SCROLL TRIGGERS --- */
         document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
             ScrollTrigger.create({
@@ -643,274 +919,27 @@
                 onEnter: () => { document.body.classList.remove('gray-mode'); document.body.classList.add('light-mode'); },
                 onLeaveBack: () => { document.body.classList.remove('light-mode'); document.body.classList.add('gray-mode'); }
             });
-            
-            // Waitlist Popup (30 Seconds Delay)
-            setTimeout(() => { 
-                document.getElementById('waitlist-popup').classList.add('active'); 
-            }, 30000);
+            setTimeout(() => { document.getElementById('waitlist-popup').classList.add('active'); }, 30000);
         });
 
-        /* --- 5. CURSOR LOGIC (DESKTOP) --- */
+        /* --- CURSOR (DESKTOP) --- */
         if(window.innerWidth > 768) {
-            const cursorDot = document.querySelector('.cursor-dot');
-            const cursorRing = document.querySelector('.cursor-ring');
-            window.addEventListener('mousemove', (e) => {
-                cursorDot.style.left = `${e.clientX}px`; cursorDot.style.top = `${e.clientY}px`;
-                setTimeout(() => { cursorRing.style.left = `${e.clientX}px`; cursorRing.style.top = `${e.clientY}px`; }, 50);
-            });
-            document.querySelectorAll('a, button, .offer-card, .carousel-item, .dashboard-container, .group').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    cursorRing.style.transform = "translate(-50%, -50%) scale(1.5)";
-                    cursorRing.style.mixBlendMode = "difference"; cursorRing.style.backgroundColor = "white";
-                });
-                el.addEventListener('mouseleave', () => {
-                    cursorRing.style.transform = "translate(-50%, -50%) scale(1)"; cursorRing.style.backgroundColor = "transparent";
-                });
-            });
-        }
-
-        /* --- 6. VIDEO MODAL --- */
-        const modal = document.getElementById('video-modal');
-        const modalPlayer = document.getElementById('modal-video-player');
-        function openModal(videoSrc) {
-            modal.classList.add('active');
-            modalPlayer.src = videoSrc;
-            modalPlayer.muted = false; // Enable Sound
-            modalPlayer.play();
-            document.getElementById('carousel-track').style.animationPlayState = 'paused';
-        }
-        function closeModal() {
-            modal.classList.remove('active');
-            modalPlayer.pause(); modalPlayer.src = "";
-            document.getElementById('carousel-track').style.animationPlayState = 'running';
-        }
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-        /* --- 7. GLOBE ANIMATION (ADVANCED) --- */
-        const globeCanvas = document.getElementById('globe-canvas');
-        const tooltip = document.getElementById('globe-tooltip');
-        const tipRegion = document.getElementById('tip-region');
-        const tipPop = document.getElementById('tip-pop');
-        const tipNodes = document.getElementById('tip-nodes');
-
-        if (globeCanvas) {
-            const globeCtx = globeCanvas.getContext('2d');
-            let gWidth = globeCanvas.width = globeCanvas.offsetWidth;
-            let gHeight = globeCanvas.height = globeCanvas.offsetHeight;
-            
-            // Physics State
-            let rotX = 0; // Vertical
-            let rotY = 0; // Horizontal
-            let velX = 0;
-            let velY = 0.002; // Base spin
-            let isDragging = false;
-            let lastMouseX = 0;
-            let lastMouseY = 0;
-
-            // Generate Points (Sphere)
-            const dots = [];
-            const numDots = 600;
-            for (let i = 0; i < numDots; i++) {
-                const phi = Math.acos(-1 + (2 * i) / numDots);
-                const theta = Math.sqrt(numDots * Math.PI) * phi;
-                dots.push({
-                    x: Math.cos(theta) * Math.sin(phi),
-                    y: Math.sin(theta) * Math.sin(phi),
-                    z: Math.cos(phi),
-                    isNode: Math.random() > 0.95, // 5% chance of being a "Human Node"
-                    pulse: Math.random() * Math.PI
-                });
-            }
-
-            // Fake Regions Data
-            const regions = [
-                { name: "NA_Server_01", pop: "4.2M", nodes: 142 },
-                { name: "EU_Core_West", pop: "3.8M", nodes: 98 },
-                { name: "Asia_Pacific_Node", pop: "8.1M", nodes: 215 },
-                { name: "SA_Hub_Latam", pop: "2.5M", nodes: 64 }
-            ];
-
-            function drawGlobe() {
-                globeCtx.clearRect(0, 0, gWidth, gHeight);
-                const radius = Math.min(gWidth, gHeight) * 0.35;
-                const cx = gWidth / 2;
-                const cy = gHeight / 2;
-                const isLight = document.body.classList.contains('light-mode');
-
-                // Physics: Inertia
-                if (!isDragging) {
-                    // Decay velocity slightly to a minimum speed
-                    if (Math.abs(velY) > 0.002) velY *= 0.95;
-                    else velY = (velY > 0 ? 0.002 : -0.002);
-                    
-                    if (Math.abs(velX) > 0) velX *= 0.95;
-                    
-                    rotY -= velY; // Reverse direction
-                    rotX += velX;
-                }
-
-                dots.forEach(dot => {
-                    // Rotate Y (Horizontal)
-                    let x1 = dot.x * Math.cos(rotY) - dot.z * Math.sin(rotY);
-                    let z1 = dot.z * Math.cos(rotY) + dot.x * Math.sin(rotY);
-                    
-                    // Rotate X (Vertical)
-                    let y2 = dot.y * Math.cos(rotX) - z1 * Math.sin(rotX);
-                    let z2 = z1 * Math.cos(rotX) + dot.y * Math.sin(rotX);
-                    let x2 = x1;
-
-                    // Projection
-                    let scale = 300 / (300 - z2 * radius);
-                    let px = cx + x2 * radius;
-                    let py = cy + y2 * radius;
-
-                    // Store screen coords for click detection
-                    dot.sx = px;
-                    dot.sy = py;
-                    dot.visible = z2 < 0.5;
-
-                    if (dot.visible) {
-                        let size = 1.2;
-                        let alpha = 0.5 - z2;
-                        
-                        globeCtx.beginPath();
-                        
-                        if (dot.isNode) {
-                            // Active Human Node
-                            size = 3;
-                            dot.pulse += 0.1;
-                            let pulseScale = (Math.sin(dot.pulse) + 2) / 2; // 0.5 to 1.5
-                            
-                            globeCtx.fillStyle = `rgba(255, 50, 50, ${alpha})`;
-                            globeCtx.arc(px, py, size * pulseScale, 0, Math.PI * 2);
-                            globeCtx.fill();
-                            
-                            // Glow
-                            globeCtx.fillStyle = `rgba(255, 0, 0, ${alpha * 0.3})`;
-                            globeCtx.arc(px, py, size * pulseScale * 2, 0, Math.PI * 2);
-                        } else {
-                            // Standard Grid Dot
-                            globeCtx.fillStyle = isLight ? `rgba(0,0,0,${alpha})` : `rgba(255,255,255,${alpha})`;
-                            globeCtx.arc(px, py, size, 0, Math.PI * 2);
-                        }
-                        globeCtx.fill();
-                    }
-                });
-
-                requestAnimationFrame(drawGlobe);
-            }
-            drawGlobe();
-
-            // Interactions
-            globeCanvas.addEventListener('mousedown', e => {
-                isDragging = true;
-                lastMouseX = e.clientX;
-                lastMouseY = e.clientY;
-                globeCanvas.style.cursor = 'grabbing';
-            });
-
-            window.addEventListener('mouseup', () => {
-                isDragging = false;
-                globeCanvas.style.cursor = 'grab';
-            });
-
+            const cd = document.querySelector('.cursor-dot');
+            const cr = document.querySelector('.cursor-ring');
             window.addEventListener('mousemove', e => {
-                if (isDragging) {
-                    const deltaX = e.clientX - lastMouseX;
-                    const deltaY = e.clientY - lastMouseY;
-                    
-                    velY = deltaX * 0.005;
-                    velX = deltaY * 0.005;
-                    
-                    rotY -= velY;
-                    rotX += velX;
-
-                    lastMouseX = e.clientX;
-                    lastMouseY = e.clientY;
-                }
+                cd.style.left = e.clientX + 'px'; cd.style.top = e.clientY + 'px';
+                setTimeout(() => { cr.style.left = e.clientX + 'px'; cr.style.top = e.clientY + 'px'; }, 50);
             });
-            
-            // Click Detection for Nodes
-            globeCanvas.addEventListener('click', e => {
-                const rect = globeCanvas.getBoundingClientRect();
-                const mx = e.clientX - rect.left;
-                const my = e.clientY - rect.top;
-                
-                let clicked = false;
-                dots.forEach(dot => {
-                    if (dot.visible && dot.isNode) {
-                        const dist = Math.sqrt((mx - dot.sx) ** 2 + (my - dot.sy) ** 2);
-                        if (dist < 10) {
-                            // Hit! Show Tooltip
-                            const region = regions[Math.floor(Math.random() * regions.length)];
-                            tipRegion.innerText = region.name;
-                            tipPop.innerText = region.pop;
-                            tipNodes.innerText = region.nodes;
-                            
-                            tooltip.style.left = `${dot.sx}px`;
-                            tooltip.style.top = `${dot.sy}px`;
-                            tooltip.classList.add('active');
-                            clicked = true;
-                        }
-                    }
-                });
-                if(!clicked && !isDragging) tooltip.classList.remove('active');
+            document.querySelectorAll('a, button, .offer-card, .timeline-item, .marquee-content span, .carousel-item').forEach(el => {
+                el.addEventListener('mouseenter', () => { cr.style.transform = 'translate(-50%, -50%) scale(1.5)'; cr.style.borderColor = 'white'; });
+                el.addEventListener('mouseleave', () => { cr.style.transform = 'translate(-50%, -50%) scale(1)'; cr.style.borderColor = 'rgba(255,255,255,0.4)'; });
             });
         }
 
-        /* --- 8. INFO MODAL (ROADMAP) --- */
-        const infoModal = document.getElementById('info-modal');
-        const infoStep = document.getElementById('info-step');
-        const infoTitle = document.getElementById('info-title');
-        const infoDesc = document.getElementById('info-desc');
-
-        const roadmapData = {
-            '01': {
-                title: 'Prueba de Concepto (POC)',
-                desc: 'Iniciamos con un sprint de 14 días. Creamos 3 variaciones de tu clon digital y lanzamos 10 piezas de contenido en un entorno controlado (Dark Posting). Analizamos retención, sentimiento y CTR para calibrar la personalidad de la IA antes del despliegue público.'
-            },
-            '02': {
-                title: 'Integración de Dashboard',
-                desc: 'Conectamos el motor Sennen a tu CRM. Obtienes acceso a métricas en tiempo real: horas de video generadas, costes ahorrados vs producción tradicional y tasa de conversión de los activos sintéticos. La IA comienza a auto-optimizarse basándose en estos datos.'
-            },
-            '03': {
-                title: 'Escala del Ecosistema',
-                desc: 'Fase final. Desplegamos el clon en omnicanalidad (IG, TikTok, LinkedIn, YouTube). Activamos flujos de monetización automática y construimos una comunidad propietaria donde tu IP digital interactúa 24/7 con la audiencia sin tu intervención.'
-            }
-        };
-
-        function openInfo(step) {
-            const data = roadmapData[step];
-            infoStep.innerText = `FASE ${step}`;
-            infoTitle.innerText = data.title;
-            infoDesc.innerText = data.desc;
-            infoModal.classList.add('active');
-        }
-
-        function closeInfoModal() {
-            infoModal.classList.remove('active');
-        }
-        
-        /* --- 9. WAITLIST HANDLE --- */
         function handleWaitlist(e) {
             e.preventDefault();
-            const form = e.target;
-            const btn = form.querySelector('button');
-            const input = form.querySelector('input');
-            
-            btn.innerText = "PROCESANDO...";
-            
-            setTimeout(() => {
-                form.innerHTML = `
-                    <div class="text-green-400 font-mono text-[10px] border border-green-500/30 p-2 bg-green-500/10 rounded">
-                        <div class="font-bold mb-1">> ACCESO CONCEDIDO</div>
-                        <div class="opacity-70">Bienvenido al protocolo Sennen.</div>
-                    </div>
-                `;
-            }, 1500);
+            e.target.innerHTML = '<div class="text-white font-mono text-[10px]">> ACCESO CONCEDIDO</div>';
         }
-
     </script>
 </body>
 </html>
