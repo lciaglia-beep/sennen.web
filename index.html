@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sennen Agency | Motor de Contenido IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -15,8 +15,8 @@
         :root {
             --color-bg: #050505;
             --color-text: #ffffff;
-            --color-panel: #0a0a0a;
-            --color-border: rgba(255, 255, 255, 0.08);
+            --color-panel: #0f0f0f;
+            --color-border: rgba(255, 255, 255, 0.1);
             --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }
@@ -26,8 +26,14 @@
             background-color: var(--color-bg);
             color: var(--color-text);
             overflow-x: hidden;
-            cursor: none;
+            cursor: none; /* Custom cursor */
             transition: background-color 1s ease, color 1s ease;
+        }
+
+        /* --- NOISE TEXTURE OVERLAY --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9000;
+            opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         /* --- MOBILE FIXES --- */
@@ -41,24 +47,39 @@
             h2 { font-size: 2rem !important; }
             .offer-card { padding: 1.5rem; }
             #video-modal .modal-content { width: 90%; height: auto; max-height: 70vh; }
-            #waitlist-popup { width: 85% !important; padding: 1.5rem !important; }
+            #waitlist-popup { width: 90% !important; right: 5% !important; bottom: 20px !important; }
             .timeline-line { left: 1rem !important; }
             .timeline-node { left: 0.75rem !important; }
             .timeline-content { margin-left: 3rem !important; }
         }
 
-        /* --- UTILS --- */
-        .force-text-white { color: #ffffff !important; }
-        
+        /* --- THEME STATES --- */
+        body.gray-mode {
+            --color-bg: #111111;
+            --color-text: #eeeeee;
+            --color-panel: #1a1a1a;
+            --color-border: rgba(255,255,255,0.15);
+        }
+
+        body.light-mode {
+            --color-bg: #ffffff;
+            --color-text: #050505;
+            --color-panel: #f4f4f5;
+            --color-border: #e0e0e0;
+        }
+
+        /* Utilities to force colors regardless of theme */
+        .bg-black-force { background-color: #050505 !important; color: #ffffff !important; }
+        .text-white-force { color: #ffffff !important; }
+
         /* --- PRELOADER --- */
         #preloader {
-            position: fixed; inset: 0; background: #000; z-index: 9999;
+            position: fixed; inset: 0; background: #000; z-index: 10000;
             display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
         .loader-text {
             font-family: var(--font-sans); font-size: 4rem; font-weight: 800; color: white; line-height: 1; letter-spacing: -0.05em;
         }
-        @media (min-width: 768px) { .loader-text { font-size: 6rem; } }
 
         /* --- CANVAS --- */
         #liquid-canvas {
@@ -73,40 +94,28 @@
         /* Globe Tooltip */
         #globe-tooltip {
             position: absolute; background: rgba(10, 10, 10, 0.95); border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 20px; border-radius: 12px; pointer-events: none; opacity: 0; transform: translate(-50%, -120%);
-            transition: opacity 0.3s; color: white; z-index: 50; font-family: var(--font-mono); backdrop-filter: blur(10px); min-width: 220px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            padding: 15px; border-radius: 8px; pointer-events: none; opacity: 0; transform: translate(-50%, -120%);
+            transition: opacity 0.2s; color: white; z-index: 50; font-family: var(--font-mono); backdrop-filter: blur(10px); min-width: 200px;
         }
         #globe-tooltip.active { opacity: 1; pointer-events: auto; }
-        #globe-tooltip h4 { font-weight: 700; margin-bottom: 8px; color: white; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
-        #globe-tooltip .stat { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 4px; color: #aaa; }
-        #globe-tooltip .stat span:last-child { color: #fff; font-weight: 600; }
 
-        /* --- GLITCH CINÉTICO --- */
-        .glitch-hover { position: relative; display: inline-block; color: inherit; transition: color 0.2s; font-weight: 800; cursor: default; }
-        .glitch-hover:hover { 
-            animation: glitch-skew 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite; 
-            color: transparent; 
-        } 
-        .glitch-hover::before, .glitch-hover::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; transition: opacity 0.2s; pointer-events: none; font-weight: 800;
+        /* --- NEW GLITCH EFFECT (RGB SPLIT) --- */
+        .glitch-text {
+            position: relative; display: inline-block; font-weight: 800; transition: color 0.1s;
         }
-        .glitch-hover:hover::before {
-            opacity: 1; color: #fff; transform: translate(-2px, 0); z-index: 1;
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        .glitch-text:hover {
+            animation: text-shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
         }
-        .glitch-hover:hover::after {
-            opacity: 1; color: #888; transform: translate(2px, 0); z-index: 2;
-            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-        }
-        @keyframes glitch-skew {
-            0% { transform: skew(0deg); }
-            20% { transform: skew(-5deg); }
-            40% { transform: skew(5deg); }
-            60% { transform: skew(-2deg); }
-            80% { transform: skew(2deg); }
-            100% { transform: skew(0deg); }
+        
+        @keyframes text-shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-2px, 0); }
+            40% { transform: translate(2px, 0); }
+            60% { transform: translate(-1px, 0); }
+            80% { transform: translate(1px, 0); }
+            100% { transform: translate(0, 0); }
         }
 
         /* --- 3D CAROUSEL --- */
@@ -118,15 +127,15 @@
         }
         .carousel:hover { animation-play-state: paused; }
         .carousel-item {
-            position: absolute; width: 220px; height: 380px; left: 0; top: 0; background: #0a0a0a; border: 1px solid rgba(255, 255, 255, 0.1);
+            position: absolute; width: 220px; height: 380px; left: 0; top: 0; background: #0a0a0a; border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden; transition: all 0.4s; cursor: pointer;
-            border-radius: 24px;
+            border-radius: 20px;
         }
         .carousel-item:hover {
-            border-color: rgba(255, 255, 255, 0.8); z-index: 100; transform: scale(1.1); box-shadow: 0 0 60px rgba(255,255,255,0.15);
+            border-color: #fff; z-index: 100; transform: scale(1.1) translateY(-10px); box-shadow: 0 30px 80px rgba(255,255,255,0.1);
         }
         .carousel-item video {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: opacity 0.5s ease; filter: grayscale(100%); pointer-events: none;
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: opacity 0.5s ease; filter: grayscale(100%); pointer-events: none;
         }
         .carousel-item:hover video { opacity: 1; filter: grayscale(0%); }
 
@@ -161,17 +170,16 @@
         
         .modal-content-video { 
             width: auto; height: 80vh; aspect-ratio: 9/16; position: relative; border: 1px solid rgba(255,255,255,0.15); background: #000; box-shadow: 0 0 100px rgba(0,0,0,0.8);
-            border-radius: 24px; overflow: hidden;
+            border-radius: 20px; overflow: hidden;
         }
         .modal-content-video video { width: 100%; height: 100%; object-fit: cover; }
 
         .modal-content-info {
-            background: #0f0f0f; border: 1px solid rgba(255,255,255,0.1); padding: 3rem; max-width: 600px; width: 90%; position: relative; transform: translateY(30px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            border-radius: 32px;
+            background: #0f0f0f; border: 1px solid rgba(255,255,255,0.1); padding: 3rem; max-width: 500px; width: 90%; position: relative; transform: translateY(30px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            border-radius: 24px;
         }
         .modal-overlay.active .modal-content-info { transform: translateY(0); }
         
-        /* Updated Close Button */
         .close-btn { 
             position: absolute; top: 1.5rem; right: 1.5rem; color: #fff; background: rgba(255,255,255,0.1); 
             border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
@@ -181,52 +189,42 @@
 
         /* --- CURSOR (DESKTOP) --- */
         .cursor-dot {
-            width: 6px; height: 6px; background-color: white; position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: exclusion;
+            width: 6px; height: 6px; background-color: var(--color-text); position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 10000; pointer-events: none; mix-blend-mode: difference;
         }
         .cursor-ring {
-            width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.4); position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; transition: width 0.3s, height 0.3s, border-color 0.3s; mix-blend-mode: exclusion;
+            width: 40px; height: 40px; border: 1px solid var(--color-text); position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; transition: width 0.3s, height 0.3s, border-color 0.3s; mix-blend-mode: difference;
         }
 
-        /* --- OFFER CARDS PRO --- */
+        /* --- OFFER CARDS PRO (ADAPTIVE LIGHT/DARK) --- */
         .offer-card {
             background: var(--color-panel); 
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
             padding: 3rem 2.5rem; 
             position: relative; 
             overflow: hidden; 
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+            transition: all 0.5s ease; 
             cursor: pointer;
-            border-radius: 32px;
+            border-radius: 24px;
         }
         
-        /* Inner Fill Animation */
-        .offer-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at top right, rgba(255,255,255,0.08) 0%, transparent 60%);
-            opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
-        }
-
         .offer-card:hover {
-            background: #080808; 
-            border-color: rgba(255,255,255,0.3);
             transform: translateY(-5px); 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
         }
-        .offer-card:hover::before { opacity: 1; }
+        /* Dark Mode Hover */
+        body:not(.light-mode) .offer-card:hover { background: #111; border-color: rgba(255,255,255,0.4); }
+        /* Light Mode Hover (Invert) */
+        body.light-mode .offer-card:hover { background: #000; border-color: #000; color: white; }
 
-        .offer-card h3 { color: var(--color-text); transition: color 0.4s; font-weight: 700; }
-        .offer-card p { color: #888; transition: color 0.4s; }
-        .offer-card:hover h3 { color: #fff; }
-        .offer-card:hover p { color: #ddd; }
+        .offer-card h3 { font-weight: 700; transition: color 0.4s; }
+        .offer-card p { opacity: 0.7; transition: color 0.4s; }
+        
+        body.light-mode .offer-card:hover h3, body.light-mode .offer-card:hover p { color: white; }
         
         .offer-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
-        .offer-card-icon {
-            font-size: 1.2rem; opacity: 0.6; transition: all 0.5s ease; color: #fff;
-        }
-        .offer-card-arrow {
-            opacity: 0; transition: all 0.5s ease; transform: translateX(-10px); color: #fff;
-        }
-        .offer-card:hover .offer-card-icon { opacity: 1; transform: scale(1.1); text-shadow: 0 0 20px rgba(255,255,255,0.6); }
+        .offer-card-icon { font-size: 1.2rem; opacity: 0.6; transition: all 0.5s ease; }
+        .offer-card-arrow { opacity: 0; transition: all 0.5s ease; transform: translateX(-10px); }
+        .offer-card:hover .offer-card-icon { opacity: 1; transform: scale(1.1); }
         .offer-card:hover .offer-card-arrow { opacity: 1; transform: translateX(0); }
         
         .divider { height: 1px; width: 100%; background: var(--color-border); margin-bottom: 1.5rem; transition: background 0.3s; }
@@ -234,56 +232,62 @@
 
         /* --- DASHBOARD --- */
         .dashboard-container {
-            font-family: var(--font-mono); background: #0f0f0f; color: #fff; border: 1px solid #222; padding: 30px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            /* Cursor Visible */
+            font-family: var(--font-mono); background: var(--color-panel); color: var(--color-text); border: 1px solid var(--color-border); padding: 30px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); transition: background-color 1s ease, border-color 1s ease;
         }
-        .dash-header { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 20px; margin-bottom: 25px; }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
-        .stat-box { background: #151515; padding: 20px; border: 1px solid #222; border-radius: 16px; transition: border-color 0.3s; }
-        .stat-box:hover { border-color: #444; }
-        .stat-value { font-size: 1.4rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
-        .stat-label { font-size: 0.65rem; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
+        body.light-mode .dashboard-container { background: #fff; border-color: #ccc; color: #000; }
         
-        .graph-area { height: 150px; display: flex; align-items: flex-end; gap: 4px; padding-top: 20px; border-top: 1px solid #222; width: 100%; }
-        .bar { flex: 1; background: #333; transition: all 0.3s ease; min-height: 2px; border-radius: 2px 2px 0 0; }
-        .bar:hover { background: #fff; transform: scaleY(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .live-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px rgba(255,255,255,0.5); animation: blink 2s infinite; }
+        .dash-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-border); padding-bottom: 20px; margin-bottom: 25px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+        .stat-box { background: rgba(128,128,128,0.05); padding: 20px; border: 1px solid var(--color-border); border-radius: 16px; transition: border-color 0.3s; }
+        .stat-box:hover { border-color: var(--color-text); }
+        .stat-value { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; }
+        .stat-label { font-size: 0.65rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
+        
+        .graph-area { height: 150px; display: flex; align-items: flex-end; gap: 4px; padding-top: 20px; border-top: 1px solid var(--color-border); width: 100%; }
+        .bar { flex: 1; background: var(--color-text); opacity: 0.2; transition: all 0.3s ease; min-height: 2px; border-radius: 2px 2px 0 0; }
+        .bar:hover { opacity: 1; transform: scaleY(1.1); }
+        .live-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #22c55e; animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        /* --- ROADMAP (TIMELINE) --- */
-        .timeline-container { position: relative; padding-left: 2rem; }
+        /* --- ROADMAP --- */
+        .timeline-container { position: relative; padding-left: 2rem; color: var(--color-text); }
         .timeline-line {
-            position: absolute; left: 2.4rem; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, #444, transparent);
+            position: absolute; left: 2.4rem; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, transparent, var(--color-border), transparent);
         }
         .timeline-item { position: relative; margin-bottom: 4rem; cursor: pointer; group; }
         .timeline-node {
-            position: absolute; left: 2rem; top: 0.5rem; width: 0.8rem; height: 0.8rem; background: #111; border: 1px solid #444; border-radius: 50%; transform: translateX(-50%); transition: all 0.3s;
+            position: absolute; left: 2rem; top: 0.5rem; width: 0.8rem; height: 0.8rem; background: var(--color-bg); border: 1px solid var(--color-text); border-radius: 50%; transform: translateX(-50%); transition: all 0.3s;
         }
-        .timeline-item:hover .timeline-node { border-color: #fff; background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.6); }
+        .timeline-item:hover .timeline-node { background: var(--color-text); box-shadow: 0 0 20px rgba(128,128,128,0.5); }
         .timeline-content { margin-left: 5rem; transition: transform 0.3s; }
         .timeline-item:hover .timeline-content { transform: translateX(5px); }
 
         /* --- MARQUEE --- */
-        .marquee-wrapper { width: 100%; overflow: hidden; padding: 2rem 0; border-y: 1px solid var(--color-border); white-space: nowrap; background: var(--color-bg); }
+        .marquee-wrapper { width: 100%; overflow: hidden; padding: 2rem 0; border-y: 1px solid var(--color-border); white-space: nowrap; background: var(--color-bg); color: var(--color-text); transition: background-color 1s ease, color 1s ease; }
         .marquee-content { display: inline-block; animation: scroll-left 60s linear infinite; }
         .marquee-content span { display: inline-block; padding: 0 2rem; opacity: 0.3; transition: all 0.3s ease; cursor: default; }
         .marquee-content:hover { animation-play-state: paused; }
-        .marquee-content span:hover { opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,0.5); transform: scale(1.05); color: #fff; }
+        .marquee-content span:hover { opacity: 1; transform: scale(1.05); }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* --- POPUP --- */
+        /* --- WAITLIST POPUP (Compact & Bottom Right) --- */
         #waitlist-popup {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 280px; background: rgba(20, 20, 20, 0.95); border: 1px solid #333; padding: 1.5rem; z-index: 12000; opacity: 0; pointer-events: none; transition: all 0.5s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.6); backdrop-filter: blur(20px); border-radius: 24px;
+            position: fixed; bottom: 2rem; right: 2rem; width: 300px; background: #0a0a0a; border: 1px solid #222; padding: 1.5rem; z-index: 9999; opacity: 0; pointer-events: none; transition: all 0.5s ease; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
-        #waitlist-popup.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        #waitlist-popup.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+        #waitlist-popup.hidden { transform: translateY(20px); opacity: 0; pointer-events: none; }
 
     </style>
 </head>
 <body class="antialiased opacity-0 overflow-hidden" id="main-body">
 
+    <!-- NOISE TEXTURE -->
+    <div class="noise-overlay"></div>
+
     <!-- PRELOADER -->
     <div id="preloader">
-        <div class="loader-text glitch-hover" data-text="0%">0%</div>
-        <div class="mt-4 font-mono text-[10px] text-gray-500 uppercase tracking-[0.3em]">Cargando Entorno</div>
+        <div class="loader-text glitch-text" data-text="0%">0%</div>
+        <div class="mt-4 font-mono text-[10px] text-gray-500 uppercase tracking-[0.3em]">Inicializando Protocolo</div>
     </div>
 
     <!-- CANVAS BG -->
@@ -297,7 +301,7 @@
     <!-- Video Modal -->
     <div id="video-modal" class="modal-overlay" onclick="closeModal('video-modal')">
         <div class="modal-content-video" onclick="event.stopPropagation()">
-            <button class="close-btn" onclick="closeModal('video-modal')" style="right: 20px; top: 20px;"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button class="close-btn" onclick="closeModal('video-modal')" style="right: 20px; top: 20px;"><i data-lucide="x" class="w-6 h-6 text-white"></i></button>
             <video id="modal-video-player" controls playsinline><source src="" type="video/mp4"></video>
         </div>
     </div>
@@ -320,7 +324,7 @@
     <!-- NAVIGATION -->
     <nav class="fixed w-full z-50 py-6 mix-blend-difference text-white">
         <div class="max-w-[92%] mx-auto flex justify-between items-center">
-            <a href="#" class="text-lg font-bold tracking-tighter hover:text-gray-300 transition-colors glitch-hover" data-text="sennen.agency">sennen.agency</a>
+            <a href="#" class="text-lg font-bold tracking-tighter hover:text-gray-300 transition-colors">sennen.agency</a>
             <div class="hidden md:flex gap-12 text-[10px] font-mono uppercase tracking-widest text-gray-400">
                 <a href="#engine" class="hover:text-white transition-colors">Motor</a>
                 <a href="#solutions" class="hover:text-white transition-colors">Ofertas</a>
@@ -329,8 +333,8 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <header class="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden perspective-1000 bg-[#050505] text-white">
+    <!-- HERO SECTION (Start Black) -->
+    <header class="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden perspective-1000 bg-black-force text-white-force">
         <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
         <div class="container mx-auto px-6 z-10 flex flex-col items-center">
             <!-- 3D CAROUSEL -->
@@ -356,12 +360,12 @@
     <!-- TRIGGER GRAY MODE -->
     <div id="trigger-gray" class="h-10 w-full"></div>
 
-    <!-- GLOBAL INSIGHT -->
-    <section id="engine" class="py-20 md:py-32 relative z-20 border-t border-white/5 force-text-white bg-[#050505]">
+    <!-- GLOBAL INSIGHT (Gray Mode) -->
+    <section id="engine" class="py-20 md:py-32 relative z-20 border-t border-white/5 bg-black-force text-white-force">
         <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
             <div>
-                <h2 class="text-3xl md:text-6xl font-bold leading-tight mb-8 glitch-hover" data-text="La Realidad del 90%">
-                    La Realidad del 90%. <br>
+                <h2 class="text-3xl md:text-6xl font-bold leading-tight mb-8">
+                    <span class="glitch-text" data-text="La Realidad del 90%.">La Realidad del 90%.</span> <br>
                     <span class="opacity-30">Cambio de Paradigma.</span>
                 </h2>
                 <div class="text-sm font-mono text-gray-500 mb-8 border-l border-white/20 pl-4">
@@ -386,7 +390,10 @@
         </div>
     </section>
 
-    <!-- MARQUEE (INTERACTIVE) -->
+    <!-- TRIGGER LIGHT MODE (THE SHIFT) -->
+    <div id="trigger-white" class="h-10 w-full"></div>
+
+    <!-- MARQUEE (Transition) -->
     <div class="marquee-wrapper text-3xl md:text-6xl font-bold uppercase tracking-tighter">
         <div class="marquee-content">
             <span>Fricción Cero</span> <span>•</span> 
@@ -400,15 +407,14 @@
         </div>
     </div>
 
-    <!-- TRIGGER LIGHT MODE -->
-    <div id="trigger-white" class="h-10 w-full"></div>
-
-    <!-- SOLUTIONS (INTERACTIVE & ROUNDED) -->
+    <!-- SOLUTIONS (LIGHT MODE SECTION) -->
     <section id="solutions" class="py-20 md:py-32 relative z-20">
         <div class="max-w-[85%] mx-auto">
             <div class="mb-20">
                 <h3 class="text-xs font-mono uppercase tracking-widest text-gray-500 mb-4">Arquitectura</h3>
-                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-black glitch-hover" data-text="Estructura de Ofertas">Estructura de Ofertas</h2>
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-black">
+                    <span class="glitch-text" data-text="Estructura de Ofertas">Estructura de Ofertas</span>
+                </h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -419,11 +425,11 @@
                         <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-6 h-6"></i></div>
                     </div>
                     <h3 class="text-2xl font-bold mb-4">Influencers UGC</h3>
-                    <p class="text-sm mb-10 leading-relaxed">
+                    <p class="text-sm mb-10 leading-relaxed opacity-70">
                         Despliegue masivo de activos visuales sin dependencia humana.
                     </p>
                     <div class="divider"></div>
-                    <div class="text-[10px] font-bold uppercase meta tracking-widest text-gray-400 group-hover:text-white">Ver Detalles +</div>
+                    <div class="text-[10px] font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">Ver Detalles +</div>
                 </div>
 
                 <!-- Option B -->
@@ -433,11 +439,11 @@
                         <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-6 h-6"></i></div>
                     </div>
                     <h3 class="text-2xl font-bold mb-4">Clon Digital</h3>
-                    <p class="text-sm mb-10 leading-relaxed">
+                    <p class="text-sm mb-10 leading-relaxed opacity-70">
                         Sintetización de Identidad. Presencia omnicanal automatizada.
                     </p>
                     <div class="divider"></div>
-                    <div class="text-[10px] font-bold uppercase meta tracking-widest text-gray-400 group-hover:text-white">Ver Detalles +</div>
+                    <div class="text-[10px] font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">Ver Detalles +</div>
                 </div>
 
                 <!-- Option C -->
@@ -447,20 +453,22 @@
                         <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-6 h-6"></i></div>
                     </div>
                     <h3 class="text-2xl font-bold mb-4">Cursos Digitales</h3>
-                    <p class="text-sm mb-10 leading-relaxed">
+                    <p class="text-sm mb-10 leading-relaxed opacity-70">
                         Capital Intelectual. Empaquetado estratégico de expertise.
                     </p>
                     <div class="divider"></div>
-                    <div class="text-[10px] font-bold uppercase meta tracking-widest text-gray-400 group-hover:text-white">Ver Detalles +</div>
+                    <div class="text-[10px] font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity">Ver Detalles +</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- GLOBE SECTION (FORCED DARK MODE) -->
-    <section id="global-map" class="py-20 overflow-hidden relative bg-[#050505] force-text-white">
+    <!-- GLOBE SECTION (ALWAYS DARK) -->
+    <section id="global-map" class="py-20 overflow-hidden relative bg-black-force text-white-force">
         <div class="max-w-[85%] mx-auto mb-10 text-center relative z-10">
-            <h2 class="text-3xl font-bold mb-2 glitch-hover" data-text="ACTIVIDAD NEURAL">ACTIVIDAD NEURAL</h2>
+            <h2 class="text-3xl font-bold mb-2">
+                <span class="glitch-text" data-text="ACTIVIDAD NEURAL">ACTIVIDAD NEURAL</span>
+            </h2>
             <p class="text-xs font-mono text-gray-500 uppercase">Red Neural Global: Activa</p>
         </div>
         <div id="globe-container">
@@ -473,26 +481,26 @@
         </div>
     </section>
 
-    <!-- VECTOR & DASHBOARD (FORCED DARK MODE) -->
-    <section id="vector" class="py-20 md:py-32 bg-[#050505] force-text-white border-t border-gray-900">
+    <!-- VECTOR & DASHBOARD (LIGHT MODE) -->
+    <section id="vector" class="py-20 md:py-32 border-t border-gray-200">
         <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
             
-            <!-- DASHBOARD (Monochrome) -->
+            <!-- DASHBOARD -->
             <div class="relative group">
-                <div class="mb-4 text-xs font-mono text-gray-500 uppercase tracking-widest text-center">DASHBOARD DE RENDIMIENTO</div>
+                <div class="mb-4 text-xs font-mono opacity-50 uppercase tracking-widest text-center">DASHBOARD DE RENDIMIENTO</div>
                 <div class="dashboard-container transform transition-transform duration-500 group-hover:scale-[1.01]">
                     <div class="dash-header">
                         <div class="flex items-center gap-2">
                             <span class="live-dot"></span>
-                            <span class="text-xs font-bold tracking-widest text-white">SENNEN_OS</span>
+                            <span class="text-xs font-bold tracking-widest">SENNEN_OS</span>
                         </div>
-                        <div class="text-[10px] text-gray-500">METRICAS EN VIVO</div>
+                        <div class="text-[10px] opacity-50">METRICAS EN VIVO</div>
                     </div>
                     
                     <div class="stat-grid">
                         <div class="stat-box">
                             <div class="stat-label">Engagement</div>
-                            <div class="stat-value glitch-hover" data-text="98.4%">98.4%</div>
+                            <div class="stat-value glitch-text" data-text="98.4%">98.4%</div>
                         </div>
                         <div class="stat-box">
                             <div class="stat-label">Retención</div>
@@ -504,11 +512,11 @@
                         </div>
                     </div>
 
-                    <div class="text-[10px] uppercase mb-4 text-white tracking-widest flex justify-between border-b border-gray-800 pb-2">
+                    <div class="text-[10px] uppercase mb-4 opacity-70 tracking-widest flex justify-between border-b border-gray-500/20 pb-2">
                         <span>Bucle de Retroalimentación</span>
                         <span>LIVE</span>
                     </div>
-                    <div class="text-xs text-gray-500 font-mono mb-6 leading-relaxed">
+                    <div class="text-xs opacity-50 font-mono mb-6 leading-relaxed">
                         > Analizando patrones de caída de audiencia.<br>
                         > Re-optimizando scripts en tiempo real.<br>
                         > Iteración automática de ganchos virales.
@@ -520,8 +528,10 @@
             <!-- ROADMAP (TIMELINE) -->
             <div class="timeline-container">
                 <div class="mb-12">
-                    <h3 class="text-sm font-mono uppercase text-gray-500 mb-2">Protocolo</h3>
-                    <h2 class="text-4xl font-bold mb-4 glitch-hover" data-text="Vector de Ejecución">Vector de Ejecución</h2>
+                    <h3 class="text-sm font-mono uppercase opacity-50 mb-2">Protocolo</h3>
+                    <h2 class="text-4xl font-bold mb-4">
+                        <span class="glitch-text" data-text="Vector de Ejecución">Vector de Ejecución</span>
+                    </h2>
                 </div>
 
                 <div class="relative">
@@ -531,9 +541,9 @@
                     <div class="timeline-item" onclick="openContent('fase1')">
                         <div class="timeline-node"></div>
                         <div class="timeline-content">
-                            <span class="text-xs font-mono text-gray-500 mb-1 block">FASE 01</span>
-                            <h4 class="text-xl font-medium mb-2 text-white">Inyección de Activos</h4>
-                            <p class="text-sm text-gray-500 font-light">Prueba de concepto y calibración de identidad.</p>
+                            <span class="text-xs font-mono opacity-60 mb-1 block">FASE 01</span>
+                            <h4 class="text-xl font-medium mb-2">Inyección de Activos</h4>
+                            <p class="text-sm opacity-60 font-light">Prueba de concepto y calibración de identidad.</p>
                         </div>
                     </div>
 
@@ -541,9 +551,9 @@
                     <div class="timeline-item" onclick="openContent('fase2')">
                         <div class="timeline-node"></div>
                         <div class="timeline-content">
-                            <span class="text-xs font-mono text-gray-500 mb-1 block">FASE 02</span>
-                            <h4 class="text-xl font-medium mb-2 text-white">Sincronización de Datos</h4>
-                            <p class="text-sm text-gray-500 font-light">Integración de Dashboard y optimización algorítmica.</p>
+                            <span class="text-xs font-mono opacity-60 mb-1 block">FASE 02</span>
+                            <h4 class="text-xl font-medium mb-2">Sincronización de Datos</h4>
+                            <p class="text-sm opacity-60 font-light">Integración de Dashboard y optimización algorítmica.</p>
                         </div>
                     </div>
 
@@ -551,9 +561,9 @@
                     <div class="timeline-item" onclick="openContent('fase3')">
                         <div class="timeline-node"></div>
                         <div class="timeline-content">
-                            <span class="text-xs font-mono text-gray-500 mb-1 block">FASE 03</span>
-                            <h4 class="text-xl font-medium mb-2 text-white">Dominancia de Ecosistema</h4>
-                            <p class="text-sm text-gray-500 font-light">Escalado masivo y monetización de comunidad propietaria.</p>
+                            <span class="text-xs font-mono opacity-60 mb-1 block">FASE 03</span>
+                            <h4 class="text-xl font-medium mb-2">Dominancia de Ecosistema</h4>
+                            <p class="text-sm opacity-60 font-light">Escalado masivo y monetización de comunidad propietaria.</p>
                         </div>
                     </div>
                 </div>
@@ -561,11 +571,11 @@
         </div>
     </section>
 
-    <!-- WAITLIST POPUP -->
+    <!-- WAITLIST POPUP (Compact & Right Bottom) -->
     <div id="waitlist-popup" class="text-center">
         <div class="flex justify-between items-center mb-4">
             <h4 class="text-xs font-bold uppercase tracking-widest text-white">Acceso Beta</h4>
-            <button onclick="document.getElementById('waitlist-popup').classList.remove('active')" class="text-gray-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <button onclick="document.getElementById('waitlist-popup').classList.add('hidden')" class="text-gray-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
         <div class="mb-4 h-px w-full bg-gray-800"></div>
         <p class="text-[10px] text-gray-400 mb-4 font-mono">Asegura el futuro sintético de tu marca.</p>
@@ -576,7 +586,7 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="py-20 border-t border-gray-900 bg-[#050505] text-white">
+    <footer class="py-20 border-t border-gray-900 bg-black-force text-white-force">
         <div class="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-end">
             <div>
                 <a href="#" class="text-3xl font-bold tracking-tighter block mb-10 hover:text-gray-400 transition-colors">sennen.agency</a>
@@ -673,7 +683,7 @@
             if(e.key === 'Escape') {
                 closeModal('video-modal');
                 closeModal('info-modal');
-                document.getElementById('waitlist-popup').classList.remove('active');
+                document.getElementById('waitlist-popup').classList.add('hidden');
             }
         });
 
@@ -909,17 +919,28 @@
         /* --- SCROLL TRIGGERS --- */
         document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
+            
+            // Hero/Engine = Dark
             ScrollTrigger.create({
                 trigger: "#trigger-gray", start: "top center", end: "bottom center",
                 onEnter: () => document.body.classList.add('gray-mode'),
                 onLeaveBack: () => document.body.classList.remove('gray-mode')
             });
+            
+            // Solutions/Vector = Light
             ScrollTrigger.create({
                 trigger: "#trigger-white", start: "top center", end: "bottom center",
-                onEnter: () => { document.body.classList.remove('gray-mode'); document.body.classList.add('light-mode'); },
-                onLeaveBack: () => { document.body.classList.remove('light-mode'); document.body.classList.add('gray-mode'); }
+                onEnter: () => { 
+                    document.body.classList.remove('gray-mode'); 
+                    document.body.classList.add('light-mode'); 
+                },
+                onLeaveBack: () => { 
+                    document.body.classList.remove('light-mode'); 
+                    document.body.classList.add('gray-mode'); 
+                }
             });
-            setTimeout(() => { document.getElementById('waitlist-popup').classList.add('active'); }, 30000);
+            
+            setTimeout(() => { document.getElementById('waitlist-popup').classList.add('active'); }, 10000);
         });
 
         /* --- CURSOR (DESKTOP) --- */
