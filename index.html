@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sennen | Presencia Sintética y Avatares de IA</title>
+    
+    <title>Sennen | Presencia Sintética y Resonancia Algorítmica</title>
     <meta name="description" content="La biología no escala. Sennen crea avatares de IA y activos sintéticos optimizados para resonancia algorítmica, retención absoluta y control de atención.">
     
-    <meta property="og:title" content="Sennen Agency | Marketing Digital y Branding">
-    <meta property="og:description" content="Impulsamos marcas con marketing digital, branding y diseño estratégico. Convertí visitas en clientes.">
+    <meta property="og:title" content="Sennen | Resonancia Algorítmica y Activos IA">
+    <meta property="og:description" content="No es volumen, es Resonancia Algorítmica. Generamos activos sintéticos con retención que la biología no puede sostener. El algoritmo prefiere la consistencia sintética.">
     <meta property="og:image" content="https://sennen.agency/og-image.jpg">
     <meta property="og:url" content="https://sennen.agency/">
     <meta property="og:type" content="website">
@@ -39,10 +40,7 @@
 
         /* --- SECCIONES --- */
         .section-black { background-color: #050505; color: #ffffff; position: relative; z-index: 2; }
-        
-        /* ALTURA REDUCIDA PARA SUBIR ARQUITECTURA (De 500px a 250px) */
         .section-gradient-transition { height: 250px; width: 100%; background: linear-gradient(to bottom, #050505 0%, #3b82f6 40%, #ffffff 100%); position: relative; z-index: 1; }
-        
         .section-white { background-color: #ffffff; color: #050505; position: relative; z-index: 2; }
 
         /* --- GLOWS --- */
@@ -57,11 +55,36 @@
         .glow-arquitectura { top: 20%; left: 50%; transform: translateX(-50%); }
         .glow-dashboard { top: 60%; right: -200px; }
 
-        /* --- MENU --- */
-        #menu-overlay { position: fixed; inset: 0; background: #050505; z-index: 9990; display: flex; justify-content: center; align-items: center; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        /* --- MENU FULLSCREEN PREMIUM --- */
+        #menu-overlay {
+            position: fixed; inset: 0; background: rgba(5, 5, 5, 0.95); /* Semi-transparente */
+            backdrop-filter: blur(15px); /* Efecto cristal */
+            z-index: 9990; 
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+        }
         #menu-overlay.active { opacity: 1; pointer-events: all; }
-        .menu-link { font-size: 4rem; font-weight: 800; color: #333; text-transform: uppercase; margin: 1rem 0; cursor: pointer; transition: color 0.3s; }
-        .menu-link:hover { color: #fff; }
+        
+        .menu-link-container {
+            text-align: center;
+            display: flex; flex-direction: column; gap: 2rem;
+        }
+        .menu-link {
+            font-size: 3.5rem; font-weight: 300; color: #666; 
+            text-transform: uppercase; cursor: pointer; transition: all 0.4s ease;
+            position: relative; letter-spacing: -0.02em;
+        }
+        .menu-link:hover { color: #fff; transform: scale(1.05); }
+        .menu-number {
+            font-family: var(--font-mono); font-size: 0.8rem; color: #3b82f6; 
+            position: absolute; top: 10px; left: -30px; opacity: 0; transition: opacity 0.3s;
+        }
+        .menu-link:hover .menu-number { opacity: 1; }
+
+        @media (max-width: 768px) { 
+            .menu-link { font-size: 2.5rem; } 
+            .menu-number { display: none; }
+        }
 
         /* --- PRELOADER --- */
         #preloader { position: fixed; inset: 0; background: #050505; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
@@ -151,7 +174,9 @@
         .modal-content-video video { width: 100%; height: 100%; object-fit: cover; }
         .modal-content-info { background: #0f0f0f; border: 1px solid rgba(255,255,255,0.1); padding: 4rem; max-width: 600px; width: 90%; border-radius: 40px; transform: translateY(30px); transition: transform 0.4s; }
         .modal-overlay.active .modal-content-info { transform: translateY(0); }
-        .close-btn { position: absolute; top: 2rem; right: 2rem; color: #fff; background: rgba(255,255,255,0.1); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 20; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        
+        /* CLOSE BUTTON (Shared by Menu and Modals) */
+        .close-btn { position: absolute; top: 2rem; right: 2rem; color: #fff; background: rgba(255,255,255,0.1); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10000; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
         .close-btn:hover { background: white; color: black; }
         
         #waitlist-popup { position: fixed; bottom: 2rem; right: 2rem; width: 320px; background: #050505; border: 1px solid #333; padding: 2rem; z-index: 12000; opacity: 0; pointer-events: none; transition: all 0.5s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.6); border-radius: 24px; }
@@ -161,18 +186,15 @@
         .menu-btn:hover { color: #38bdf8; }
 
         /* ========================================= */
-        /* === MOBILE OPTIMIZATIONS (AL MILIMETRO) === */
+        /* === MOBILE OPTIMIZATIONS === */
         /* ========================================= */
         @media (max-width: 768px) {
             h2 { font-size: 2.2rem !important; line-height: 1.2 !important; }
             h3 { font-size: 1rem !important; }
             .parallax-text-lg { font-size: 2.5rem !important; }
             .menu-link { font-size: 2.5rem !important; }
-            
-            /* PADDING ADJUSTMENT FOR MOBILE */
             .section-padding { padding-top: 4rem !important; padding-bottom: 4rem !important; }
             
-            /* Carousel Scene Mobile */
             .carousel-scene { height: 350px !important; margin-top: 3rem !important; }
             .carousel { width: 140px; height: 220px; }
             .carousel-item { width: 140px; height: 220px; }
@@ -204,7 +226,6 @@
             #waitlist-popup { width: 90% !important; bottom: 20px !important; right: 5% !important; }
             
             #dust-canvas { display: none; }
-            
             .modal-content-video { width: 95%; height: auto; aspect-ratio: 9/16; }
             .modal-content-info { width: 95%; padding: 2rem; }
         }
@@ -220,10 +241,23 @@
     <canvas id="dust-canvas"></canvas>
 
     <div id="menu-overlay">
-        <div class="menu-link" onclick="navTo('motor', 'motor')">MOTOR</div>
-        <div class="menu-link" onclick="navTo('arquitectura', 'arquitectura')">ARQUITECTURA</div>
-        <div class="menu-link" onclick="navTo('dashboard', 'dashboard')">DASHBOARD</div>
-        <button class="mt-12 text-sm font-mono text-gray-500 uppercase tracking-widest hover:text-white" onclick="toggleMenu()">Cerrar</button>
+        <button class="close-btn" onclick="toggleMenu()"><i data-lucide="x" class="w-6 h-6"></i></button>
+        
+        <div class="menu-link-container">
+            <div class="menu-link" onclick="navTo('motor', 'motor')">
+                <span class="menu-number">01</span> MOTOR
+            </div>
+            <div class="menu-link" onclick="navTo('arquitectura', 'arquitectura')">
+                <span class="menu-number">02</span> ARQUITECTURA
+            </div>
+            <div class="menu-link" onclick="navTo('dashboard', 'dashboard')">
+                <span class="menu-number">03</span> DASHBOARD
+            </div>
+        </div>
+        
+        <div class="mt-16 font-mono text-xs text-gray-600 tracking-widest uppercase">
+            SENNEN SYSTEM ONLINE
+        </div>
     </div>
 
     <div id="video-modal" class="modal-overlay" onclick="closeModal('video-modal')">
@@ -711,8 +745,6 @@
                             gCtx.arc(px, py, 2.5, 0, Math.PI * 2);
                             // Draw connecting lines if close
                             dots.forEach(other => {
-                                // Simple distance check approx (too heavy to calculate all)
-                                // Only draw line to cursor
                                 if (Math.random() > 0.99) {
                                     gCtx.strokeStyle = 'rgba(0,0,0,0.1)';
                                     gCtx.moveTo(px, py);
@@ -735,7 +767,7 @@
             }
             drawGlobe();
             
-            // Only add mouse/touch listeners if not mobile
+            // Only add mouse/touch listeners if not mobile to prevent scroll blocking
             if (window.innerWidth > 768) {
                 globeCanvas.addEventListener('mousedown', e => { dragging=true; lx=e.clientX; ly=e.clientY; vx = 0; vy = 0; document.getElementById('globe-container').style.cursor = 'grabbing'; });
                 window.addEventListener('mouseup', () => { dragging=false; document.getElementById('globe-container').style.cursor = 'grab'; });
