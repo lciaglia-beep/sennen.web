@@ -57,8 +57,8 @@
 
         /* --- MENU FULLSCREEN PREMIUM --- */
         #menu-overlay {
-            position: fixed; inset: 0; background: rgba(5, 5, 5, 0.95); /* Semi-transparente */
-            backdrop-filter: blur(15px); /* Efecto cristal */
+            position: fixed; inset: 0; background: rgba(5, 5, 5, 0.95); 
+            backdrop-filter: blur(15px);
             z-index: 9990; 
             display: flex; justify-content: center; align-items: center; flex-direction: column;
             opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
@@ -81,11 +81,6 @@
         }
         .menu-link:hover .menu-number { opacity: 1; }
 
-        @media (max-width: 768px) { 
-            .menu-link { font-size: 2.5rem; } 
-            .menu-number { display: none; }
-        }
-
         /* --- PRELOADER --- */
         #preloader { position: fixed; inset: 0; background: #050505; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .loader-brand { font-family: var(--font-sans); font-size: 1.5rem; font-weight: 800; color: white; letter-spacing: 0.2em; animation: pulse-slow 2s infinite; }
@@ -107,6 +102,7 @@
         .carousel-item:hover { border-color: rgba(255, 255, 255, 0.9); z-index: 100; transform: scale(1.1); box-shadow: 0 0 80px rgba(56, 189, 248, 0.2); }
         .carousel-item video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease; filter: grayscale(100%); pointer-events: none; }
         
+        /* LOCK SYSTEM */
         .lock-overlay { position: absolute; inset: 0; background: rgba(5,5,5,0.85); z-index: 20; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: background 0.3s; }
         .carousel-item:hover .lock-overlay { background: rgba(5,5,5,0.6); }
         .lock-icon-container { position: relative; width: 24px; height: 24px; margin-bottom: 12px; }
@@ -186,15 +182,19 @@
         .menu-btn:hover { color: #38bdf8; }
 
         /* ========================================= */
-        /* === MOBILE OPTIMIZATIONS === */
+        /* === MOBILE OPTIMIZATIONS (AL MILIMETRO) === */
         /* ========================================= */
         @media (max-width: 768px) {
             h2 { font-size: 2.2rem !important; line-height: 1.2 !important; }
             h3 { font-size: 1rem !important; }
             .parallax-text-lg { font-size: 2.5rem !important; }
             .menu-link { font-size: 2.5rem !important; }
+            .menu-number { display: none; }
+            
+            /* PADDING ADJUSTMENT FOR MOBILE */
             .section-padding { padding-top: 4rem !important; padding-bottom: 4rem !important; }
             
+            /* Carousel Scene Mobile */
             .carousel-scene { height: 350px !important; margin-top: 3rem !important; }
             .carousel { width: 140px; height: 220px; }
             .carousel-item { width: 140px; height: 220px; }
@@ -514,8 +514,9 @@
         </div>
         <div class="mb-6 h-px w-full bg-gray-800"></div>
         <p class="text-[10px] text-gray-400 mb-6 font-mono">Asegura el futuro sintético de tu marca.</p>
+        
         <form onsubmit="handleWaitlist(event)">
-            <input type="email" placeholder="CORREO" class="bg-black border border-gray-800 text-white px-3 py-3 text-[10px] w-full focus:outline-none focus:border-white font-mono mb-3 placeholder-gray-600" required>
+            <input type="email" name="email" placeholder="CORREO" class="bg-black border border-gray-800 text-white px-3 py-3 text-[10px] w-full focus:outline-none focus:border-white font-mono mb-3 placeholder-gray-600" required>
             <button type="submit" class="bg-white text-black px-3 py-3 text-[10px] font-bold uppercase w-full hover:bg-gray-200 transition-colors">Unirse</button>
         </form>
     </div>
@@ -663,9 +664,59 @@
                 if(isMenuOpen) toggleMenu();
             }
         });
+        
+        /* --- FORMULARIO CONECTADO (AJAX) --- */
         function handleWaitlist(e) {
             e.preventDefault();
-            e.target.innerHTML = '<div class="text-white font-mono text-[10px]">> ACCESO CONCEDIDO</div>';
+            
+            const form = e.target;
+            const input = form.querySelector('input[type="email"]');
+            const button = form.querySelector('button');
+            const email = input.value;
+
+            // Feedback visual
+            button.innerText = "SINTETIZANDO...";
+            button.style.opacity = "0.7";
+            button.disabled = true;
+            input.disabled = true;
+
+            // Envío silencioso
+            fetch("https://formsubmit.co/ajax/hello@sennen.agency", {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    _subject: "NUEVO LEAD - SENNEN BETA",
+                    _template: "table"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Éxito
+                form.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-6 animate-pulse">
+                        <i data-lucide="check-circle" class="w-8 h-8 text-white mb-3"></i>
+                        <div class="text-white font-mono text-[10px] tracking-[0.2em] text-center">
+                            > ACCESO CONCEDIDO<br>
+                            <span class="text-gray-500 normal-case tracking-normal">Te contactaremos pronto.</span>
+                        </div>
+                    </div>
+                `;
+                lucide.createIcons(); 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                button.innerText = "ERROR DE RED";
+                setTimeout(() => {
+                    button.innerText = "UNIRSE";
+                    button.style.opacity = "1";
+                    button.disabled = false;
+                    input.disabled = false;
+                }, 3000);
+            });
         }
 
         /* --- DASHBOARD GRAPH --- */
