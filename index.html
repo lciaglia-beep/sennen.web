@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Sennen | Presencia Sintética y Resonancia Algorítmica</title>
-    <meta name="description" content="La biología no escala. Sennen crea avatares de IA y activos sintéticos optimizados para resonancia algorítmica, retención absoluta y control de atención.">
+    <meta name="description" content="Automatización total de marca. CRM, Chatbots, Activos Sintéticos y Clones Digitales. Sennen escala tu negocio con IA.">
     
-    <meta property="og:title" content="Sennen | Resonancia Algorítmica y Activos IA">
-    <meta property="og:description" content="No es volumen, es Resonancia Algorítmica. Generamos activos sintéticos con retención que la biología no puede sostener. El algoritmo prefiere la consistencia sintética.">
+    <meta property="og:title" content="Sennen | Presencia Sintética">
+    <meta property="og:description" content="Automatización Algorítmica y Activos IA.">
     <meta property="og:image" content="https://sennen.agency/og-image.jpg">
     <meta property="og:url" content="https://sennen.agency/">
     <meta property="og:type" content="website">
@@ -41,6 +41,7 @@
         /* --- SECCIONES --- */
         .section-black { background-color: #050505; color: #ffffff; position: relative; z-index: 2; }
         .section-gradient-transition { height: 250px; width: 100%; background: linear-gradient(to bottom, #050505 0%, #3b82f6 40%, #ffffff 100%); position: relative; z-index: 1; }
+        .section-gradient-reverse { height: 150px; width: 100%; background: linear-gradient(to bottom, #ffffff 0%, #050505 100%); position: relative; z-index: 1; }
         .section-white { background-color: #ffffff; color: #050505; position: relative; z-index: 2; }
 
         /* --- GLOWS --- */
@@ -94,7 +95,7 @@
         #liquid-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.15; mix-blend-mode: screen; }
         #dust-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.5; mix-blend-mode: screen; }
 
-        /* --- CAROUSEL --- */
+        /* --- CAROUSEL (Moved to its own section) --- */
         .carousel-scene { perspective: 2000px; width: 100%; height: 500px; display: flex; justify-content: center; align-items: center; overflow: visible; margin-top: 5vh; will-change: transform; }
         .carousel { width: 180px; height: 300px; position: relative; transform-style: preserve-3d; animation: rotate 60s infinite linear; }
         .carousel:hover { animation-play-state: paused; }
@@ -133,7 +134,7 @@
         .parallax-quote { font-family: var(--font-mono); font-size: 1.1rem; color: #aaa; border-left: 2px solid #38bdf8; padding-left: 2rem; text-align: left; margin: 0 auto; max-width: 80%; }
 
         /* --- OFFER CARDS --- */
-        .offer-card { background: #ffffff; border: 1px solid #e5e5e5; padding: 4rem 3rem; position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; border-radius: 40px; z-index: 10; will-change: transform; }
+        .offer-card { background: #ffffff; border: 1px solid #e5e5e5; padding: 4rem 3rem; position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; border-radius: 40px; z-index: 10; will-change: transform; display: flex; flex-direction: column; justify-content: space-between; }
         .offer-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.15); border-color: #000; }
         .offer-card h3 { font-weight: 700; color: #000; font-size: 2rem; }
         .offer-card p { opacity: 0.7; color: #444; margin-top: 1rem; }
@@ -156,6 +157,10 @@
         .timeline-item:hover .timeline-node { background: #000; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); transform: translateX(-50%) scale(1.2); border-color: #2563eb; }
         .timeline-content { margin-left: 6rem; transition: transform 0.3s; }
         .timeline-item:hover .timeline-content { transform: translateX(10px); }
+
+        /* --- BENEFITS GRID --- */
+        .benefit-card { padding: 2rem; border-left: 1px solid #e5e5e5; transition: all 0.3s; }
+        .benefit-card:hover { background: #f9fafb; border-left: 3px solid #000; }
 
         /* --- GLOBE --- */
         #globe-container { width: 100%; height: 85vh; position: relative; display: flex; justify-content: center; align-items: center; z-index: 10; will-change: transform; cursor: grab; }
@@ -185,6 +190,7 @@
         /* === MOBILE OPTIMIZATIONS (AL MILIMETRO) === */
         /* ========================================= */
         @media (max-width: 768px) {
+            h1 { font-size: 3rem !important; }
             h2 { font-size: 2.2rem !important; line-height: 1.2 !important; }
             h3 { font-size: 1rem !important; }
             .parallax-text-lg { font-size: 2.5rem !important; }
@@ -228,6 +234,8 @@
             #dust-canvas { display: none; }
             .modal-content-video { width: 95%; height: auto; aspect-ratio: 9/16; }
             .modal-content-info { width: 95%; padding: 2rem; }
+            
+            .benefit-card { border-left: none; border-bottom: 1px solid #e5e5e5; padding-left: 0; }
         }
     </style>
 </head>
@@ -250,8 +258,11 @@
             <div class="menu-link" onclick="navTo('arquitectura', 'arquitectura')">
                 <span class="menu-number">02</span> ARQUITECTURA
             </div>
+            <div class="menu-link" onclick="navTo('cursos-visual', 'cursos')">
+                <span class="menu-number">03</span> CURSOS
+            </div>
             <div class="menu-link" onclick="navTo('dashboard', 'dashboard')">
-                <span class="menu-number">03</span> DASHBOARD
+                <span class="menu-number">04</span> DASHBOARD
             </div>
         </div>
         
@@ -286,53 +297,24 @@
         </div>
     </nav>
 
+    <!-- HEADER MODIFICADO: Título bajado considerablemente -->
     <header id="motor" class="section-black relative min-h-screen flex flex-col justify-center items-center overflow-hidden perspective-1000 pb-32">
         <div class="ambient-glow glow-top-left"></div>
         <div class="ambient-glow glow-top-right"></div>
         
-        <div class="container mx-auto px-6 z-10 flex flex-col items-center">
-            <div class="carousel-scene mb-12" data-speed="0.2">
-                <div class="carousel" id="carousel-track">
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video1.mp4')">
-                        <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video1.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video2.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video2.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video3.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video3.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video4.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video4.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video5.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video5.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video6.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video6.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video7.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video7.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video8.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video8.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                    <div class="carousel-item" onclick="handleCarouselClick(this, 'video9.mp4')">
-                         <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">PRESS TO UNLOCK</span></div>
-                        <video src="video9.mp4" muted loop playsinline preload="none"></video>
-                    </div>
-                </div>
+        <!-- Added mt-32 md:mt-48 to push content down -->
+        <div class="container mx-auto px-6 z-10 flex flex-col items-center text-center mt-32 md:mt-48">
+            <div class="reveal-up mb-8">
+                <h1 class="text-6xl md:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-6">
+                    PRESENCIA<br>SINTÉTICA
+                </h1>
+                <p class="font-mono text-sm md:text-base text-[#38bdf8] uppercase tracking-[0.4em] animate-pulse">
+                    RESONANCIA ALGORÍTMICA
+                </p>
             </div>
-            <p class="font-mono text-xs text-gray-500 uppercase tracking-[0.4em] animate-pulse mt-12 reveal-up">
-                Sistema Operativo para Soberanía Digital
+            
+            <p class="max-w-2xl text-gray-400 text-lg leading-relaxed reveal-up delay-100">
+                Sistema Operativo para Soberanía Digital. Construimos la infraestructura invisible que escala tu marca sin límites biológicos.
             </p>
         </div>
     </header>
@@ -386,43 +368,110 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal-up">
-                <div class="offer-card group reveal-up" onclick="openContent('ugc')" data-speed="0.1">
-                    <div class="offer-card-top">
-                        <div class="offer-card-icon"><i data-lucide="zap" class="w-8 h-8"></i></div>
-                        <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-8 h-8"></i></div>
+                <!-- OFFER 1: ACTIVOS SINTÉTICOS -->
+                <div class="offer-card group reveal-up" onclick="openContent('ia-activos')" data-speed="0.1">
+                    <div>
+                        <div class="offer-card-top">
+                            <div class="offer-card-icon"><i data-lucide="bot" class="w-8 h-8"></i></div>
+                            <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-8 h-8"></i></div>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Activos Sintéticos e IA</h3>
+                        <p class="text-base mb-6 leading-relaxed opacity-70">
+                            CRM, Automatización y ChatBots. Generamos contenido de marca automatizado consiguiendo niveles de retención muy altos.
+                        </p>
                     </div>
-                    <h3 class="text-3xl font-bold mb-4">Influencers UGC</h3>
-                    <p class="text-base mb-12 leading-relaxed opacity-70">
-                        Despliegue masivo de activos visuales sin dependencia humana. Escala infinita.
-                    </p>
-                    <div class="h-px w-full bg-gray-200 mb-6"></div>
-                    <div class="text-xs font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity text-black">Ver Detalles</div>
+                    <div>
+                        <div class="h-px w-full bg-gray-200 mb-6"></div>
+                        <div class="text-xs font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity text-black">Ver Detalles</div>
+                    </div>
                 </div>
 
+                <!-- OFFER 2: CLON DIGITAL -->
                 <div class="offer-card group reveal-up" onclick="openContent('clon')" data-speed="0.2">
-                    <div class="offer-card-top">
-                        <div class="offer-card-icon"><i data-lucide="fingerprint" class="w-8 h-8"></i></div>
-                        <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-8 h-8"></i></div>
+                    <div>
+                        <div class="offer-card-top">
+                            <div class="offer-card-icon"><i data-lucide="fingerprint" class="w-8 h-8"></i></div>
+                            <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-8 h-8"></i></div>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Clon Digital</h3>
+                        <p class="text-base mb-6 leading-relaxed opacity-70">
+                            Replicamos tu identidad de marca (voz, imagen y estilo) en múltiples canales para ofrecer presencia constante 24/7.
+                        </p>
                     </div>
-                    <h3 class="text-3xl font-bold mb-4">Clon Digital</h3>
-                    <p class="text-base mb-12 leading-relaxed opacity-70">
-                        Sintetización de Identidad. Presencia omnicanal automatizada 24/7.
-                    </p>
-                    <div class="h-px w-full bg-gray-200 mb-6"></div>
-                    <div class="text-xs font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity text-black">Ver Detalles</div>
+                    <div>
+                        <div class="h-px w-full bg-gray-200 mb-6"></div>
+                        <div class="text-xs font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity text-black">Ver Detalles</div>
+                    </div>
                 </div>
 
+                <!-- OFFER 3: CURSOS DIGITALES -->
                 <div class="offer-card group reveal-up" onclick="openContent('cursos')" data-speed="0.1">
-                    <div class="offer-card-top">
-                        <div class="offer-card-icon"><i data-lucide="library" class="w-8 h-8"></i></div>
-                        <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-8 h-8"></i></div>
+                    <div>
+                        <div class="offer-card-top">
+                            <div class="offer-card-icon"><i data-lucide="library" class="w-8 h-8"></i></div>
+                            <div class="offer-card-arrow"><i data-lucide="arrow-right" class="w-8 h-8"></i></div>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Cursos Digitales</h3>
+                        <p class="text-base mb-6 leading-relaxed opacity-70">
+                            Convertimos la experiencia de tu empresa en productos formativos escalables con distribución automatizada.
+                        </p>
                     </div>
-                    <h3 class="text-3xl font-bold mb-4">Cursos Digitales</h3>
-                    <p class="text-base mb-12 leading-relaxed opacity-70">
-                        Capital Intelectual. Empaquetado estratégico de expertise y distribución automática.
-                    </p>
-                    <div class="h-px w-full bg-gray-200 mb-6"></div>
-                    <div class="text-xs font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity text-black">Ver Detalles</div>
+                    <div>
+                        <div class="h-px w-full bg-gray-200 mb-6"></div>
+                        <div class="text-xs font-bold uppercase meta tracking-widest opacity-50 group-hover:opacity-100 transition-opacity text-black">Ver Detalles</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVA SECCION: CARRUSEL MOVIDO AQUI (Contexto Cursos Digitales) -->
+    <div class="section-gradient-reverse"></div>
+    <section id="cursos-visual" class="section-black py-32 relative overflow-hidden">
+        <div class="ambient-glow glow-bottom-center" style="opacity: 0.2"></div>
+        <div class="max-w-[85%] mx-auto text-center relative z-10 mb-12">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4 text-white">PRODUCTOS FORMATIVOS</h2>
+            <p class="font-mono text-xs text-blue-400 uppercase tracking-widest">Visualización de Activos</p>
+        </div>
+
+        <div class="carousel-scene" data-speed="0.1">
+            <div class="carousel" id="carousel-track">
+                <!-- Videos 1-9 mapped as requested -->
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video1.mp4')">
+                    <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 01</span></div>
+                    <video src="video1.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video2.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 02</span></div>
+                    <video src="video2.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video3.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 03</span></div>
+                    <video src="video3.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video4.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 04</span></div>
+                    <video src="video4.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video5.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 05</span></div>
+                    <video src="video5.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video6.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 06</span></div>
+                    <video src="video6.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video7.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 07</span></div>
+                    <video src="video7.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video8.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 08</span></div>
+                    <video src="video8.mp4" muted loop playsinline preload="none"></video>
+                </div>
+                <div class="carousel-item" onclick="handleCarouselClick(this, 'video9.mp4')">
+                     <div class="lock-overlay"><div class="lock-icon-container"><i data-lucide="lock" class="lock-svg lock-closed"></i><i data-lucide="lock-open" class="lock-svg lock-open"></i></div><span class="lock-text">MODULO 09</span></div>
+                    <video src="video9.mp4" muted loop playsinline preload="none"></video>
                 </div>
             </div>
         </div>
@@ -443,12 +492,13 @@
         </div>
     </section>
 
-    <section id="dashboard" class="section-white min-h-screen flex items-center relative py-40 pb-64 overflow-hidden">
+    <section id="dashboard" class="section-white min-h-screen flex items-center relative py-40 overflow-hidden">
         <div class="ambient-glow-white-bg glow-middle-right" style="opacity: 0.5;" data-speed="-0.4"></div>
         <div class="ambient-glow-white-bg glow-dashboard" data-speed="0.2"></div>
 
         <div class="max-w-[85%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 items-start relative z-10">
             
+            <!-- TIMELINE ACTUALIZADA CON TEXTO NUEVO -->
             <div class="timeline-container reveal-up">
                 <div class="mb-20">
                     <h3 class="text-sm font-mono uppercase opacity-50 mb-4">Protocolo</h3>
@@ -457,28 +507,28 @@
 
                 <div class="relative">
                     <div class="timeline-line"></div>
-                    <div class="timeline-item reveal-up" onclick="openContent('fase1')">
+                    <div class="timeline-item reveal-up" onclick="openContent('auto-algo')">
                         <div class="timeline-node"></div>
                         <div class="timeline-content">
                             <span class="text-xs font-mono opacity-60 mb-2 block">FASE 01</span>
-                            <h4 class="text-2xl font-bold mb-2">Inyección de Activos</h4>
-                            <p class="text-base opacity-60 font-light">Prueba de concepto y calibración de identidad.</p>
+                            <h4 class="text-2xl font-bold mb-2">Automatización Algorítmica</h4>
+                            <p class="text-base opacity-60 font-light">Sistemas que analizan datos en tiempo real y optimizan procesos automáticamente.</p>
                         </div>
                     </div>
-                    <div class="timeline-item reveal-up" onclick="openContent('fase2')">
+                    <div class="timeline-item reveal-up" onclick="openContent('crm-int')">
                         <div class="timeline-node"></div>
                         <div class="timeline-content">
                             <span class="text-xs font-mono opacity-60 mb-2 block">FASE 02</span>
-                            <h4 class="text-2xl font-bold mb-2">Sincronización de Datos</h4>
-                            <p class="text-base opacity-60 font-light">Integración de Dashboard y optimización algorítmica.</p>
+                            <h4 class="text-2xl font-bold mb-2">CRM & Marketing Integral</h4>
+                            <p class="text-base opacity-60 font-light">Estrategias multicanal unificadas y personalización automática de prospectos.</p>
                         </div>
                     </div>
-                    <div class="timeline-item reveal-up" onclick="openContent('fase3')">
+                    <div class="timeline-item reveal-up" onclick="openContent('auto-total')">
                         <div class="timeline-node"></div>
                         <div class="timeline-content">
                             <span class="text-xs font-mono opacity-60 mb-2 block">FASE 03</span>
-                            <h4 class="text-2xl font-bold mb-2">Dominancia de Ecosistema</h4>
-                            <p class="text-base opacity-60 font-light">Escalado masivo y monetización de comunidad propietaria.</p>
+                            <h4 class="text-2xl font-bold mb-2">Automatización Total</h4>
+                            <p class="text-base opacity-60 font-light">Flujos automatizados en ventas y atención para escalar sin carga manual.</p>
                         </div>
                     </div>
                 </div>
@@ -502,6 +552,49 @@
                     <div class="text-[10px] uppercase mb-4 opacity-70 tracking-widest flex justify-between border-b border-gray-500/20 pb-2"><span>Bucle de Retroalimentación</span><span>LIVE</span></div>
                     <div class="text-xs opacity-50 font-mono mb-6 leading-relaxed">> Analizando patrones de caída de audiencia.<br>> Re-optimizando scripts en tiempo real.<br>> Iteración automática de ganchos virales.</div>
                     <div class="h-24 w-full flex items-end gap-1" id="live-graph"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVA SECCION: BENEFICIOS CLAVE -->
+    <section class="section-white py-24 pb-40 relative z-20 border-t border-gray-100">
+        <div class="max-w-[85%] mx-auto">
+            <div class="mb-16 reveal-up">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight mb-6">Beneficios de la Unificación</h2>
+                <p class="text-gray-500 text-lg">Por qué Sennen es el estándar de la industria.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-r border-b border-l border-gray-200 reveal-up bg-white">
+                <div class="benefit-card">
+                    <i data-lucide="layers" class="w-8 h-8 text-blue-600 mb-4 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-2">Oferta Unificada</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">Solución todo-en-uno, evitando propuestas fragmentadas y costes ocultos.</p>
+                </div>
+                <div class="benefit-card">
+                    <i data-lucide="trending-up" class="w-8 h-8 text-blue-600 mb-4 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-2">Engagement +400%</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">La tecnología de resonancia eleva el alcance gracias al contenido sintético perfecto.</p>
+                </div>
+                <div class="benefit-card">
+                    <i data-lucide="clock" class="w-8 h-8 text-blue-600 mb-4 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-2">Disponibilidad 24/7</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">Presencia omnicanal que permite interactuar con tu audiencia en todo momento.</p>
+                </div>
+                <div class="benefit-card">
+                    <i data-lucide="cpu" class="w-8 h-8 text-blue-600 mb-4 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-2">Eficiencia Operativa</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">Centralizamos procesos, reduciendo costos drásticamente y acelerando la ejecución.</p>
+                </div>
+                <div class="benefit-card">
+                    <i data-lucide="maximize" class="w-8 h-8 text-blue-600 mb-4 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-2">Escalabilidad Infinita</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">Las soluciones crecen con el negocio sin necesidad de contratar más personal.</p>
+                </div>
+                <div class="benefit-card">
+                    <i data-lucide="shield-check" class="w-8 h-8 text-blue-600 mb-4 opacity-80"></i>
+                    <h4 class="font-bold text-lg mb-2">Control Total</h4>
+                    <p class="text-sm text-gray-500 leading-relaxed">Dashboards integrados que permiten monitorización y corrección en tiempo real.</p>
                 </div>
             </div>
         </div>
@@ -549,14 +642,38 @@
     <script>
         lucide.createIcons();
 
-        /* --- CONTENT DATA --- */
+        /* --- CONTENT DATA (ACTUALIZADO - MÁS INFO CRM & WEB) --- */
         const contentData = {
-            'ugc': { tag: 'CORE OFFER', title: 'Influencers UGC', desc: 'Red de avatares sintéticos hiper-realistas para testeo masivo de creatividades publicitarias. Eliminamos costes de estudio y regrabaciones.' },
-            'clon': { tag: 'HIGH TICKET', title: 'Clon Digital', desc: 'Digitalización de tu esencia. Tu voz y rostro escalados infinitamente para generar contenido en múltiples idiomas mientras duermes.' },
-            'cursos': { tag: 'PASSIVE INCOME', title: 'Cursos Digitales', desc: 'Transformación de conocimiento en productos digitales. Presentadores IA mantienen el contenido siempre actualizado.' },
-            'fase1': { tag: 'SPRINT 01', title: 'Inyección de Activos', desc: 'Despliegue de 3 prototipos IA en canales controlados. Pruebas A/B de tono y estética.' },
-            'fase2': { tag: 'SPRINT 02', title: 'Sincronización', desc: 'Conexión con Dashboard Sennen. La IA auto-corrige guiones basados en retención.' },
-            'fase3': { tag: 'SPRINT 03', title: 'Dominancia', desc: 'Escalado horizontal a todas las plataformas y activación de funnels automáticos.' }
+            'ia-activos': { 
+                tag: 'AUTOMATIZACIÓN', 
+                title: 'Activos Sintéticos e IA', 
+                desc: 'Generamos contenido de marca automatizado con inteligencia artificial. Incluye Chatbots avanzados y automatización web integral (Webhooks, APIs) para que tu web venda sola. Niveles de retención imposibles para humanos.' 
+            },
+            'clon': { 
+                tag: 'IDENTIDAD', 
+                title: 'Clon Digital', 
+                desc: 'Replicamos tu identidad de marca (voz, imagen y estilo) en múltiples canales para ofrecer presencia constante 24/7. Tu avatar trabaja mientras tú duermes, escalando tu mensaje infinitamente.' 
+            },
+            'cursos': { 
+                tag: 'EDUCACIÓN', 
+                title: 'Cursos Digitales', 
+                desc: 'Convertimos la experiencia de tu empresa en productos formativos escalables, con empaquetado estratégico del conocimiento y distribución automatizada. Videos 1 a 9 incluidos en el plan formativo.' 
+            },
+            'auto-algo': { 
+                tag: 'FASE 01', 
+                title: 'Automatización Algorítmica', 
+                desc: 'Implementamos sistemas que analizan datos en tiempo real. Tracking avanzado de comportamiento web: detectamos intenciones de compra y activamos ofertas personalizadas automáticamente.' 
+            },
+            'crm-int': { 
+                tag: 'FASE 02', 
+                title: 'CRM & Web Automation', 
+                desc: 'Conectamos todos los datos de clientes en un CRM inteligente. Implementamos tracking web que detecta comportamiento en tiempo real para activar secuencias de venta personalizadas. Si un lead duda en el checkout, el sistema interviene.' 
+            },
+            'auto-total': { 
+                tag: 'FASE 03', 
+                title: 'Automatización Total', 
+                desc: 'Aplicamos flujos automatizados en ventas, atención y seguimiento para que las operaciones escalen sin aumentar la carga manual. Tu empresa crece, tus costes fijos no.' 
+            }
         };
 
         /* --- ANIMATIONS & LOGIC --- */
