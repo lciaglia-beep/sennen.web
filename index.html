@@ -509,6 +509,19 @@
         document.querySelectorAll('.dashboard-grid video').forEach(v => observer.observe(v));
         document.querySelectorAll('.lazy-video').forEach(v => observer.observe(v));
 
+        // --- IMAGE OBSERVER FOR FADE-IN ---
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('loaded');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '50px 0px', threshold: 0.1 });
+        
+        document.querySelectorAll('.photo-item').forEach(item => imageObserver.observe(item));
+
+
         const initAnimations = () => {
             if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                 gsap.registerPlugin(ScrollTrigger);
