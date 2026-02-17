@@ -198,10 +198,11 @@
         #menu-overlay::-webkit-scrollbar-track { background: #000; }
         #menu-overlay::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-        /* Full Screen Video */
+        /* Full Screen Video - Mobile Optimized */
         .full-screen-video-section {
             width: 100%;
-            height: 100vh;
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic viewport height for mobile browsers */
             position: relative;
             overflow: hidden;
             background: #000;
@@ -210,6 +211,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center center; /* Ensure center is visible on mobile crop */
         }
     </style>
 </head>
@@ -388,12 +390,14 @@
             <div class="photo-grid-section reveal-up">
                 <h3 class="text-xs font-mono text-gray-500 mb-8 uppercase tracking-widest border-b border-gray-800 pb-4">Evidencia Visual</h3>
                 <div class="photo-grid">
-                    <div class="photo-item"><img src="foto1.png" loading="lazy" decoding="async" alt="Evidencia"></div>
-                    <div class="photo-item"><img src="foto2.png" loading="lazy" decoding="async" alt="Evidencia"></div>
-                    <div class="photo-item"><img src="foto3.png" loading="lazy" decoding="async" alt="Evidencia"></div>
-                    <div class="photo-item"><img src="foto4.png" loading="lazy" decoding="async" alt="Evidencia"></div>
-                    <div class="photo-item"><img src="foto5.png" loading="lazy" decoding="async" alt="Evidencia"></div>
-                    <div class="photo-item"><img src="foto6.png" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <!-- RESTORED UNSPLASH PLACEHOLDERS FOR PREVIEW VISIBILITY -->
+                    <!-- To use local files, replace src with "foto1.png", etc. -->
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
                 </div>
             </div>
         </div>
