@@ -2,7 +2,7 @@
 <html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
     
     <title>SENNEN AGENCY | Presencia Sintética</title>
     <meta name="description" content="Creación de Activos Sintéticos y Clones Digitales. Sennen escala tu imagen con IA.">
@@ -11,200 +11,153 @@
     <meta property="og:description" content="Impacto Visual y Activos IA.">
     <meta property="og:type" content="website">
 
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23050505'/%3E%3Ccircle cx='50' cy='50' r='15' fill='%23ffffff'/%3E%3C/svg%3E">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@800;900&display=swap" rel="stylesheet">
     
-    <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        black: '#050505',
+                        white: '#ffffff',
+                        offwhite: '#e5e5e5'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <style>
-        :root {
-            --font-sans: 'Inter', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --font-display: 'Poppins', sans-serif;
-            /* CAMBIO: Color de resplandor a blanco/gris para estética B&W */
-            --glow-color: rgba(255, 255, 255, 0.15); 
-        }
+        :root { --glow-color: rgba(255, 255, 255, 0.15); }
 
-        html, body {
-            width: 100%;
-            overflow-x: hidden;
-            font-family: var(--font-sans);
-            background-color: #050505;
-            color: #ffffff;
-            cursor: default;
-        }
+        html { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; overscroll-behavior-y: none; }
 
-        /* --- OPTIMIZACIONES --- */
+        /* --- UTILS --- */
         .will-change-transform { will-change: transform; }
+        .render-optimize { content-visibility: auto; contain-intrinsic-size: 1000px; }
 
-        /* --- SECCIONES --- */
-        .section-black { background-color: #050505; color: #ffffff; position: relative; z-index: 2; }
-        .section-gradient-transition { height: 150px; width: 100%; background: linear-gradient(to bottom, #050505 0%, #111 100%); position: relative; z-index: 1; pointer-events: none; }
-        .section-white { background-color: #ffffff; color: #050505; position: relative; z-index: 2; }
+        /* --- SECTIONS --- */
+        .section-black { background-color: #050505; position: relative; z-index: 2; }
 
-        /* --- DASHBOARD GRID HERO --- */
+        /* --- DASHBOARD GRID --- */
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1rem;
-            width: 100%;
-            max-width: 1920px;
-            margin: 2rem auto 0;
-            padding: 0 1rem;
-            position: relative;
-            z-index: 10;
+            display: grid; grid-template-columns: repeat(1, 1fr); gap: 1rem;
+            width: 100%; max-width: 1920px; margin: 2rem auto 0; padding: 0 1rem;
+            position: relative; z-index: 10;
         }
-
-        @media (min-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-                padding: 0 2rem;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 2rem;
-            }
-        }
-
-        @media (min-width: 1600px) {
-             .dashboard-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
+        @media (min-width: 640px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); padding: 0 1.5rem; } }
+        @media (min-width: 1024px) { .dashboard-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+        @media (min-width: 1600px) { .dashboard-grid { grid-template-columns: repeat(4, 1fr); gap: 2rem; } }
 
         .video-card {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #111;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-            cursor: pointer;
-            /* OPTIMIZACIÓN: Hardware acceleration hint */
-            transform: translateZ(0);
+            position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 12px;
+            overflow: hidden; background: #111; border: 1px solid rgba(255,255,255,0.08);
+            transition: border-color 0.3s ease, transform 0.3s ease; cursor: pointer; transform: translateZ(0);
+        }
+        .video-placeholder {
+            position: absolute; inset: 0; background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+            display: flex; align-items: center; justify-content: center; z-index: 1;
+        }
+        .video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease; position: relative; z-index: 2; }
+        .video-card.loaded video { opacity: 1; }
+        .video-card.loaded .video-placeholder { display: none; }
+        @media (hover: hover) {
+            .video-card:hover { transform: scale(1.02); z-index: 20; border-color: #ffffff; box-shadow: 0 10px 40px rgba(255, 255, 255, 0.05); }
         }
 
-        .video-card video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* CAMBIO: Opacidad al 100% y sin filtro de grises para ver en COLOR */
-            opacity: 1; 
-            transition: opacity 0.5s ease;
-            filter: none; 
-            pointer-events: none;
+        /* --- GLOWS --- */
+        .ambient-glow { 
+            position: absolute; width: 600px; height: 600px; 
+            background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%); 
+            border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; opacity: 0.3; mix-blend-mode: screen; 
         }
-
-        .video-card:hover {
-            transform: scale(1.02);
-            z-index: 20;
-            /* CAMBIO: Borde blanco al hover */
-            border-color: #ffffff;
-            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Icono de Play sutil al hover */
-        .video-card::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            width: 60px; height: 60px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.3);
-            opacity: 0;
-            transition: all 0.3s;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='24' height='24'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        .video-card:hover::after {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        /* --- GLOWS (Blanco/Gris) --- */
-        .ambient-glow { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; opacity: 0.3; will-change: transform; mix-blend-mode: screen; }
+        @media (max-width: 768px) { .ambient-glow { opacity: 0.15; width: 300px; height: 300px; } }
         .glow-top-left { top: -200px; left: -200px; }
         .glow-top-right { top: -200px; right: -200px; }
         .glow-middle-right { top: 50%; right: -300px; transform: translateY(-50%); }
 
-        /* --- MENU --- */
+        /* --- MENU OVERLAY (FORM) --- */
         #menu-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); 
-            backdrop-filter: blur(10px);
-            z-index: 9990; 
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            position: fixed; inset: 0; background: rgba(5, 5, 5, 0.98); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 9990; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            overflow-y: auto; padding: 2rem 0;
         }
         #menu-overlay.active { opacity: 1; pointer-events: all; }
         
-        .menu-link {
-            font-size: 3rem; font-weight: 300; color: #666; 
-            text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
-            position: relative; letter-spacing: -0.02em;
+        .form-group { margin-bottom: 2.5rem; }
+        .form-label { 
+            display: block; font-family: 'Inter', sans-serif; font-weight: 500; 
+            font-size: 0.85rem; color: #fff; margin-bottom: 1rem; 
+            text-transform: uppercase; letter-spacing: 0.05em; 
         }
-        .menu-link:hover { color: #fff; transform: scale(1.02); }
+        
+        .pill-checkbox input[type="checkbox"], .pill-radio input[type="radio"] { display: none; }
+        .pill-label {
+            display: inline-block; padding: 0.8rem 1.8rem; 
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 0; /* Square/Minimalist look */
+            cursor: pointer; transition: all 0.2s ease;
+            font-size: 0.9rem; margin-right: 0.5rem; margin-bottom: 0.5rem; color: #888;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .pill-label:hover { border-color: #fff; color: #fff; }
+        .pill-checkbox input:checked + .pill-label, .pill-radio input:checked + .pill-label {
+            background: #fff; color: #000; border-color: #fff; font-weight: 600;
+        }
+        .input-line {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #333;
+            padding: 1rem 0; color: #fff; font-family: 'Inter', sans-serif; font-size: 1.5rem;
+            outline: none; transition: border-color 0.3s; border-radius: 0; font-weight: 300;
+        }
+        .input-line:focus { border-color: #fff; }
+        .input-line::placeholder { color: #333; }
 
         /* --- PRELOADER --- */
-        #preloader { position: fixed; inset: 0; background: #000000; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        .loader-brand { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: white; letter-spacing: 0.1em; animation: pulse-slow 2s infinite; }
+        #preloader { 
+            position: fixed; inset: 0; background: #050505; z-index: 9999; 
+            display: flex; justify-content: center; align-items: center; flex-direction: column; 
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader-brand { font-family: 'Poppins', sans-serif; font-size: 2rem; font-weight: 800; color: white; letter-spacing: 0.1em; animation: pulse-slow 2s infinite; }
         @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         /* --- ANIMATIONS --- */
-        .reveal-up { opacity: 0; transform: translateY(30px); transition: opacity 1s ease-out, transform 1s ease-out; }
+        .reveal-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .reveal-up.active { opacity: 1; transform: translateY(0); }
 
-        /* --- PHOTO GRID (MASONRY) --- */
+        /* --- PHOTO GRID --- */
         .photo-grid-section { padding: 4rem 0; position: relative; z-index: 10; }
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        @media (min-width: 768px) {
-            .photo-grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 250px; }
-        }
-        
-        .photo-item {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #111;
-        }
-        .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-            /* CAMBIO: Sin filtro grayscale para ver fotos en color real */
-            filter: none; 
-        }
-        .photo-item:hover img {
-            transform: scale(1.05);
-        }
-        
+        .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; max-width: 1400px; margin: 0 auto; padding: 0 1rem; }
+        @media (min-width: 768px) { .photo-grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 250px; gap: 1rem; } }
+        .photo-item { position: relative; border-radius: 8px; overflow: hidden; background: #111; aspect-ratio: 1; }
+        @media (min-width: 768px) { .photo-item { aspect-ratio: auto; height: 100%; } }
+        .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; opacity: 0; }
+        .photo-item.loaded img { opacity: 1; }
+        .photo-item:hover img { transform: scale(1.05); }
         @media (min-width: 768px) {
             .photo-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
             .photo-item:nth-child(4) { grid-column: span 2; }
@@ -214,444 +167,445 @@
 
         /* --- PARALLAX BOX --- */
         .parallax-box { 
-            padding: 5rem; max-width: 900px; margin: 0 auto; border-radius: 40px; text-align: center; 
-            background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.8); 
-            will-change: transform; 
+            padding: 3rem 1.5rem; width: 100%; max-width: 900px; margin: 0 auto; 
+            border-radius: 24px; text-align: center; background: rgba(20, 20, 20, 0.6); 
+            border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
         }
-        .parallax-quote { 
-            font-family: var(--font-mono); font-size: 1.1rem; color: #ccc; 
-            /* CAMBIO: Borde blanco */
-            border-left: 2px solid #fff; padding-left: 2rem; 
-            text-align: left; margin: 0 auto; max-width: 80%; 
-        }
+        @media (min-width: 768px) { .parallax-box { padding: 5rem; border-radius: 40px; } }
+        .parallax-quote { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #ccc; border-left: 2px solid #fff; padding-left: 1.5rem; text-align: left; margin: 0 auto; max-width: 100%; }
 
-        /* --- MODALS & POPUP --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(20px); }
+        /* --- MODALS --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        
-        .modal-content-video { 
-            width: 95%; 
-            max-width: 1600px;
-            aspect-ratio: 16/9; 
-            position: relative; 
-            border-radius: 0; 
-            overflow: hidden; 
-            background: #000; 
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
-            border: 1px solid #333;
-        }
-        .modal-content-video video { width: 100%; height: 100%; object-fit: contain; }
-        
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.2);
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            z-index: 11001;
-        }
-        .nav-btn:hover { background: white; color: black; transform: translateY(-50%) scale(1.1); }
-        .nav-prev { left: 2rem; }
-        .nav-next { right: 2rem; }
-        
-        .close-btn { position: absolute; top: 2rem; right: 2rem; color: #fff; background: rgba(0,0,0,0.5); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10000; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; }
-        .close-btn:hover { background: white; color: black; }
-        
-        /* --- TITLE STYLES --- */
+        .modal-content-video { width: 100%; max-width: 1400px; aspect-ratio: 16/9; background: #000; position: relative; }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); color: white; background: rgba(255,255,255,0.1); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 11001; backdrop-filter: blur(4px); }
+        .nav-prev { left: 1rem; } .nav-next { right: 1rem; }
+        .close-btn { position: absolute; top: 1.5rem; right: 1.5rem; color: white; cursor: pointer; z-index: 10002; }
+
+        /* --- TITLE --- */
         .hero-title {
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: clamp(3rem, 18vw, 368px);
-            line-height: 0.85;
-            letter-spacing: -0.04em;
-            color: white;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 2rem;
-            
-            /* CAMBIO: Gradiente B&W puro */
-            background: linear-gradient(180deg, #ffffff 0%, #333333 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.05));
+            font-family: 'Poppins', sans-serif; font-weight: 900; font-size: clamp(3.5rem, 16vw, 12rem);
+            line-height: 0.9; letter-spacing: -0.04em; color: white; text-align: center; margin-bottom: 1.5rem;
+            background: linear-gradient(180deg, #ffffff 0%, #666 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .menu-btn { cursor: pointer; color: white; transition: color 0.3s; z-index: 9999; position: relative; }
-        .menu-btn:hover { color: #888; } /* Hover gris en vez de azul */
+        .menu-btn { cursor: pointer; color: white; z-index: 10000; position: relative; padding: 10px; }
+        
+        /* Form Scrollbar */
+        #menu-overlay::-webkit-scrollbar { width: 6px; }
+        #menu-overlay::-webkit-scrollbar-track { background: #000; }
+        #menu-overlay::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-        /* --- MOBILE OPTIMIZATIONS --- */
-        @media (max-width: 768px) {
-            .hero-title { margin-bottom: 1rem; }
-            .dashboard-grid { margin-top: 1rem; padding: 0 1rem; gap: 1rem; }
-            .nav-btn { width: 40px; height: 40px; background: rgba(0,0,0,0.8); }
-            .nav-prev { left: 10px; }
-            .nav-next { right: 10px; }
-            .close-btn { top: 1rem; right: 1rem; width: 40px; height: 40px; }
-            .modal-content-video { width: 100%; aspect-ratio: 16/9; background: black; }
-            
-            .photo-grid { grid-template-columns: 1fr; }
-            .photo-item { height: 250px; }
-            
-            .parallax-box { padding: 2rem !important; width: 100% !important; border-radius: 24px; }
-            .parallax-quote { font-size: 0.9rem; padding-left: 1rem; border-left-width: 2px; }
+        /* Full Screen Video */
+        .full-screen-video-section {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+        .full-screen-video-section video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     </style>
 </head>
-<body class="antialiased opacity-0 overflow-hidden bg-black" id="main-body">
+<body class="opacity-0 transition-opacity duration-500">
 
+    <!-- Preloader -->
     <div id="preloader">
         <div class="loader-brand">SENNEN</div>
-        <div class="text-xs font-mono text-gray-500 mt-4 tracking-widest">CARGANDO INTERFAZ</div>
+        <div class="text-xs font-mono text-gray-500 mt-4 tracking-widest">INICIALIZANDO SISTEMAS</div>
     </div>
 
-    <!-- Menu -->
+    <!-- Menu Overlay (Full Form AJAX) -->
     <div id="menu-overlay">
-        <button class="close-btn" onclick="toggleMenu()"><i data-lucide="x" class="w-6 h-6"></i></button>
-        <div class="menu-link-container">
-            <div class="menu-link" onclick="navTo('motor', 'motor')">MOTOR</div>
-            <div class="menu-link" onclick="navTo('evidencia', 'evidencia')">EVIDENCIA</div>
-            <div class="menu-link" onclick="navTo('publicidad', 'publicidad')">PUBLICIDAD</div>
+        <div class="container mx-auto px-6 py-12 max-w-3xl relative">
+            <button class="close-btn p-4 fixed top-4 right-4 md:top-8 md:right-8" onclick="toggleMenu()" aria-label="Cerrar Menú">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold font-display mb-4 tracking-tight">Hablemos.</h2>
+                <p class="text-gray-400 font-mono text-sm tracking-widest uppercase">Inicia el protocolo de colaboración.</p>
+            </div>
+
+            <form id="contact-form" onsubmit="handleContactForm(event)" class="space-y-16">
+                <!-- Services -->
+                <div class="form-group">
+                    <label class="form-label">¿Qué arquitectura necesitas?</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="pill-checkbox">
+                            <input type="checkbox" name="services[]" value="Campaña Publicitaria">
+                            <span class="pill-label">Campaña Publicitaria</span>
+                        </label>
+                        <label class="pill-checkbox">
+                            <input type="checkbox" name="services[]" value="Producción Audiovisual">
+                            <span class="pill-label">Producción Audiovisual</span>
+                        </label>
+                        <label class="pill-checkbox">
+                            <input type="checkbox" name="services[]" value="Estrategia de Marca">
+                            <span class="pill-label">Estrategia de Marca</span>
+                        </label>
+                        <label class="pill-checkbox">
+                            <input type="checkbox" name="services[]" value="Contenido IA">
+                            <span class="pill-label">Contenido IA</span>
+                        </label>
+                        <label class="pill-checkbox">
+                            <input type="checkbox" name="services[]" value="Otro">
+                            <span class="pill-label">Otro</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Budget -->
+                <div class="form-group">
+                    <label class="form-label">Capacidad de Inversión (EUR)</label>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="pill-radio">
+                            <input type="radio" name="budget" value="10-20k">
+                            <span class="pill-label">€10k - 20k</span>
+                        </label>
+                        <label class="pill-radio">
+                            <input type="radio" name="budget" value="20-50k">
+                            <span class="pill-label">€20k - 50k</span>
+                        </label>
+                        <label class="pill-radio">
+                            <input type="radio" name="budget" value="50-100k">
+                            <span class="pill-label">€50k - 100k</span>
+                        </label>
+                        <label class="pill-radio">
+                            <input type="radio" name="budget" value="100k+">
+                            <span class="pill-label">€100k+</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Personal Info -->
+                <div class="space-y-12">
+                    <div class="relative">
+                        <input type="text" name="name" placeholder="Tu nombre" class="input-line" required>
+                    </div>
+                    <div class="relative">
+                        <input type="email" name="email" placeholder="Email corporativo" class="input-line" required>
+                    </div>
+                    <div class="relative">
+                        <textarea name="message" rows="1" placeholder="Detalles del proyecto (opcional)" class="input-line resize-none" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                    </div>
+                </div>
+
+                <!-- GDPR & Submit -->
+                <div class="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                    <label class="flex items-center gap-3 text-xs text-gray-500 cursor-pointer">
+                        <input type="checkbox" required class="accent-white w-4 h-4">
+                        <span>Acepto la política de GDPR y privacidad.</span>
+                    </label>
+                    
+                    <button type="submit" id="submit-btn" class="w-full md:w-auto bg-white text-black px-12 py-5 rounded-none font-bold uppercase tracking-widest hover:bg-gray-200 transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        Enviar Solicitud
+                    </button>
+                </div>
+                
+                <div id="form-response" class="hidden text-center p-4 border border-green-900 bg-green-900/20 text-green-400 font-mono text-sm mt-8">
+                    > TRANSMISIÓN COMPLETADA. PROTOCOLO INICIADO.
+                </div>
+            </form>
         </div>
-        <div class="mt-16 font-mono text-xs text-gray-600 tracking-widest uppercase">SENNEN SYSTEM ONLINE</div>
     </div>
 
-    <!-- Video Lightbox Modal -->
-    <div id="video-modal" class="modal-overlay">
-        <!-- Navigation Buttons -->
-        <button class="nav-btn nav-prev" onclick="changeVideo(-1)"><i data-lucide="chevron-left"></i></button>
-        <button class="nav-btn nav-next" onclick="changeVideo(1)"><i data-lucide="chevron-right"></i></button>
-        
-        <div class="modal-content-video" onclick="event.stopPropagation()">
-            <button class="close-btn" onclick="closeModal('video-modal')"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <video id="modal-video-player" controls playsinline><source src="" type="video/mp4"></video>
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal-overlay" onclick="closeModal('video-modal')">
+        <button class="close-btn" onclick="closeModal('video-modal')"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <div class="w-full h-full md:h-auto md:w-auto flex items-center justify-center relative pointer-events-none">
+            <button class="nav-btn nav-prev pointer-events-auto" onclick="event.stopPropagation(); changeVideo(-1)"><i data-lucide="chevron-left"></i></button>
+            <button class="nav-btn nav-next pointer-events-auto" onclick="event.stopPropagation(); changeVideo(1)"><i data-lucide="chevron-right"></i></button>
+            <div class="modal-content-video pointer-events-auto" onclick="event.stopPropagation()">
+                <video id="modal-video-player" controls playsinline class="w-full h-full object-contain bg-black">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
         </div>
     </div>
 
     <!-- Nav -->
-    <nav class="fixed w-full z-50 py-6 mix-blend-difference text-white pointer-events-none">
-        <div class="w-full px-6 flex justify-between items-center pointer-events-auto">
-            <a href="#" class="text-xl font-bold tracking-tighter hover:text-gray-300 transition-colors">sennen.agency</a>
-            <button class="menu-btn" onclick="toggleMenu()">
-                <i data-lucide="menu" class="w-8 h-8"></i>
+    <nav class="fixed w-full z-40 top-0 left-0 py-4 transition-all duration-300" id="navbar">
+        <div class="w-full px-6 flex justify-between items-center">
+            <a href="#" class="text-lg md:text-xl font-bold tracking-tighter mix-blend-difference text-white z-50">sennen.agency</a>
+            <button class="menu-btn mix-blend-difference" onclick="toggleMenu()" aria-label="Abrir Menú">
+                <div class="flex items-center gap-3">
+                    <span class="hidden md:block font-mono text-xs uppercase tracking-widest hover:text-gray-300 transition-colors">Consultar</span>
+                    <i data-lucide="menu" class="w-8 h-8"></i>
+                </div>
             </button>
         </div>
     </nav>
 
-    <!-- HEADER: TITLE + DASHBOARD GRID -->
-    <header id="motor" class="section-black relative min-h-screen flex flex-col pt-32 pb-20 items-center overflow-hidden">
-        
+    <!-- HEADER -->
+    <header id="motor" class="section-black relative min-h-screen flex flex-col pt-32 pb-12 items-center overflow-hidden">
         <div class="ambient-glow glow-top-left"></div>
         <div class="ambient-glow glow-top-right"></div>
-        
         <div class="w-full px-4 z-10 flex flex-col items-center text-center">
-            <div class="reveal-up mb-4">
-                <h1 class="hero-title">
-                    SENNEN<br>AGENCY
-                </h1>
-                <!-- CAMBIO: Color blanco para el subtítulo -->
-                <p class="font-mono text-xs md:text-sm text-gray-400 uppercase tracking-[0.4em] mt-4">
-                    RESONANCIA ALGORÍTMICA
-                </p>
+            <div class="reveal-up">
+                <h1 class="hero-title">SENNEN<br>AGENCY</h1>
+                <p class="font-mono text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.3em] mt-2 mb-8">RESONANCIA ALGORÍTMICA</p>
             </div>
         </div>
-
-        <!-- VIDEO DASHBOARD (10 Videos) - OPTIMIZADO PARA MOSTRARSE EN COLOR -->
-        <div class="dashboard-grid reveal-up delay-100">
-            <div class="video-card" onclick="openVideoModal(0)"><video data-src="video1.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(1)"><video data-src="video2.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(2)"><video data-src="video3.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(3)"><video data-src="video4.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(4)"><video data-src="video5.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(5)"><video data-src="video6.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(6)"><video data-src="video7.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(7)"><video data-src="video8.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(8)"><video data-src="video9.mp4" muted loop playsinline class="lazy-video"></video></div>
-            <div class="video-card" onclick="openVideoModal(9)"><video data-src="video10.mp4" muted loop playsinline class="lazy-video"></video></div>
+        <div class="dashboard-grid reveal-up">
+            <div class="video-card" onclick="openVideoModal(0)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video1.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card" onclick="openVideoModal(1)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video2.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card" onclick="openVideoModal(2)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video3.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card" onclick="openVideoModal(3)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video4.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card" onclick="openVideoModal(4)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video5.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card" onclick="openVideoModal(5)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video6.mp4" muted loop playsinline preload="none"></video></div>
         </div>
-
     </header>
 
-    <section id="evidencia" class="section-black min-h-screen flex flex-col items-center justify-center relative z-20 py-20 overflow-hidden">
-        <div class="ambient-glow glow-middle-right" data-speed="-0.3"></div>
-
+    <section id="evidencia" class="section-black min-h-screen flex flex-col items-center justify-center relative z-20 py-20 overflow-hidden render-optimize">
+        <div class="ambient-glow glow-middle-right"></div>
         <div class="max-w-[90%] md:max-w-[80%] mx-auto w-full relative z-10">
-            
-            <!-- PARALLAX BOX -->
-            <div class="parallax-box mb-32 reveal-up">
-                <h2 class="text-5xl md:text-7xl font-bold leading-tight mb-8">
-                    Cambio de<br>
-                    <span class="text-gray-500">Paradigma</span>
-                </h2>
-                <div class="parallax-quote">
-                    "La biología no puede sostener la retención."
-                </div>
+            <div class="parallax-box mb-24 reveal-up">
+                <h2 class="text-4xl md:text-7xl font-bold leading-tight mb-6">Cambio de<br><span class="text-gray-500">Paradigma</span></h2>
+                <div class="parallax-quote">"La biología no puede sostener la retención."</div>
             </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 reveal-up mb-32">
-                <div class="space-y-8">
-                    <p class="text-2xl md:text-3xl text-gray-200 font-light leading-snug">
-                        <!-- CAMBIO: Texto blanco/gris en lugar de azul -->
-                        No se trata de volumen; se trata de <span class="text-white font-medium border-b border-gray-500">Resonancia Algorítmica</span>. Los activos generados por IA logran tasas de retención que la biología simplemente no puede sostener.
-                    </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 reveal-up mb-24">
+                <div>
+                    <p class="text-xl md:text-3xl text-gray-300 font-light leading-snug">No se trata de volumen; se trata de <span class="text-white font-medium border-b border-gray-500">Resonancia Algorítmica</span>. Los activos generados por IA logran tasas de retención superiores.</p>
                 </div>
-                <div class="grid grid-cols-1 gap-12 border-l border-gray-800 pl-8">
+                <div class="grid grid-cols-1 gap-8 border-l border-gray-800 pl-6">
                     <div>
-                        <h4 class="text-white font-bold mb-2 text-lg uppercase tracking-wider font-display">Dominio de la Atención</h4>
-                        <p class="text-base text-gray-500 leading-relaxed">Erradicación de fricción cognitiva y modulación semántica para una adherencia neuro-química absoluta.</p>
+                        <h4 class="text-white font-bold mb-2 text-base uppercase tracking-wider font-display">Dominio de la Atención</h4>
+                        <p class="text-sm md:text-base text-gray-500 leading-relaxed">Erradicación de fricción cognitiva y modulación semántica.</p>
                     </div>
                     <div>
-                        <h4 class="text-white font-bold mb-2 text-lg uppercase tracking-wider font-display">El Nuevo Estándar</h4>
-                        <p class="text-base text-gray-500 leading-relaxed">El ojo humano ya no distingue; el algoritmo prefiere la consistencia sintética.</p>
+                        <h4 class="text-white font-bold mb-2 text-base uppercase tracking-wider font-display">El Nuevo Estándar</h4>
+                        <p class="text-sm md:text-base text-gray-500 leading-relaxed">El algoritmo prefiere la consistencia sintética.</p>
                     </div>
                 </div>
             </div>
-
-            <!-- PHOTO GRID SECTION (MASONRY) -->
             <div class="photo-grid-section reveal-up">
-                <h3 class="text-sm font-mono text-gray-500 mb-8 uppercase tracking-widest border-b border-gray-800 pb-4">Evidencia Visual</h3>
+                <h3 class="text-xs font-mono text-gray-500 mb-8 uppercase tracking-widest border-b border-gray-800 pb-4">Evidencia Visual</h3>
                 <div class="photo-grid">
-                    <div class="photo-item"><img src="foto1.png" alt="Sennen Visual 1" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto2.png" alt="Sennen Visual 2" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto3.png" alt="Sennen Visual 3" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto4.png" alt="Sennen Visual 4" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto5.png" alt="Sennen Visual 5" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto6.png" alt="Sennen Visual 6" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto7.png" alt="Sennen Visual 7" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto8.png" alt="Sennen Visual 8" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto9.png" alt="Sennen Visual 9" loading="lazy"></div>
-                    <div class="photo-item"><img src="foto10.png" alt="Sennen Visual 10" loading="lazy"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
+                    <div class="photo-item"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=500&auto=format&fit=crop" loading="lazy" decoding="async" alt="Evidencia"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="section-gradient-transition"></div>
-
-    <!-- NUEVA SECCION: VIDEO PUBLICITARIO -->
-    <section id="publicidad" class="section-black min-h-screen flex flex-col justify-center relative py-32">
-        <div class="max-w-[85%] mx-auto relative z-10 reveal-up text-center">
-             <!-- Use lazy loading for video -->
-            <video data-src="video.mp4" autoplay loop muted playsinline class="w-full rounded-[30px] shadow-2xl block lazy-video border border-gray-800" style="max-height: 80vh; object-fit: cover;"></video>
-        </div>
+    <!-- VIDEO FULL SCREEN SECTION -->
+    <section id="publicidad" class="full-screen-video-section render-optimize reveal-up">
+        <!-- Reemplazado por video a pantalla completa -->
+        <video data-src="video.mp4" autoplay loop muted playsinline class="lazy-video"></video>
     </section>
 
-    <!-- WAITLIST -->
-    <div id="waitlist-popup" class="text-center">
-        <div class="flex justify-between items-center mb-6">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-white">Acceso Beta</h4>
-            <button onclick="document.getElementById('waitlist-popup').classList.add('hidden')" class="text-gray-500 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
-        </div>
-        <div class="mb-6 h-px w-full bg-gray-800"></div>
-        <p class="text-[10px] text-gray-400 mb-6 font-mono">Asegura el futuro sintético.</p>
-        <form onsubmit="handleWaitlist(event)">
-            <input type="email" name="email" placeholder="CORREO" class="bg-black border border-gray-800 text-white px-3 py-3 text-[10px] w-full focus:outline-none focus:border-white font-mono mb-3 placeholder-gray-600" required>
-            <button type="submit" class="bg-white text-black px-3 py-3 text-[10px] font-bold uppercase w-full hover:bg-gray-200 transition-colors">Unirse</button>
-        </form>
-    </div>
-
-    <footer class="section-black py-32 border-t border-gray-900 relative z-20 overflow-hidden">
+    <!-- FOOTER -->
+    <footer class="section-black py-20 border-t border-gray-900 relative z-20 overflow-hidden render-optimize">
         <div class="max-w-[85%] mx-auto flex flex-col md:flex-row justify-between items-end relative z-10 reveal-up">
             <div>
-                <a href="#" class="text-4xl font-bold tracking-tighter block mb-12 hover:text-gray-400 transition-colors font-display">SENNEN</a>
-                <div class="flex gap-8 items-center">
-                    <a href="https://instagram.com/sennen.agency" target="_blank" class="hover:text-white transition-colors text-gray-500"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                <a href="#" class="text-4xl font-bold tracking-tighter block mb-8 hover:text-gray-400 transition-colors font-display">SENNEN</a>
+                <div class="flex gap-6 items-center">
+                    <a href="#" class="hover:text-white transition-colors text-gray-600"><i data-lucide="instagram" class="w-5 h-5"></i></a>
                     <div class="h-4 w-px bg-gray-800"></div>
                     <span class="font-mono text-[10px] text-gray-500 uppercase tracking-widest">High-Ticket AI Infrastructure</span>
                 </div>
             </div>
-            <div class="mt-16 md:mt-0 text-right">
-                <div class="font-mono text-[10px] text-gray-500 mb-2">ESTADO: ÓPTIMO</div>
+            <div class="mt-12 md:mt-0 text-right">
+                <div class="font-mono text-[10px] text-gray-500 mb-2">ESTADO: <span class="text-green-500">●</span> EN LÍNEA</div>
                 <div class="font-mono text-[10px] text-gray-500">LONDRES • MADRID • BUENOS AIRES</div>
             </div>
         </div>
     </footer>
 
+    <!-- DUST CANVAS -->
+    <canvas id="dust-canvas" class="fixed inset-0 pointer-events-none z-[1] opacity-30"></canvas>
+
     <script>
-        lucide.createIcons();
-
-        // Video Playlist Logic
-        const videoSources = [
-            "video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", 
-            "video5.mp4", "video6.mp4", "video7.mp4", "video8.mp4", 
-            "video9.mp4", "video10.mp4"
-        ];
-        let currentVideoIndex = 0;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            gsap.registerPlugin(ScrollTrigger);
-
-            // OPTIMIZED LAZY LOAD VIDEOS WITH PAUSE/PLAY
-            const videoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const v = entry.target;
-                    if (entry.isIntersecting) {
-                        // Load source if not loaded
-                        if(v.dataset.src) {
-                             v.src = v.dataset.src;
-                             delete v.dataset.src;
-                        }
-                        // Resume playing
-                        v.play().catch(e => {}); 
-                    } else {
-                        // Pause when out of view (HUGE PERFORMANCE GAIN)
-                        if (!v.paused) v.pause();
-                    }
-                });
-            }, { threshold: 0.1 }); // Trigger when 10% visible
-
-            document.querySelectorAll('.lazy-video').forEach(v => videoObserver.observe(v));
-
-            // Reveal Animation
-            gsap.utils.toArray('.reveal-up').forEach(elem => {
-                ScrollTrigger.create({
-                    trigger: elem,
-                    start: "top 90%",
-                    onEnter: () => elem.classList.add('active')
-                });
-            });
-
-            // Remove Preloader
+        const body = document.body;
+        
+        window.addEventListener('load', () => {
+            body.style.opacity = '1';
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
             setTimeout(() => {
-                gsap.to("#preloader", { opacity: 0, duration: 1, onComplete: () => {
-                    document.getElementById('preloader').style.display = 'none';
-                    document.body.classList.remove('overflow-hidden');
-                    document.body.classList.remove('opacity-0');
-                    gsap.to("body", { opacity: 1, duration: 0.5 });
-                }});
-            }, 1000);
-
-            // Auto-open Waitlist
-            setTimeout(() => {
-                document.getElementById('waitlist-popup').classList.add('active');
-            }, 8000);
+                preloader.style.visibility = 'hidden';
+                preloader.style.display = 'none';
+            }, 500);
+            if(window.lucide) lucide.createIcons();
         });
 
-        /* --- VIDEO MODAL LOGIC (UPDATED) --- */
+        const videoSources = ["video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video5.mp4", "video6.mp4"];
+        let currentVideoIndex = 0;
+
         function openVideoModal(index) {
             currentVideoIndex = index;
             const modal = document.getElementById('video-modal');
             const player = document.getElementById('modal-video-player');
-            
-            player.src = videoSources[currentVideoIndex];
-            player.muted = false; // Enable sound in modal
-            player.currentTime = 0;
-            
+            player.src = videoSources[currentVideoIndex]; 
             modal.classList.add('active');
-            player.play().catch(e => console.log("Play error:", e));
-        }
-
-        function changeVideo(direction) {
-            currentVideoIndex += direction;
-            if (currentVideoIndex >= videoSources.length) currentVideoIndex = 0;
-            if (currentVideoIndex < 0) currentVideoIndex = videoSources.length - 1;
-            
-            const player = document.getElementById('modal-video-player');
-            player.style.opacity = 0;
-            setTimeout(() => {
-                player.src = videoSources[currentVideoIndex];
-                player.play();
-                player.style.opacity = 1;
-            }, 200);
-        }
-
-        /* --- MENU LOGIC --- */
-        const menuOverlay = document.getElementById('menu-overlay');
-        let isMenuOpen = false;
-
-        function toggleMenu() {
-            isMenuOpen = !isMenuOpen;
-            if(isMenuOpen) menuOverlay.classList.add('active');
-            else menuOverlay.classList.remove('active');
-        }
-
-        function navTo(id, slug) {
-            toggleMenu(); 
-            const element = document.getElementById(id);
-            if(element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-                history.pushState(null, null, slug);
-            }
+            player.play().catch(e => console.log("Video waiting for interaction"));
         }
 
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
-            if(id === 'video-modal') {
-                const player = document.getElementById('modal-video-player');
-                player.pause();
-                player.src = "";
+            const player = document.getElementById('modal-video-player');
+            player.pause();
+            player.src = "";
+        }
+
+        function changeVideo(dir) {
+            currentVideoIndex += dir;
+            if(currentVideoIndex >= videoSources.length) currentVideoIndex = 0;
+            if(currentVideoIndex < 0) currentVideoIndex = videoSources.length - 1;
+            const player = document.getElementById('modal-video-player');
+            player.src = videoSources[currentVideoIndex];
+            player.play().catch(e => {});
+        }
+
+        const config = { rootMargin: '50px 0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, self) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    if (video.dataset.src && !video.src) {
+                        video.src = video.dataset.src;
+                        video.load();
+                        if(video.parentElement.classList.contains('video-card')) {
+                            video.parentElement.classList.add('loaded');
+                        }
+                    }
+                    video.play().catch(e => {});
+                } else {
+                    video.pause();
+                }
+            });
+        }, config);
+        document.querySelectorAll('.dashboard-grid video').forEach(v => observer.observe(v));
+        document.querySelectorAll('.lazy-video').forEach(v => observer.observe(v));
+
+        const initAnimations = () => {
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                ScrollTrigger.batch(".reveal-up", {
+                    onEnter: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.1, duration: 0.8, ease: "power2.out"}),
+                    start: "top 90%"
+                });
+            }
+        };
+
+        const checkGsap = setInterval(() => {
+            if (typeof gsap !== 'undefined') {
+                initAnimations();
+                clearInterval(checkGsap);
+            }
+        }, 100);
+
+        // --- OPTIMIZED DUST PARTICLES ---
+        const canvas = document.getElementById('dust-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        const particleCount = window.innerWidth < 768 ? 15 : 40;
+        const particles = Array.from({ length: particleCount }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.2,
+            vy: (Math.random() - 0.5) * 0.2,
+            size: Math.random() * 2
+        }));
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; 
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0) p.x = width; if (p.x > width) p.x = 0;
+                if (p.y < 0) p.y = height; if (p.y > height) p.y = 0;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }, 200);
+        });
+
+        function toggleMenu() {
+            const menu = document.getElementById('menu-overlay');
+            const isActive = menu.classList.contains('active');
+            if(isActive) {
+                menu.classList.remove('active');
+                body.style.overflow = '';
+            } else {
+                menu.classList.add('active');
+                body.style.overflow = 'hidden';
             }
         }
 
-        // Keyboard Navigation
-        document.addEventListener('keydown', e => {
-            if(e.key === 'Escape') {
-                closeModal('video-modal');
-                document.getElementById('waitlist-popup').classList.add('hidden');
-                if(isMenuOpen) toggleMenu();
-            }
-            if(document.getElementById('video-modal').classList.contains('active')) {
-                if (e.key === 'ArrowRight') changeVideo(1);
-                if (e.key === 'ArrowLeft') changeVideo(-1);
-            }
-        });
-        
-        /* --- FORM --- */
-        function handleWaitlist(e) {
+        // --- NEW AJAX FORM HANDLER ---
+        function handleContactForm(e) {
             e.preventDefault();
             const form = e.target;
-            const input = form.querySelector('input[type="email"]');
-            const button = form.querySelector('button');
-            const email = input.value;
-            button.innerText = "SINTETIZANDO...";
-            button.style.opacity = "0.7"; button.disabled = true; input.disabled = true;
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerText;
+            const responseDiv = document.getElementById('form-response');
+
+            // UI Loading State
+            btn.innerText = "ENCRIPTANDO Y ENVIANDO...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+
+            // Gather Data
+            const formData = new FormData(form);
+            // Append hidden configs manually if not in DOM or needed by formsubmit
+            formData.append("_subject", "Nueva Consulta - Sennen Agency");
+            formData.append("_template", "table");
+            formData.append("_captcha", "false");
 
             fetch("https://formsubmit.co/ajax/hello@sennen.agency", {
                 method: "POST",
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ email: email, _subject: "NUEVO LEAD - SENNEN BETA", _template: "table" })
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
-                form.innerHTML = `<div class="flex flex-col items-center justify-center py-6 animate-pulse"><i data-lucide="check-circle" class="w-8 h-8 text-white mb-3"></i><div class="text-white font-mono text-[10px] tracking-[0.2em] text-center">> ACCESO CONCEDIDO</div></div>`;
-                lucide.createIcons(); 
+                // Success
+                btn.style.display = 'none'; // Hide button
+                responseDiv.classList.remove('hidden'); // Show success message
+                form.reset();
             })
             .catch(error => {
-                button.innerText = "ERROR";
-                setTimeout(() => { button.innerText = "UNIRSE"; button.style.opacity = "1"; button.disabled = false; input.disabled = false; }, 3000);
+                // Error
+                console.error('Error:', error);
+                btn.innerText = "ERROR DE CONEXIÓN";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                }, 3000);
             });
         }
 
-        /* --- DUST PARTICLES (Optimized) --- */
-        const dustCanvas = document.getElementById('dust-canvas');
-        if (dustCanvas && window.innerWidth > 768) {
-            const dCtx = dustCanvas.getContext('2d', { alpha: true });
-            let dW = dustCanvas.width = window.innerWidth;
-            let dH = dustCanvas.height = window.innerHeight;
-            let resizeTimeout;
-            window.addEventListener('resize', () => { 
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => { dW = dustCanvas.width = window.innerWidth; dH = dustCanvas.height = window.innerHeight; }, 200);
-            });
-            class Particle {
-                constructor() { this.x = Math.random() * dW; this.y = Math.random() * dH; this.size = Math.random() * 2; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25; }
-                update() {
-                    this.x += this.speedX; this.y += this.speedY;
-                    if (this.x < 0 || this.x > dW) this.speedX *= -1; 
-                    if (this.y < 0 || this.y > dH) this.speedY *= -1;
-                }
-                draw() { dCtx.fillStyle = 'rgba(255, 255, 255, 0.2)'; dCtx.beginPath(); dCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); dCtx.fill(); }
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if(window.scrollY > 50) {
+                nav.classList.add('backdrop-blur-md', 'bg-black/50');
+            } else {
+                nav.classList.remove('backdrop-blur-md', 'bg-black/50');
             }
-            const particles = []; for (let i = 0; i < 50; i++) particles.push(new Particle());
-            function animateDust() { dCtx.clearRect(0, 0, dW, dH); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateDust); }
-            animateDust();
-        }
+        });
     </script>
 </body>
 </html>
