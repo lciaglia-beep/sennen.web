@@ -31,7 +31,8 @@
             --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --font-display: 'Poppins', sans-serif;
-            --glow-color: rgba(56, 189, 248, 0.4); 
+            /* CAMBIO: Color de resplandor a blanco/gris para estética B&W */
+            --glow-color: rgba(255, 255, 255, 0.15); 
         }
 
         html, body {
@@ -48,7 +49,7 @@
 
         /* --- SECCIONES --- */
         .section-black { background-color: #050505; color: #ffffff; position: relative; z-index: 2; }
-        .section-gradient-transition { height: 150px; width: 100%; background: linear-gradient(to bottom, #050505 0%, #1a1a1a 100%); position: relative; z-index: 1; pointer-events: none; }
+        .section-gradient-transition { height: 150px; width: 100%; background: linear-gradient(to bottom, #050505 0%, #111 100%); position: relative; z-index: 1; pointer-events: none; }
         .section-white { background-color: #ffffff; color: #050505; position: relative; z-index: 2; }
 
         /* --- DASHBOARD GRID HERO --- */
@@ -74,12 +75,11 @@
 
         @media (min-width: 1200px) {
             .dashboard-grid {
-                grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop grande */
+                grid-template-columns: repeat(3, 1fr);
                 gap: 2rem;
             }
         }
 
-        /* 4ta columna para pantallas ULTRA anchas */
         @media (min-width: 1600px) {
              .dashboard-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -96,40 +96,40 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: transform 0.3s ease, border-color 0.3s ease;
             cursor: pointer;
+            /* OPTIMIZACIÓN: Hardware acceleration hint */
+            transform: translateZ(0);
         }
 
         .video-card video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.7;
-            transition: opacity 0.5s ease, filter 0.5s ease;
-            filter: grayscale(100%) contrast(1.1);
-            pointer-events: none; /* Dejar pasar el click al card */
+            /* CAMBIO: Opacidad al 100% y sin filtro de grises para ver en COLOR */
+            opacity: 1; 
+            transition: opacity 0.5s ease;
+            filter: none; 
+            pointer-events: none;
         }
 
         .video-card:hover {
             transform: scale(1.02);
             z-index: 20;
-            border-color: #38bdf8;
-            box-shadow: 0 10px 40px rgba(56, 189, 248, 0.2);
+            /* CAMBIO: Borde blanco al hover */
+            border-color: #ffffff;
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
         }
 
-        .video-card:hover video {
-            opacity: 1;
-            filter: grayscale(0%) contrast(1);
-        }
-        
-        /* Play icon overlay on hover */
+        /* Icono de Play sutil al hover */
         .video-card::after {
             content: '';
             position: absolute;
             top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.5);
+            transform: translate(-50%, -50%) scale(0.8);
             width: 60px; height: 60px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(5px);
             border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.3);
             opacity: 0;
             transition: all 0.3s;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='24' height='24'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
@@ -141,15 +141,15 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        /* --- GLOWS --- */
-        .ambient-glow { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, var(--glow-color) 0%, rgba(56, 189, 248, 0) 70%); border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; opacity: 0.4; will-change: transform; mix-blend-mode: screen; }
+        /* --- GLOWS (Blanco/Gris) --- */
+        .ambient-glow { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; opacity: 0.3; will-change: transform; mix-blend-mode: screen; }
         .glow-top-left { top: -200px; left: -200px; }
         .glow-top-right { top: -200px; right: -200px; }
         .glow-middle-right { top: 50%; right: -300px; transform: translateY(-50%); }
 
         /* --- MENU --- */
         #menu-overlay {
-            position: fixed; inset: 0; background: rgba(5, 5, 5, 0.98); 
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); 
             backdrop-filter: blur(10px);
             z-index: 9990; 
             display: flex; justify-content: center; align-items: center; flex-direction: column;
@@ -165,7 +165,7 @@
         .menu-link:hover { color: #fff; transform: scale(1.02); }
 
         /* --- PRELOADER --- */
-        #preloader { position: fixed; inset: 0; background: #050505; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        #preloader { position: fixed; inset: 0; background: #000000; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .loader-brand { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: white; letter-spacing: 0.1em; animation: pulse-slow 2s infinite; }
         @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
@@ -191,21 +191,20 @@
             position: relative;
             border-radius: 12px;
             overflow: hidden;
-            background: #222;
+            background: #111;
         }
         .photo-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
-            filter: grayscale(100%);
+            /* CAMBIO: Sin filtro grayscale para ver fotos en color real */
+            filter: none; 
         }
         .photo-item:hover img {
-            transform: scale(1.1);
-            filter: grayscale(0%);
+            transform: scale(1.05);
         }
         
-        /* Grid Spans for "Different sizes" look */
         @media (min-width: 768px) {
             .photo-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
             .photo-item:nth-child(4) { grid-column: span 2; }
@@ -213,44 +212,44 @@
             .photo-item:nth-child(8) { grid-column: span 2; grid-row: span 2; }
         }
 
-        /* --- PARALLAX BOX (Restaurado) --- */
+        /* --- PARALLAX BOX --- */
         .parallax-box { 
             padding: 5rem; max-width: 900px; margin: 0 auto; border-radius: 40px; text-align: center; 
-            background: rgba(15, 15, 15, 0.4); backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 40px 80px rgba(0,0,0,0.5); 
+            background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.8); 
             will-change: transform; 
         }
         .parallax-quote { 
-            font-family: var(--font-mono); font-size: 1.1rem; color: #aaa; 
-            border-left: 2px solid #38bdf8; padding-left: 2rem; 
+            font-family: var(--font-mono); font-size: 1.1rem; color: #ccc; 
+            /* CAMBIO: Borde blanco */
+            border-left: 2px solid #fff; padding-left: 2rem; 
             text-align: left; margin: 0 auto; max-width: 80%; 
         }
 
         /* --- MODALS & POPUP --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(15px); }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.98); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(20px); }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
-        /* Video Modal Specifics */
         .modal-content-video { 
-            width: 90%; 
+            width: 95%; 
             max-width: 1600px;
             aspect-ratio: 16/9; 
             position: relative; 
-            border-radius: 0; /* Cleaner for cinema mode */
+            border-radius: 0; 
             overflow: hidden; 
             background: #000; 
-            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+            border: 1px solid #333;
         }
         .modal-content-video video { width: 100%; height: 100%; object-fit: contain; }
         
-        /* Navigation Arrows */
         .nav-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             color: white;
             background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
             width: 60px; height: 60px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
@@ -261,18 +260,14 @@
         .nav-btn:hover { background: white; color: black; transform: translateY(-50%) scale(1.1); }
         .nav-prev { left: 2rem; }
         .nav-next { right: 2rem; }
-
-        .modal-content-info { background: #0f0f0f; border: 1px solid rgba(255,255,255,0.1); padding: 4rem; max-width: 600px; width: 90%; border-radius: 40px; transform: translateY(30px); transition: transform 0.4s; }
-        .modal-overlay.active .modal-content-info { transform: translateY(0); }
         
-        .close-btn { position: absolute; top: 2rem; right: 2rem; color: #fff; background: rgba(255,255,255,0.1); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10000; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        .close-btn { position: absolute; top: 2rem; right: 2rem; color: #fff; background: rgba(0,0,0,0.5); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10000; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; }
         .close-btn:hover { background: white; color: black; }
         
         /* --- TITLE STYLES --- */
         .hero-title {
             font-family: var(--font-display);
             font-weight: 900;
-            /* Massive, scalable title */
             font-size: clamp(3rem, 18vw, 368px);
             line-height: 0.85;
             letter-spacing: -0.04em;
@@ -281,20 +276,21 @@
             text-align: center;
             margin-bottom: 2rem;
             
-            background: linear-gradient(180deg, #ffffff 0%, #444 100%);
+            /* CAMBIO: Gradiente B&W puro */
+            background: linear-gradient(180deg, #ffffff 0%, #333333 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.05));
         }
 
         .menu-btn { cursor: pointer; color: white; transition: color 0.3s; z-index: 9999; position: relative; }
-        .menu-btn:hover { color: #38bdf8; }
+        .menu-btn:hover { color: #888; } /* Hover gris en vez de azul */
 
         /* --- MOBILE OPTIMIZATIONS --- */
         @media (max-width: 768px) {
             .hero-title { margin-bottom: 1rem; }
             .dashboard-grid { margin-top: 1rem; padding: 0 1rem; gap: 1rem; }
-            .nav-btn { width: 40px; height: 40px; }
+            .nav-btn { width: 40px; height: 40px; background: rgba(0,0,0,0.8); }
             .nav-prev { left: 10px; }
             .nav-next { right: 10px; }
             .close-btn { top: 1rem; right: 1rem; width: 40px; height: 40px; }
@@ -341,7 +337,6 @@
     <!-- Nav -->
     <nav class="fixed w-full z-50 py-6 mix-blend-difference text-white pointer-events-none">
         <div class="w-full px-6 flex justify-between items-center pointer-events-auto">
-            <!-- REVERTIDO: sennen.agency -->
             <a href="#" class="text-xl font-bold tracking-tighter hover:text-gray-300 transition-colors">sennen.agency</a>
             <button class="menu-btn" onclick="toggleMenu()">
                 <i data-lucide="menu" class="w-8 h-8"></i>
@@ -360,24 +355,25 @@
                 <h1 class="hero-title">
                     SENNEN<br>AGENCY
                 </h1>
-                <p class="font-mono text-xs md:text-sm text-[#38bdf8] uppercase tracking-[0.4em] animate-pulse mt-4">
+                <!-- CAMBIO: Color blanco para el subtítulo -->
+                <p class="font-mono text-xs md:text-sm text-gray-400 uppercase tracking-[0.4em] mt-4">
                     RESONANCIA ALGORÍTMICA
                 </p>
             </div>
         </div>
 
-        <!-- VIDEO DASHBOARD (10 Videos) -->
+        <!-- VIDEO DASHBOARD (10 Videos) - OPTIMIZADO PARA MOSTRARSE EN COLOR -->
         <div class="dashboard-grid reveal-up delay-100">
-            <div class="video-card" onclick="openVideoModal(0)"><video src="video1.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(1)"><video src="video2.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(2)"><video src="video3.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(3)"><video src="video4.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(4)"><video src="video5.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(5)"><video src="video6.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(6)"><video src="video7.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(7)"><video src="video8.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(8)"><video src="video9.mp4" muted loop autoplay playsinline></video></div>
-            <div class="video-card" onclick="openVideoModal(9)"><video src="video10.mp4" muted loop autoplay playsinline></video></div>
+            <div class="video-card" onclick="openVideoModal(0)"><video data-src="video1.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(1)"><video data-src="video2.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(2)"><video data-src="video3.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(3)"><video data-src="video4.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(4)"><video data-src="video5.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(5)"><video data-src="video6.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(6)"><video data-src="video7.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(7)"><video data-src="video8.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(8)"><video data-src="video9.mp4" muted loop playsinline class="lazy-video"></video></div>
+            <div class="video-card" onclick="openVideoModal(9)"><video data-src="video10.mp4" muted loop playsinline class="lazy-video"></video></div>
         </div>
 
     </header>
@@ -387,7 +383,7 @@
 
         <div class="max-w-[90%] md:max-w-[80%] mx-auto w-full relative z-10">
             
-            <!-- TEXT BLOCK RESTAURADO A ESTILO "PARALLAX BOX" -->
+            <!-- PARALLAX BOX -->
             <div class="parallax-box mb-32 reveal-up">
                 <h2 class="text-5xl md:text-7xl font-bold leading-tight mb-8">
                     Cambio de<br>
@@ -401,7 +397,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 reveal-up mb-32">
                 <div class="space-y-8">
                     <p class="text-2xl md:text-3xl text-gray-200 font-light leading-snug">
-                        No se trata de volumen; se trata de <span class="text-[#38bdf8] font-medium">Resonancia Algorítmica</span>. Los activos generados por IA logran tasas de retención que la biología simplemente no puede sostener.
+                        <!-- CAMBIO: Texto blanco/gris en lugar de azul -->
+                        No se trata de volumen; se trata de <span class="text-white font-medium border-b border-gray-500">Resonancia Algorítmica</span>. Los activos generados por IA logran tasas de retención que la biología simplemente no puede sostener.
                     </p>
                 </div>
                 <div class="grid grid-cols-1 gap-12 border-l border-gray-800 pl-8">
@@ -436,8 +433,6 @@
     </section>
 
     <div class="section-gradient-transition"></div>
-
-    <!-- SECCION ELIMINADA: Arquitectura de Ofertas -->
 
     <!-- NUEVA SECCION: VIDEO PUBLICITARIO -->
     <section id="publicidad" class="section-black min-h-screen flex flex-col justify-center relative py-32">
@@ -492,19 +487,25 @@
         document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
 
-            // Lazy Load Videos
+            // OPTIMIZED LAZY LOAD VIDEOS WITH PAUSE/PLAY
             const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
+                    const v = entry.target;
                     if (entry.isIntersecting) {
-                        const v = entry.target;
-                        if(v.tagName === 'VIDEO' && v.dataset.src) {
+                        // Load source if not loaded
+                        if(v.dataset.src) {
                              v.src = v.dataset.src;
                              delete v.dataset.src;
                         }
-                        videoObserver.unobserve(v);
+                        // Resume playing
+                        v.play().catch(e => {}); 
+                    } else {
+                        // Pause when out of view (HUGE PERFORMANCE GAIN)
+                        if (!v.paused) v.pause();
                     }
                 });
-            });
+            }, { threshold: 0.1 }); // Trigger when 10% visible
+
             document.querySelectorAll('.lazy-video').forEach(v => videoObserver.observe(v));
 
             // Reveal Animation
@@ -538,9 +539,8 @@
             const modal = document.getElementById('video-modal');
             const player = document.getElementById('modal-video-player');
             
-            // Set source and play with sound
             player.src = videoSources[currentVideoIndex];
-            player.muted = false; // Enable sound!
+            player.muted = false; // Enable sound in modal
             player.currentTime = 0;
             
             modal.classList.add('active');
@@ -549,13 +549,10 @@
 
         function changeVideo(direction) {
             currentVideoIndex += direction;
-            // Wrap around logic
             if (currentVideoIndex >= videoSources.length) currentVideoIndex = 0;
             if (currentVideoIndex < 0) currentVideoIndex = videoSources.length - 1;
             
             const player = document.getElementById('modal-video-player');
-            
-            // Fade out effect
             player.style.opacity = 0;
             setTimeout(() => {
                 player.src = videoSources[currentVideoIndex];
@@ -592,14 +589,13 @@
             }
         }
 
-        // Keyboard Navigation for Video Gallery
+        // Keyboard Navigation
         document.addEventListener('keydown', e => {
             if(e.key === 'Escape') {
                 closeModal('video-modal');
                 document.getElementById('waitlist-popup').classList.add('hidden');
                 if(isMenuOpen) toggleMenu();
             }
-            // Left/Right arrows for video
             if(document.getElementById('video-modal').classList.contains('active')) {
                 if (e.key === 'ArrowRight') changeVideo(1);
                 if (e.key === 'ArrowLeft') changeVideo(-1);
