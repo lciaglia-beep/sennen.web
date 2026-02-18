@@ -98,7 +98,7 @@
         .glow-top-right { top: -200px; right: -200px; }
         .glow-middle-right { top: 50%; right: -300px; transform: translateY(-50%); }
 
-        /* --- MENU OVERLAY (FORM) - OPTIMIZED --- */
+        /* --- MENU OVERLAY (FORM) --- */
         #menu-overlay {
             position: fixed; inset: 0; background: rgba(5, 5, 5, 0.98); 
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -143,7 +143,7 @@
         .input-line:focus { border-color: #fff; }
         .input-line::placeholder { color: #333; }
 
-        /* Close Button Fixed positioning for reliability */
+        /* Menu Close Button */
         .close-btn { 
             position: fixed; top: 1.5rem; right: 1.5rem; 
             color: white; cursor: pointer; z-index: 10002; 
@@ -173,7 +173,7 @@
         .photo-item img { 
             width: 100%; height: 100%; object-fit: cover; 
             transition: transform 0.5s ease; opacity: 0; 
-            filter: grayscale(100%); /* Optional: Adds to the aesthetic, remove if unwanted */
+            filter: grayscale(100%);
         }
         .photo-item.loaded img { opacity: 1; }
         .photo-item:hover img { transform: scale(1.05); filter: grayscale(0%); }
@@ -194,12 +194,58 @@
         @media (min-width: 768px) { .parallax-box { padding: 5rem; border-radius: 40px; } }
         .parallax-quote { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #ccc; border-left: 2px solid #fff; padding-left: 1.5rem; text-align: left; margin: 0 auto; max-width: 100%; }
 
-        /* --- MODALS --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        /* --- VIDEO MODAL & NAVIGATION --- */
+        .modal-overlay { 
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000; 
+            display: flex; justify-content: center; align-items: center; 
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; 
+        }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content-video { width: 100%; max-width: 1400px; aspect-ratio: 16/9; background: #000; position: relative; }
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); color: white; background: rgba(255,255,255,0.1); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 11001; backdrop-filter: blur(4px); }
-        .nav-prev { left: 1rem; } .nav-next { right: 1rem; }
+        
+        /* Video Modal Controls */
+        .nav-btn { 
+            position: absolute; top: 50%; transform: translateY(-50%); 
+            color: white; background: rgba(255,255,255,0.1); 
+            width: 48px; height: 48px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; z-index: 11001; backdrop-filter: blur(4px); 
+            border: none;
+        }
+        .nav-prev { left: 1rem; } 
+        .nav-next { right: 1rem; }
+        
+        /* Specific Close Button for Video Modal - Fixed/Absolute handling */
+        .modal-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 11005;
+            color: white;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            padding: 12px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s ease, background 0.2s ease;
+            pointer-events: auto; /* Force clickable */
+        }
+        .modal-close-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+        
+        /* Mobile adjustment for modal close button */
+        @media (max-width: 768px) {
+            .modal-close-btn {
+                position: fixed; /* Keep fixed on mobile to avoid scrolling away */
+                top: 15px;
+                right: 15px;
+                padding: 10px;
+                background: rgba(0,0,0,0.8); /* Darker bg for visibility */
+            }
+            .nav-btn { width: 40px; height: 40px; }
+            .nav-prev { left: 0.5rem; } 
+            .nav-next { right: 0.5rem; }
+        }
 
         /* --- TITLE --- */
         .hero-title {
@@ -335,12 +381,17 @@
         </div>
     </div>
 
-    <!-- Video Modal -->
-    <div id="video-modal" class="modal-overlay" onclick="closeModal('video-modal')">
-        <button class="close-btn" onclick="closeModal('video-modal')"><i data-lucide="x" class="w-8 h-8"></i></button>
+    <!-- Video Modal - Fixed Close Button -->
+    <div id="video-modal" class="modal-overlay">
+        <!-- Close Button (Specifically styled for Video Modal) -->
+        <button class="modal-close-btn" onclick="closeModal('video-modal')" aria-label="Cerrar Video">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+
         <div class="w-full h-full md:h-auto md:w-auto flex items-center justify-center relative pointer-events-none">
             <button class="nav-btn nav-prev pointer-events-auto" onclick="event.stopPropagation(); changeVideo(-1)"><i data-lucide="chevron-left"></i></button>
             <button class="nav-btn nav-next pointer-events-auto" onclick="event.stopPropagation(); changeVideo(1)"><i data-lucide="chevron-right"></i></button>
+            
             <div class="modal-content-video pointer-events-auto" onclick="event.stopPropagation()">
                 <video id="modal-video-player" controls playsinline class="w-full h-full object-contain bg-black">
                     <source src="" type="video/mp4">
@@ -369,7 +420,10 @@
         <div class="w-full px-4 z-10 flex flex-col items-center text-center">
             <div class="reveal-up">
                 <h1 class="hero-title">SENNEN<br>AGENCY</h1>
-                <p class="font-mono text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.3em] mt-2 mb-8">RESONANCIA ALGORÍTMICA</p>
+                <!-- Changed Text Here -->
+                <p class="font-mono text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.2em] mt-2 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Creación de Activos Sintéticos y Clones Digitales
+                </p>
             </div>
         </div>
         <div class="dashboard-grid reveal-up">
@@ -407,8 +461,6 @@
             <div class="photo-grid-section reveal-up">
                 <h3 class="text-xs font-mono text-gray-500 mb-8 uppercase tracking-widest border-b border-gray-800 pb-4">Evidencia Visual</h3>
                 <div class="photo-grid">
-                    <!-- CHANGED BACK TO LOCAL FILES PER REQUEST -->
-                    <!-- Note: These will appear broken in preview unless you have files named exactly foto1.png etc. -->
                     <div class="photo-item"><img src="foto1.png" loading="lazy" decoding="async" alt="Evidencia"></div>
                     <div class="photo-item"><img src="foto2.png" loading="lazy" decoding="async" alt="Evidencia"></div>
                     <div class="photo-item"><img src="foto3.png" loading="lazy" decoding="async" alt="Evidencia"></div>
@@ -433,7 +485,8 @@
                 <div class="flex gap-6 items-center">
                     <a href="https://instagram.com/sennen.agency" target="_blank" class="hover:text-white transition-colors text-gray-600"><i data-lucide="instagram" class="w-5 h-5"></i></a>
                     <div class="h-4 w-px bg-gray-800"></div>
-                    <span class="font-mono text-[10px] text-gray-500 uppercase tracking-widest">High-Ticket AI Infrastructure</span>
+                    <!-- Changed Footer Text -->
+                    <span class="font-mono text-[10px] text-gray-500 uppercase tracking-widest">AI Infrastructure</span>
                 </div>
             </div>
             <div class="mt-12 md:mt-0 text-right">
@@ -469,25 +522,43 @@
             const player = document.getElementById('modal-video-player');
             player.src = videoSources[currentVideoIndex]; 
             modal.classList.add('active');
-            player.play().catch(e => console.log("Video waiting for interaction"));
+            
+            // Safe play promise
+            const playPromise = player.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Auto-play prevented (user interaction needed or loading)");
+                });
+            }
         }
 
         function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            
+            modal.classList.remove('active');
             const player = document.getElementById('modal-video-player');
-            player.pause();
-            player.src = "";
+            
+            if (player) {
+                player.pause();
+                player.currentTime = 0; // Reset time
+                player.src = ""; // Clear source to stop buffering
+            }
         }
 
         function changeVideo(dir) {
             currentVideoIndex += dir;
             if(currentVideoIndex >= videoSources.length) currentVideoIndex = 0;
             if(currentVideoIndex < 0) currentVideoIndex = videoSources.length - 1;
+            
             const player = document.getElementById('modal-video-player');
-            player.src = videoSources[currentVideoIndex];
-            player.play().catch(e => {});
+            if (player) {
+                player.src = videoSources[currentVideoIndex];
+                player.play().catch(e => {});
+            }
         }
 
+        // --- OBSERVER LOGIC ---
         const config = { rootMargin: '50px 0px', threshold: 0.1 };
         const observer = new IntersectionObserver((entries, self) => {
             entries.forEach(entry => {
@@ -506,10 +577,10 @@
                 }
             });
         }, config);
+        
         document.querySelectorAll('.dashboard-grid video').forEach(v => observer.observe(v));
         document.querySelectorAll('.lazy-video').forEach(v => observer.observe(v));
 
-        // --- IMAGE OBSERVER FOR FADE-IN ---
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -520,7 +591,6 @@
         }, { rootMargin: '50px 0px', threshold: 0.1 });
         
         document.querySelectorAll('.photo-item').forEach(item => imageObserver.observe(item));
-
 
         const initAnimations = () => {
             if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
@@ -590,7 +660,7 @@
             }
         }
 
-        // --- NEW AJAX FORM HANDLER ---
+        // --- FORM HANDLER ---
         function handleContactForm(e) {
             e.preventDefault();
             const form = e.target;
@@ -598,14 +668,11 @@
             const originalText = btn.innerText;
             const responseDiv = document.getElementById('form-response');
 
-            // UI Loading State
             btn.innerText = "ENCRIPTANDO Y ENVIANDO...";
             btn.disabled = true;
             btn.style.opacity = "0.7";
 
-            // Gather Data
             const formData = new FormData(form);
-            // Append hidden configs manually if not in DOM or needed by formsubmit
             formData.append("_subject", "Nueva Consulta - Sennen Agency");
             formData.append("_template", "table");
             formData.append("_captcha", "false");
@@ -616,13 +683,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Success
-                btn.style.display = 'none'; // Hide button
-                responseDiv.classList.remove('hidden'); // Show success message
+                btn.style.display = 'none';
+                responseDiv.classList.remove('hidden');
                 form.reset();
             })
             .catch(error => {
-                // Error
                 console.error('Error:', error);
                 btn.innerText = "ERROR DE CONEXIÓN";
                 setTimeout(() => {
