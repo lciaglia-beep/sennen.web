@@ -74,7 +74,9 @@
         .video-card {
             position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 12px;
             overflow: hidden; background: #111; border: 1px solid rgba(255,255,255,0.08);
-            transition: border-color 0.3s ease, transform 0.3s ease; cursor: pointer; transform: translateZ(0);
+            transition: border-color 0.3s ease, transform 0.3s ease; 
+            cursor: default; 
+            transform: translateZ(0);
         }
         .video-placeholder {
             position: absolute; inset: 0; background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
@@ -83,6 +85,7 @@
         .video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease; position: relative; z-index: 2; }
         .video-card.loaded video { opacity: 1; }
         .video-card.loaded .video-placeholder { display: none; }
+        
         @media (hover: hover) {
             .video-card:hover { transform: scale(1.02); z-index: 20; border-color: #ffffff; box-shadow: 0 10px 40px rgba(255, 255, 255, 0.05); }
         }
@@ -193,59 +196,6 @@
         }
         @media (min-width: 768px) { .parallax-box { padding: 5rem; border-radius: 40px; } }
         .parallax-quote { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #ccc; border-left: 2px solid #fff; padding-left: 1.5rem; text-align: left; margin: 0 auto; max-width: 100%; }
-
-        /* --- VIDEO MODAL & NAVIGATION --- */
-        .modal-overlay { 
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 11000; 
-            display: flex; justify-content: center; align-items: center; 
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; 
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal-content-video { width: 100%; max-width: 1400px; aspect-ratio: 16/9; background: #000; position: relative; }
-        
-        /* Video Modal Controls */
-        .nav-btn { 
-            position: absolute; top: 50%; transform: translateY(-50%); 
-            color: white; background: rgba(255,255,255,0.1); 
-            width: 48px; height: 48px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; z-index: 11001; backdrop-filter: blur(4px); 
-            border: none;
-        }
-        .nav-prev { left: 1rem; } 
-        .nav-next { right: 1rem; }
-        
-        /* Specific Close Button for Video Modal - Fixed/Absolute handling */
-        .modal-close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 11005;
-            color: white;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            border-radius: 50%;
-            padding: 12px;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s ease, background 0.2s ease;
-            pointer-events: auto; /* Force clickable */
-        }
-        .modal-close-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
-        
-        /* Mobile adjustment for modal close button */
-        @media (max-width: 768px) {
-            .modal-close-btn {
-                position: fixed; /* Keep fixed on mobile to avoid scrolling away */
-                top: 15px;
-                right: 15px;
-                padding: 10px;
-                background: rgba(0,0,0,0.8); /* Darker bg for visibility */
-            }
-            .nav-btn { width: 40px; height: 40px; }
-            .nav-prev { left: 0.5rem; } 
-            .nav-next { right: 0.5rem; }
-        }
 
         /* --- TITLE --- */
         .hero-title {
@@ -381,24 +331,7 @@
         </div>
     </div>
 
-    <!-- Video Modal - Fixed Close Button -->
-    <div id="video-modal" class="modal-overlay">
-        <!-- Close Button (Specifically styled for Video Modal) -->
-        <button class="modal-close-btn" onclick="closeModal('video-modal')" aria-label="Cerrar Video">
-            <i data-lucide="x" class="w-8 h-8"></i>
-        </button>
-
-        <div class="w-full h-full md:h-auto md:w-auto flex items-center justify-center relative pointer-events-none">
-            <button class="nav-btn nav-prev pointer-events-auto" onclick="event.stopPropagation(); changeVideo(-1)"><i data-lucide="chevron-left"></i></button>
-            <button class="nav-btn nav-next pointer-events-auto" onclick="event.stopPropagation(); changeVideo(1)"><i data-lucide="chevron-right"></i></button>
-            
-            <div class="modal-content-video pointer-events-auto" onclick="event.stopPropagation()">
-                <video id="modal-video-player" controls playsinline class="w-full h-full object-contain bg-black">
-                    <source src="" type="video/mp4">
-                </video>
-            </div>
-        </div>
-    </div>
+    <!-- ELIMINADO: Todo el bloque del Video Modal que estaba aquí ha sido borrado -->
 
     <!-- Nav -->
     <nav class="fixed w-full z-40 top-0 left-0 py-4 transition-all duration-300" id="navbar">
@@ -420,19 +353,20 @@
         <div class="w-full px-4 z-10 flex flex-col items-center text-center">
             <div class="reveal-up">
                 <h1 class="hero-title">SENNEN<br>AGENCY</h1>
-                <!-- Changed Text Here -->
                 <p class="font-mono text-[10px] md:text-sm text-gray-400 uppercase tracking-[0.2em] mt-2 mb-8 max-w-2xl mx-auto leading-relaxed">
                     Creación de Activos Sintéticos y Clones Digitales
                 </p>
             </div>
         </div>
+        
+        <!-- Videos Autoreproducidos (Grid) -->
         <div class="dashboard-grid reveal-up">
-            <div class="video-card" onclick="openVideoModal(0)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video1.mp4" muted loop playsinline preload="none"></video></div>
-            <div class="video-card" onclick="openVideoModal(1)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video2.mp4" muted loop playsinline preload="none"></video></div>
-            <div class="video-card" onclick="openVideoModal(2)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video3.mp4" muted loop playsinline preload="none"></video></div>
-            <div class="video-card" onclick="openVideoModal(3)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video4.mp4" muted loop playsinline preload="none"></video></div>
-            <div class="video-card" onclick="openVideoModal(4)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video5.mp4" muted loop playsinline preload="none"></video></div>
-            <div class="video-card" onclick="openVideoModal(5)"><div class="video-placeholder"><i data-lucide="play" class="text-white opacity-50 w-8 h-8"></i></div><video data-src="video6.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card"><div class="video-placeholder"></div><video data-src="video1.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card"><div class="video-placeholder"></div><video data-src="video2.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card"><div class="video-placeholder"></div><video data-src="video3.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card"><div class="video-placeholder"></div><video data-src="video4.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card"><div class="video-placeholder"></div><video data-src="video5.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="video-card"><div class="video-placeholder"></div><video data-src="video6.mp4" muted loop playsinline preload="none"></video></div>
         </div>
     </header>
 
@@ -513,50 +447,7 @@
             if(window.lucide) lucide.createIcons();
         });
 
-        const videoSources = ["video1.mp4", "video2.mp4", "video3.mp4", "video4.mp4", "video5.mp4", "video6.mp4"];
-        let currentVideoIndex = 0;
-
-        function openVideoModal(index) {
-            currentVideoIndex = index;
-            const modal = document.getElementById('video-modal');
-            const player = document.getElementById('modal-video-player');
-            player.src = videoSources[currentVideoIndex]; 
-            modal.classList.add('active');
-            
-            // Safe play promise
-            const playPromise = player.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("Auto-play prevented (user interaction needed or loading)");
-                });
-            }
-        }
-
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            if (!modal) return;
-            
-            modal.classList.remove('active');
-            const player = document.getElementById('modal-video-player');
-            
-            if (player) {
-                player.pause();
-                player.currentTime = 0; // Reset time
-                player.src = ""; // Clear source to stop buffering
-            }
-        }
-
-        function changeVideo(dir) {
-            currentVideoIndex += dir;
-            if(currentVideoIndex >= videoSources.length) currentVideoIndex = 0;
-            if(currentVideoIndex < 0) currentVideoIndex = videoSources.length - 1;
-            
-            const player = document.getElementById('modal-video-player');
-            if (player) {
-                player.src = videoSources[currentVideoIndex];
-                player.play().catch(e => {});
-            }
-        }
+        // ELIMINADO: Funciones del modal de video (openVideoModal, closeModal, changeVideo) y lista de fuentes.
 
         // --- OBSERVER LOGIC ---
         const config = { rootMargin: '50px 0px', threshold: 0.1 };
